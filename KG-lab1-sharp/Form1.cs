@@ -75,23 +75,28 @@ namespace KG_lab1_sharp
         {
             Graphics g = pictureBox1.CreateGraphics();
             
-            //g.Clear(Color.White);
+            
             Pen l1 = new Pen(Color.Blue);//цвет линии
             Pen l2 = new Pen(Color.White);//фон
-            foreach (SLine point in lines.points)
-            {
-                g.DrawLine(l2, point.p1, point.p2);
-                g.DrawLine(l1, point.p1, point.p2);
-            } 
+
             if (drawEnds)
             {
+                g.Clear(Color.White);
+                //pictureBox1.Update();
+                ;
+                foreach (SLine point in lines.points)
+                {
+                    g.DrawLine(l2, point.p1, point.p2);
+                    g.DrawLine(l1, point.p1, point.p2);
+                } 
 
 
                 lines.pointDebug();
                 Console.WriteLine("--------------------");
                  g.DrawLine(l2, lines.tmpLine.p1, lines.tmpLine.p2);
-                 g.DrawLine(l1, lines.tmpLine.p1, lines.tmpLine.p2);
-               // pictureBox1.Update();
+                 g.DrawLine(l1, lines.tmpLine.p1, e.Location);
+
+               // 
 
                 //lines.tmpLine.p2 = e.Location;
 
@@ -126,10 +131,6 @@ namespace KG_lab1_sharp
        //void rem(){points.RemoveLast();
        public figure()
        {
-
-
-
-
        }
        public void pointDebug()
        {
@@ -138,12 +139,29 @@ namespace KG_lab1_sharp
                Console.WriteLine(point.p1.ToString() + " " + point.p2.ToString());
            }
        }
+       public void add(SLine line)
+       {
+           points.AddLast(line);
+       }
+       public void removeLast()
+       {
+           points.RemoveLast();
+       }
+       public void removeFirt() { points.RemoveFirst(); }
+       public void addFirst(SLine line) { points.AddFirst(line); }
+       public void ad(int n, SLine line) { int a; }// points.AddAfter(n, line); }
        //public System.Collections.Generic.IEnumerator<figure.SLine> pointsIter()
        //{
        //    return points.GetEnumerator();
        //}
 
    }
+
+   class polygon : figure
+   {
+
+   }
+
 
 
 
