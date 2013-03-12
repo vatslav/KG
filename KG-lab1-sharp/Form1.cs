@@ -17,10 +17,7 @@ namespace KG_lab1_sharp
     //режим рисования: рисования, перемешение, удаление
     public enum modes { MODE_DROW, MODE_MOVE, MODE_DELETE };
 
-    public struct SLine
-    {
-        public Point p1, p2;
-    } 
+
  
    public partial class Form1 : Form
    {
@@ -44,8 +41,10 @@ namespace KG_lab1_sharp
             down = true;
             drawEnds = true;
             lines.lastPoint = e.Location;
-            lines.tmpLine.p1 = lines.lastPoint;
-            lines.points.AddLast(lines.tmpLine);
+            //lines.las
+            lines.lastLine.a = lines.lastPoint;
+           // lines.lastLine.a;
+            //lines.points.AddLast(lines.lastLine);
 
             
 
@@ -63,10 +62,10 @@ namespace KG_lab1_sharp
             down = false;
             drawEnds = false;
             
-            lines.tmpLine.p2 = e.Location;
+            lines.lastLine.b = e.Location;
 
             //lines.points.RemoveLast();
-            lines.points.AddLast(lines.tmpLine);
+            lines.points.AddLast(lines.lastLine);
 
 
         }
@@ -86,25 +85,25 @@ namespace KG_lab1_sharp
                 ;
                 foreach (SLine point in lines.points)
                 {
-                    g.DrawLine(l2, point.p1, point.p2);
-                    g.DrawLine(l1, point.p1, point.p2);
+                    g.DrawLine(l2, point.a, point.b);
+                    g.DrawLine(l1, point.a, point.b);
                 } 
 
 
                 lines.pointDebug();
                 Console.WriteLine("--------------------");
-                 g.DrawLine(l2, lines.tmpLine.p1, lines.tmpLine.p2);
-                 g.DrawLine(l1, lines.tmpLine.p1, e.Location);
+                 g.DrawLine(l2, lines.lastLine.a, lines.lastLine.b);
+                 g.DrawLine(l1, lines.lastLine.a, e.Location);
 
                // 
 
-                //lines.tmpLine.p2 = e.Location;
+                //lines.tmpLine.b = e.Location;
 
    
             }
             else
             {
-                lines.tmpLine.p2 = e.Location;
+                lines.lastLine.b = e.Location;
             }
         }
 
@@ -115,46 +114,81 @@ namespace KG_lab1_sharp
            // pictureBox1.Invalidate();
         }
     }
-
+///----------------------------------------------------------------------------==============================
    class figure
    {
 
        //Тип данных "линия" для начала
 
-       public Point lastPoint;
-       public SLine tmpLine;
-       public LinkedList<SLine> points = new LinkedList<SLine>();
+       protected static Point LastPoint;
+       public Point lastPoint { get { return LastPoint; } set { LastPoint = value; } }
+
+
+       protected static SLine LastLine = new SLine();
+       public SLine lastLine { get { return LastLine; } set { LastLine = value; } }
+
+       //общий для всех классов список объекто
+       //protected static ArrayList points = new ArrayList();
+       protected static ArrayList Points = new ArrayList(); //оригинальное хранилище
+       public arrayListProxy points = new arrayListProxy(ref Points); //создаем экземпляр прокси-класса
        //public static ArrayList points = new ArrayList();
        //public static List<int> test1 = new List<int>();
-       
 
-       //void rem(){points.RemoveLast();
+
+
+
        public figure()
        {
+          // points.
        }
        public void pointDebug()
        {
            foreach (SLine point in points)
            {
-               Console.WriteLine(point.p1.ToString() + " " + point.p2.ToString());
+               Console.WriteLine(point.a.ToString() + " " + point.b.ToString());
            }
        }
-       public void add(SLine line)
-       {
-           points.AddLast(line);
-       }
-       public void removeLast()
-       {
-           points.RemoveLast();
-       }
-       public void removeFirt() { points.RemoveFirst(); }
-       public void addFirst(SLine line) { points.AddFirst(line); }
-       public void ad(int n, SLine line) { int a; }// points.AddAfter(n, line); }
+       //public void add(SLine line)
+       //{
+       //    points.AddLast(line);
+       //}
+       //public void removeLast()
+       //{
+       //    points.RemoveLast();
+       //}
+       //public void removeFirt() { points.RemoveFirst(); }
+       //public void addFirst(SLine line) { points.AddFirst(line); }
+       //public void ad(int n, SLine line) { int a; }// points.AddAfter(n, line); }
+
        //public System.Collections.Generic.IEnumerator<figure.SLine> pointsIter()
        //{
        //    return points.GetEnumerator();
        //}
 
+   }
+   class SLine
+   {
+       Point A, B;
+       public Point a { get { return A; } set { A = value; } }
+       public Point b { get { return B; } set { B = value; } }
+   }
+
+
+   class arrayListProxy
+   {
+       public ArrayList arr = new ArrayList();
+       public arrayListProxy(ref ArrayList arr) { this.arr = arr; }
+       public void Add<T>(T obj) { arr.Add(obj); }
+       public dynamic Get(int index) { return arr[index]; }
+       public int Count() { return arr.Count; }
+       public void Remove(object obj) { arr.Remove(obj); }
+       public IEnumerator GetEnumerator() { return arr.GetEnumerator(); } //нужно сделать приведение типов
+
+
+       internal void AddLast<T>(T sLine) {Add(sLine); }
+       
+           //throw new NotImplementedException();
+       
    }
 
    class polygon : figure
