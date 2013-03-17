@@ -168,11 +168,17 @@ namespace KG_lab1_sharp
        //}
 
    }
-   class SLine
+   class SLine:System.ICloneable
    {
-       Point A, B;
+       static Point A, B;
        public Point a { get { return A; } set { A = value; } }
        public Point b { get { return B; } set { B = value; } }
+       public SLine(Point a, Point b) { this.a = a; this.b = b; }
+       public SLine() { }
+       public object Clone()
+       {
+           return new SLine(a, b);
+       }
    }
     //struct SLine
     //{
