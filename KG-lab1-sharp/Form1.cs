@@ -43,6 +43,8 @@ namespace KG_lab1_sharp
             lines.lastPoint = e.Location;
             //lines.las
             lines.lastLine.a = lines.lastPoint;
+            //lines.lastLine.a = e.Location;
+
            // lines.lastLine.a;
             //lines.points.AddLast(lines.lastLine);
 
@@ -172,6 +174,12 @@ namespace KG_lab1_sharp
        public Point a { get { return A; } set { A = value; } }
        public Point b { get { return B; } set { B = value; } }
    }
+    //struct SLine
+    //{
+    //   public Point a, b;
+    //   SLine(Point a) { this.a = a; }
+    //    SLine(Point a, Point b) { this.a = a; this.b = b; }
+    //    }
 
 
    class arrayListProxy
