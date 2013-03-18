@@ -29,9 +29,8 @@
         private void InitializeComponent()
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.bDrow = new System.Windows.Forms.Button();
-            this.bEdit = new System.Windows.Forms.Button();
-            this.bDel = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,44 +47,31 @@
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
-            // bDrow
+            // button1
             // 
-            this.bDrow.Location = new System.Drawing.Point(13, 24);
-            this.bDrow.Name = "bDrow";
-            this.bDrow.Size = new System.Drawing.Size(116, 73);
-            this.bDrow.TabIndex = 1;
-            this.bDrow.Text = "Drow";
-            this.bDrow.UseVisualStyleBackColor = true;
-            this.bDrow.Click += new System.EventHandler(this.bDrow_Click);
+            this.button1.Location = new System.Drawing.Point(13, 24);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(116, 73);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
             // 
-            // bEdit
+            // button2
             // 
-            this.bEdit.Location = new System.Drawing.Point(135, 24);
-            this.bEdit.Name = "bEdit";
-            this.bEdit.Size = new System.Drawing.Size(116, 73);
-            this.bEdit.TabIndex = 2;
-            this.bEdit.Text = "Edit";
-            this.bEdit.UseVisualStyleBackColor = true;
-            this.bEdit.Click += new System.EventHandler(this.bEdit_Click);
-            // 
-            // bDel
-            // 
-            this.bDel.Location = new System.Drawing.Point(258, 24);
-            this.bDel.Name = "bDel";
-            this.bDel.Size = new System.Drawing.Size(111, 73);
-            this.bDel.TabIndex = 3;
-            this.bDel.Text = "Delet";
-            this.bDel.UseVisualStyleBackColor = true;
-            this.bDel.Click += new System.EventHandler(this.bDel_Click);
+            this.button2.Location = new System.Drawing.Point(135, 24);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(116, 73);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 377);
-            this.Controls.Add(this.bDel);
-            this.Controls.Add(this.bEdit);
-            this.Controls.Add(this.bDrow);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.pictureBox1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -100,9 +86,8 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button bDrow;
-        private System.Windows.Forms.Button bEdit;
-        private System.Windows.Forms.Button bDel;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 
