@@ -43,6 +43,7 @@ namespace KG_lab1_sharp
             lines.lastPoint = e.Location;
             //lines.las
             lines.lastLine.a = lines.lastPoint;
+            
             //lines.lastLine.a = e.Location;
 
            // lines.lastLine.a;
@@ -168,24 +169,24 @@ namespace KG_lab1_sharp
        //}
 
    }
-   class SLine:System.ICloneable
+   //class SLine:System.ICloneable
+   //{
+   //    static Point A, B;
+   //    public Point a { get { return A; } set { A = value; } }
+   //    public Point b { get { return B; } set { B = value; } }
+   //    public SLine(Point a, Point b) { this.a = a; this.b = b; }
+   //    public SLine() { }
+   //    public object Clone()
+   //    {
+   //        return new SLine(a, b);
+   //    }
+   //}
+   struct SLine
    {
-       static Point A, B;
-       public Point a { get { return A; } set { A = value; } }
-       public Point b { get { return B; } set { B = value; } }
-       public SLine(Point a, Point b) { this.a = a; this.b = b; }
-       public SLine() { }
-       public object Clone()
-       {
-           return new SLine(a, b);
-       }
+       public Point a, b;
+       SLine(Point a) { this.a = a; b = a; }
+       SLine(Point a, Point b) { this.a = a; this.b = b; }
    }
-    //struct SLine
-    //{
-    //   public Point a, b;
-    //   SLine(Point a) { this.a = a; }
-    //    SLine(Point a, Point b) { this.a = a; this.b = b; }
-    //    }
 
 
    class arrayListProxy
