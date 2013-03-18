@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("KG-lab1-sharp")]
+[assembly: AssemblyTitle("kg-polygon")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("KG-lab1-sharp")]
+[assembly: AssemblyProduct("kg-polygon")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("401007eb-a6f2-4416-962e-68b6c28644c5")]
+[assembly: Guid("ddf87ddd-4606-4188-ab13-a1a21c5c45c8")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //

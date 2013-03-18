@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace KG_lab1_sharp.Properties
+namespace kg_polygon.Properties
 {
 
 

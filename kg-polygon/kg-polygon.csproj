@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E3F60B52-F5E5-43C0-A97F-AFD754C0DC1F}</ProjectGuid>
+    <ProjectGuid>{AFB3A770-A6C9-4BF8-9AEF-19AC1DB40C73}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KG_lab1_sharp</RootNamespace>
-    <AssemblyName>KG-lab1-sharp</AssemblyName>
+    <RootNamespace>kg_polygon</RootNamespace>
+    <AssemblyName>kg-polygon</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

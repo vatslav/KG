@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace KG_lab1_sharp
+namespace kg_polygon
 {
     static class Program
     {
@@ -13,7 +13,6 @@ namespace KG_lab1_sharp
         [STAThread]
         static void Main()
         {
-            //storage stor;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
