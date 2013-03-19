@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kg-polygon", "kg-polygon\kg-polygon.csproj", "{AFB3A770-A6C9-4BF8-9AEF-19AC1DB40C73}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{37B8AF18-2DC3-4B3A-BA41-912F43A22965}"
+	ProjectSection(SolutionItems) = preProject
+		drawingObjects.cs = drawingObjects.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
