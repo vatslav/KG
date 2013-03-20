@@ -48,8 +48,40 @@ namespace kg_polygon
             }
             else if (state.curModes == (int)modes.MODE_MOVE)
             {
-                state.testD(e.Location);
-                state.getLine(e.Location);
+                //state.testD(e.Location);
+                int index = state.getLine(e.Location) ;
+                //если мы куда попали в фигуру
+                if (state.curCaptures != (int)captures.TAKE_NONE)
+                {
+                    /*включаем режим перетаскивания
+                      запоминаем индекс редактируемого элемента
+                     пишем редактируемую фигуру во временный контейнер
+                     удаляем ее из основного хранилища*/
+                    state.isDragging = true;
+                    state.curLineIndex = index;
+                    state.curPoint = e.Location;
+                    //state.curLine = (SLine)state.points[index];
+                    //state.points.RemoveAt(index);
+
+                    //switch (state.curCaptures)
+                    //{
+                    //    case (int)captures.TAKE_PT1:
+                    //        object A = state.points[index];
+                    //        SLine a = (SLine)A;
+                    //        a.a = e.Location;
+                    //        A = (object) a;
+                    //        state.points[index] = A;
+                    //        break;
+                        
+                    //}
+
+                    
+                    //foreach(SLine line in iter)
+
+                    //Console.WriteLine(temp.a.ToString() + " " + temp.b.ToString());
+
+                }
+
             }
         }
 
@@ -62,7 +94,26 @@ namespace kg_polygon
             }
             else if (state.curModes == (int)modes.MODE_MOVE)
             {
-                state.getLine(e.Location);
+                state.isDragging = false;
+                switch (state.curCaptures)
+                {
+                    case (int)captures.TAKE_PT1:
+                        SLine changeLine = (SLine) state.points[state.curLineIndex];
+                        changeLine.a = e.Location;
+                        state.points[state.curLineIndex] = (object)changeLine;
+                        break;
+                    case (int) captures.TAKE_PT2:
+                        SLine changeLine2 = (SLine) state.points[state.curLineIndex];
+                        changeLine2.b = e.Location;
+                        state.points[state.curLineIndex] = (object)changeLine2;
+                        break;
+                    case (int) captures.TAKE_CENTR:
+                        MessageBox.Show("not implemented");
+                        break;
+
+
+
+                }
             }
         }
 
