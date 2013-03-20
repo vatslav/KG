@@ -73,14 +73,15 @@ namespace shareData
             Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             Graphics bmpGr = Graphics.FromImage(bmp);
             bmpGr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            bmpGr.Clear(Color.White);
+           
 
-            bmpGr.Clear(Color.White);
+
             if (curModes == (int)modes.MODE_DROW) 
             {
                 
                 if (isDragging)
                 {
+                    bmpGr.Clear(Color.White);
 
                     //отрисовка фигур из хранилища
                     foreach (SLine point in points)
@@ -91,12 +92,13 @@ namespace shareData
                     //отрисовка текущего изображения, того которое тянем
                     bmpGr.DrawLine(l2, curLine.a, curLine.b);
                     bmpGr.DrawLine(l1, curLine.a, e.Location);
+                    canvas.DrawImage(bmp, 0, 0);
                     
 
                 }
                 else
                 {
-                    curLine.b = e.Location;//хоть и работает и понмаю что делает, когда мы сюда попадем?
+                    curLine.b = e.Location;//хоть и работает и понимаю что делает, когда мы сюда попадем?
                 }
             }
             else if (curModes == (int)modes.MODE_MOVE)
@@ -106,10 +108,24 @@ namespace shareData
                     switch (curCaptures)
                     {
                         case (int)captures.TAKE_PT1:
-                            //отрисовка текущего изображения, того которое тянем
+                            bmpGr.Clear(Color.White);
+                            //меняем кординаты у перетягиваемого изображения
                             curLine = (SLine)points[curLineIndex];
                             curLine.a = e.Location;
                             points[curLineIndex] = (object)curLine;
+                            //отрисовка фигур из хранилища
+                            foreach (SLine point in points)
+                            {
+                                bmpGr.DrawLine(l2, point.a, point.b);
+                                bmpGr.DrawLine(l1, point.a, point.b);
+                            }
+                            //отрисовка текущего изображения, того которое тянем
+                            bmpGr.DrawLine(l2, curLine.a, curLine.b);
+                            bmpGr.DrawLine(l1, curLine.a, e.Location);
+                            canvas.DrawImage(bmp, 0, 0);                            
+                        
+
+
                             break;
                         case (int)captures.TAKE_PT2:
                             //отрисовка текущего изображения, того которое тянем
@@ -128,7 +144,7 @@ namespace shareData
                 }
             }
             //ставим на место
-            canvas.DrawImage(bmp, 0, 0);
+            
         }
 
 

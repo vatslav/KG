@@ -101,6 +101,7 @@ namespace kg_polygon
                         SLine changeLine = (SLine) state.points[state.curLineIndex];
                         changeLine.a = e.Location;
                         state.points[state.curLineIndex] = (object)changeLine;
+                        state.DrawingFigure(pictureBox1, e);
                         break;
                     case (int) captures.TAKE_PT2:
                         SLine changeLine2 = (SLine) state.points[state.curLineIndex];
