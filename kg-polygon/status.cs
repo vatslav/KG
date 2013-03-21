@@ -140,112 +140,113 @@ namespace shareData
             Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             Graphics bmpGr = Graphics.FromImage(bmp);
             bmpGr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            
 
-            //switch(curModes){
-            if (curModes == (int)modes.MODE_DROW) 
+
+            switch (curModes)
             {
-                
-                if (isDragging)
-                {
+                case (int)modes.MODE_DROW:
+
+
+                    if (isDragging)
+                    {
+
+                        bmpGr.Clear(Color.White);
+                        //отрисовка фигур из хранилища
+                        foreach (SLine point in points)
+                        {
+                            bmpGr.DrawLine(l2, point.a, point.b);
+                            bmpGr.DrawLine(l1, point.a, point.b);
+                        }
+                        //отрисовка текущего изображения, того которое тянем
+                        bmpGr.DrawLine(l2, curLine.a, curLine.b);
+                        bmpGr.DrawLine(l1, curLine.a, e.Location);
+                        canvas.DrawImage(bmp, 0, 0);
+
+
+                    }
+                    else
+                    {
+                        curLine.b = e.Location;//хоть и работает и понимаю что делает, когда мы сюда попадем?
+                    }
+                    break;
+                case (int)modes.MODE_MOVE:
+
 
                     bmpGr.Clear(Color.White);
-                    //отрисовка фигур из хранилища
-                    foreach (SLine point in points)
+                    if (isDragging)
                     {
-                        bmpGr.DrawLine(l2, point.a, point.b);
-                        bmpGr.DrawLine(l1, point.a, point.b);
-                    }
-                    //отрисовка текущего изображения, того которое тянем
-                    bmpGr.DrawLine(l2, curLine.a, curLine.b);
-                    bmpGr.DrawLine(l1, curLine.a, e.Location);
-                    canvas.DrawImage(bmp, 0, 0);
-                    
-
-                }
-                else
-                {
-                    curLine.b = e.Location;//хоть и работает и понимаю что делает, когда мы сюда попадем?
-                }
-            }
-            else if (curModes == (int)modes.MODE_MOVE)
-            {
-
-                bmpGr.Clear(Color.White);
-                if (isDragging)
-                {
-                    //if (curCaptures!=(int)captures.TAKE_CENTR)
+                        //if (curCaptures!=(int)captures.TAKE_CENTR)
                         curLine = (SLine)points[curLineIndex];
-                    SLine tempLine;
-                    switch (curCaptures)
+                        SLine tempLine;
+                        switch (curCaptures)
+                        {
+                            //меняем кординаты у перетягиваемого изображения прямо в хранилище
+                            //готовимся к отрисовке
+                            case (int)captures.TAKE_PT1:
+                                curLine.a = e.Location;
+                                break;
+                            case (int)captures.TAKE_PT2:
+                                curLine.b = e.Location;
+                                break;
+                            case (int)captures.TAKE_CENTR:
+                                int dx = e.Location.X - curPoint.X;
+                                int dy = e.Location.Y - curPoint.Y;
+                                curLine.a.X = dx + e.Location.X;
+                                curLine.a.Y = dy + e.Location.Y;
+                                curLine.b.X = dx + e.Location.X;
+                                curLine.b.Y = dy + e.Location.Y;
+                                break;
+                        }
+                        points[curLineIndex] = (object)curLine;
+                        //отрисовка фигур из хранилища
+                        foreach (SLine point in points)
+                        {
+                            bmpGr.DrawLine(l2, point.a, point.b);
+                            bmpGr.DrawLine(l1, point.a, point.b);
+                        }
+                        //Эффект полупрозачности!
+                        ///хоть это и здорово не пойму почему тут получается рисование полузпрозрачным?
+                        switch (curCaptures)
+                        {
+                            case (int)captures.TAKE_PT1:
+                                bmpGr.DrawLine(l2, curLine.a, curLine.b);
+                                bmpGr.DrawLine(l1, curLine.a, e.Location);
+                                break;
+                            case (int)captures.TAKE_PT2:
+                                bmpGr.DrawLine(l2, curLine.a, curLine.b);
+                                bmpGr.DrawLine(l1, e.Location, curLine.b);
+                                break;
+                        }
+                        canvas.DrawImage(bmp, 0, 0);
+
+                    }
+                    else
                     {
-                        //меняем кординаты у перетягиваемого изображения прямо в хранилище
-                    //готовимся к отрисовке
-                        case (int)captures.TAKE_PT1:
-                            curLine.a = e.Location;
-                            break;
-                        case (int)captures.TAKE_PT2:
-                            curLine.b = e.Location;
-                            break;
-                        case (int)captures.TAKE_CENTR:
-                            int dx = e.Location.X - curPoint.X;
-                            int dy = e.Location.Y - curPoint.Y;
-                            curLine.a.X = dx+  e.Location.X;
-                            curLine.a.Y = dy+ e.Location.Y;
-                            curLine.b.X = dx+  e.Location.X;
-                            curLine.b.Y = dy+ e.Location.Y;
-                            break;
-                     }
-                    points[curLineIndex] = (object)curLine;
-                    //отрисовка фигур из хранилища
+
+                        foreach (SLine point in points)
+                        {
+                            bmpGr.DrawLine(l2, point.a, point.b);
+                            bmpGr.DrawLine(l1, point.a, point.b);
+                        }
+                        canvas.DrawImage(bmp, 0, 0);
+
+
+                    }
+
+
+                    break;
+                case (int)modes.MODE_DELETE:
+
+                    bmpGr.Clear(Color.White);
                     foreach (SLine point in points)
                     {
                         bmpGr.DrawLine(l2, point.a, point.b);
                         bmpGr.DrawLine(l1, point.a, point.b);
                     }
-                    //Эффект полупрозачности!
-                    ///хоть это и здорово не пойму почему тут получается рисование полузпрозрачным?
-                    switch (curCaptures)
-                    {
-                        case (int) captures.TAKE_PT1: 
-                            bmpGr.DrawLine(l2, curLine.a, curLine.b);
-                            bmpGr.DrawLine(l1, curLine.a, e.Location);
-                            break;
-                        case (int) captures.TAKE_PT2:
-                            bmpGr.DrawLine(l2, curLine.a, curLine.b);
-                            bmpGr.DrawLine(l1, e.Location, curLine.b);
-                            break;
-                    }
                     canvas.DrawImage(bmp, 0, 0);
-                
-                }
-                else 
-                {
-                    
-                    foreach (SLine point in points)
-                    {
-                        bmpGr.DrawLine(l2, point.a, point.b);
-                        bmpGr.DrawLine(l1, point.a, point.b);
-                    }
-                    canvas.DrawImage(bmp, 0, 0);
-
-
-                }
-                
+                    break;
 
             }
-            if (curModes != (int)modes.MODE_DELETE)
-            {
-                bmpGr.Clear(Color.White);
-                foreach (SLine point in points)
-                {
-                    bmpGr.DrawLine(l2, point.a, point.b);
-                    bmpGr.DrawLine(l1, point.a, point.b);
-                }
-                canvas.DrawImage(bmp, 0, 0);
-            }
-           
-            
         }
 
         public void DeleteFigure(MouseEventArgs e)
