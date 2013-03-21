@@ -21,9 +21,11 @@ namespace shareData
         public int curLineIndex;
         protected int visibility = 4;
         protected Graphics canvas;
+        protected PictureBox defaultCanvas;
         public void initial(PictureBox initialForm)
         {
             canvas = initialForm.CreateGraphics();
+            defaultCanvas = initialForm;
         }
 
         public ArrayList points = new ArrayList();
@@ -78,6 +80,7 @@ namespace shareData
             else if (curModes == (int)modes.MODE_MOVE)
             {
                 isDragging = false;
+                DrawingFigure(null, e);
 
             }
         }
@@ -111,6 +114,8 @@ namespace shareData
         }
         public void DrawingFigure(PictureBox pictureBox1, MouseEventArgs e)
         {
+            if (pictureBox1 == null) pictureBox1 = defaultCanvas;
+
             Pen l1 = new Pen(Color.Blue, 2.0f);//цвет линии
             Pen l2 = new Pen(Color.White, 2.0f);//фон
             //сглаживание
@@ -153,7 +158,7 @@ namespace shareData
                     {
                         case (int)captures.TAKE_PT1:
                             bmpGr.Clear(Color.White);
-                            //меняем кординаты у перетягиваемого изображения
+                            //меняем кординаты у перетягиваемого изображения прямо в хранилище
                             curLine = (SLine)points[curLineIndex];
                             curLine.a = e.Location;
                             points[curLineIndex] = (object)curLine;
@@ -164,10 +169,11 @@ namespace shareData
                                 bmpGr.DrawLine(l1, point.a, point.b);
                             }
                             //отрисовка текущего изображения, того которое тянем
+                            ///хоть это и здорово не пойму почему тут получается рисование полузпрозрачным?
                             bmpGr.DrawLine(l2, curLine.a, curLine.b);
                             bmpGr.DrawLine(l1, curLine.a, e.Location);
-                            canvas.DrawImage(bmp, 0, 0);                            
-                        
+                            canvas.DrawImage(bmp, 0, 0);
+
 
 
                             break;
@@ -179,11 +185,18 @@ namespace shareData
                             break;
                     }
                     //отрисовка фигур из хранилища
+
+                }
+                else 
+                {
+                    bmpGr.Clear(Color.White);
                     foreach (SLine point in points)
                     {
                         bmpGr.DrawLine(l2, point.a, point.b);
                         bmpGr.DrawLine(l1, point.a, point.b);
                     }
+                    canvas.DrawImage(bmp, 0, 0);
+
 
                 }
             }
