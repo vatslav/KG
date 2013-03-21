@@ -175,9 +175,9 @@ namespace shareData
                     bmpGr.Clear(Color.White);
                     if (isDragging)
                     {
-                        //if (curCaptures!=(int)captures.TAKE_CENTR)
-                        curLine = (SLine)points[curLineIndex];
-                        SLine tempLine;
+                        if (curCaptures!=(int)captures.TAKE_CENTR)
+                            curLine = (SLine)points[curLineIndex];
+                        SLine tempLine = (SLine)points[curLineIndex];
                         switch (curCaptures)
                         {
                             //меняем кординаты у перетягиваемого изображения прямо в хранилище
@@ -189,15 +189,19 @@ namespace shareData
                                 curLine.b = e.Location;
                                 break;
                             case (int)captures.TAKE_CENTR:
+                                
                                 int dx = e.Location.X - curPoint.X;
                                 int dy = e.Location.Y - curPoint.Y;
-                                curLine.a.X = dx + e.Location.X;
-                                curLine.a.Y = dy + e.Location.Y;
-                                curLine.b.X = dx + e.Location.X;
-                                curLine.b.Y = dy + e.Location.Y;
+
+                                tempLine.a.X = Math.Abs(e.Location.X - (curLine.a.X - curPoint.X));
+                                tempLine.a.Y = Math.Abs(e.Location.Y - (curLine.a.Y - curPoint.Y));
+                                tempLine.b.X = Math.Abs(e.Location.X - (curLine.b.X - curPoint.X));
+                                tempLine.b.Y = Math.Abs(e.Location.Y - (curLine.b.Y - curPoint.Y));
                                 break;
                         }
-                        points[curLineIndex] = (object)curLine;
+                        if (curCaptures != (int)captures.TAKE_CENTR)
+                            points[curLineIndex] = (object)curLine;
+                        else points[curLineIndex] = (object)tempLine;
                         //отрисовка фигур из хранилища
                         foreach (SLine point in points)
                         {
