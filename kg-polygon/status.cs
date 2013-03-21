@@ -39,6 +39,50 @@ namespace shareData
             c.Y = (a.Y + b.Y) / 2;
             return c;
         }
+        public void drawingDown(MouseEventArgs e) 
+        {
+            if (curModes == (int)modes.MODE_DROW)
+            {
+                isDragging = true;
+                curPoint = e.Location;
+                curLine.a = e.Location;
+            }
+            else if (curModes == (int)modes.MODE_MOVE)
+            {
+                //testD(e.Location);
+                int index = getLine(e.Location);
+                //если мы куда попали в фигуру
+                if (curCaptures != (int)captures.TAKE_NONE)
+                {
+                    /*включаем режим перетаскивания
+                      запоминаем индекс редактируемого элемента
+                     пишем редактируемую фигуру во временный контейнер
+                     удаляем ее из основного хранилища*/
+                    isDragging = true;
+                    curLineIndex = index;
+                    curPoint = e.Location;
+
+                }
+
+            }
+        }
+
+        public void drawingUp(MouseEventArgs e)
+        {
+            if (curModes == (int)modes.MODE_DROW)
+            {
+                isDragging = false;
+                curLine.b = e.Location;
+                points.Add(curLine);
+            }
+            else if (curModes == (int)modes.MODE_MOVE)
+            {
+                isDragging = false;
+
+            }
+        }
+
+
         public int getLine(Point midPoint)
         {
             int dx = (int)midPoint.X;

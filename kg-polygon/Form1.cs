@@ -41,81 +41,12 @@ namespace kg_polygon
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (state.curModes == (int)modes.MODE_DROW) {
-                state.isDragging = true;
-                state.curPoint = e.Location;
-                state.curLine.a = e.Location;
-            }
-            else if (state.curModes == (int)modes.MODE_MOVE)
-            {
-                //state.testD(e.Location);
-                int index = state.getLine(e.Location) ;
-                //если мы куда попали в фигуру
-                if (state.curCaptures != (int)captures.TAKE_NONE)
-                {
-                    /*включаем режим перетаскивания
-                      запоминаем индекс редактируемого элемента
-                     пишем редактируемую фигуру во временный контейнер
-                     удаляем ее из основного хранилища*/
-                    state.isDragging = true;
-                    state.curLineIndex = index;
-                    state.curPoint = e.Location;
-                    //state.curLine = (SLine)state.points[index];
-                    //state.points.RemoveAt(index);
-
-                    //switch (state.curCaptures)
-                    //{
-                    //    case (int)captures.TAKE_PT1:
-                    //        object A = state.points[index];
-                    //        SLine a = (SLine)A;
-                    //        a.a = e.Location;
-                    //        A = (object) a;
-                    //        state.points[index] = A;
-                    //        break;
-                        
-                    //}
-
-                    
-                    //foreach(SLine line in iter)
-
-                    //Console.WriteLine(temp.a.ToString() + " " + temp.b.ToString());
-
-                }
-
-            }
+            state.drawingDown(e);
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (state.curModes == (int)modes.MODE_DROW) {
-                state.isDragging = false;
-                state.curLine.b = e.Location;
-                state.points.Add(state.curLine);
-            }
-            else if (state.curModes == (int)modes.MODE_MOVE)
-            {
-                state.isDragging = false;
-                switch (state.curCaptures)
-                {
-                    case (int)captures.TAKE_PT1:
-                        SLine changeLine = (SLine) state.points[state.curLineIndex];
-                        changeLine.a = e.Location;
-                        state.points[state.curLineIndex] = (object)changeLine;
-                        state.DrawingFigure(pictureBox1, e);
-                        break;
-                    case (int) captures.TAKE_PT2:
-                        SLine changeLine2 = (SLine) state.points[state.curLineIndex];
-                        changeLine2.b = e.Location;
-                        state.points[state.curLineIndex] = (object)changeLine2;
-                        break;
-                    case (int) captures.TAKE_CENTR:
-                        MessageBox.Show("not implemented");
-                        break;
-
-
-
-                }
-            }
+            state.drawingUp(e);
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -147,3 +78,43 @@ namespace kg_polygon
 
 
 }
+///UP===
+//switch (state.curCaptures)
+//{
+//    case (int)captures.TAKE_PT1:
+//        SLine changeLine = (SLine) state.points[state.curLineIndex];
+//        changeLine.a = e.Location;
+//        state.points[state.curLineIndex] = (object)changeLine;
+//        state.DrawingFigure(pictureBox1, e);
+//        break;
+//    case (int) captures.TAKE_PT2:
+//        SLine changeLine2 = (SLine) state.points[state.curLineIndex];
+//        changeLine2.b = e.Location;
+//        state.points[state.curLineIndex] = (object)changeLine2;
+//        break;
+//    case (int) captures.TAKE_CENTR:
+//        MessageBox.Show("not implemented");
+//        break;
+//}
+
+
+///DOWN===
+///  //state.curLine = (SLine)state.points[index];
+//state.points.RemoveAt(index);
+
+//switch (state.curCaptures)
+//{
+//    case (int)captures.TAKE_PT1:
+//        object A = state.points[index];
+//        SLine a = (SLine)A;
+//        a.a = e.Location;
+//        A = (object) a;
+//        state.points[index] = A;
+//        break;
+
+//}
+
+
+//foreach(SLine line in iter)
+
+//Console.WriteLine(temp.a.ToString() + " " + temp.b.ToString());
