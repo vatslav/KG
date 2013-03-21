@@ -122,7 +122,7 @@ namespace shareData
             Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             Graphics bmpGr = Graphics.FromImage(bmp);
             bmpGr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-           
+            
 
 
             if (curModes == (int)modes.MODE_DROW) 
@@ -130,8 +130,8 @@ namespace shareData
                 
                 if (isDragging)
                 {
-                    bmpGr.Clear(Color.White);
 
+                    bmpGr.Clear(Color.White);
                     //отрисовка фигур из хранилища
                     foreach (SLine point in points)
                     {
@@ -152,44 +152,44 @@ namespace shareData
             }
             else if (curModes == (int)modes.MODE_MOVE)
             {
+
+                bmpGr.Clear(Color.White);
                 if (isDragging)
                 {
+                    curLine = (SLine)points[curLineIndex];
                     switch (curCaptures)
                     {
+                        //меняем кординаты у перетягиваемого изображения прямо в хранилище
+                    //готовимся к отрисовке
                         case (int)captures.TAKE_PT1:
-                            bmpGr.Clear(Color.White);
-                            //меняем кординаты у перетягиваемого изображения прямо в хранилище
-                            curLine = (SLine)points[curLineIndex];
                             curLine.a = e.Location;
-                            points[curLineIndex] = (object)curLine;
-                            //отрисовка фигур из хранилища
-                            foreach (SLine point in points)
-                            {
-                                bmpGr.DrawLine(l2, point.a, point.b);
-                                bmpGr.DrawLine(l1, point.a, point.b);
-                            }
-                            //отрисовка текущего изображения, того которое тянем
-                            ///хоть это и здорово не пойму почему тут получается рисование полузпрозрачным?
-                            bmpGr.DrawLine(l2, curLine.a, curLine.b);
-                            bmpGr.DrawLine(l1, curLine.a, e.Location);
-                            canvas.DrawImage(bmp, 0, 0);
-
-
-
                             break;
                         case (int)captures.TAKE_PT2:
-                            //отрисовка текущего изображения, того которое тянем
-                            curLine = (SLine)points[curLineIndex];
-                            curLine.a = e.Location;
-                            points[curLineIndex] = (object)curLine;
+                            curLine.b = e.Location;
                             break;
-                    }
+                        case (int)captures.TAKE_CENTR:
+                            curLine.a.X = curPoint.X - e.Location.X;
+                            curLine.a.Y = curPoint.Y - e.Location.Y;
+                            curLine.b.X = curPoint.X - e.Location.X;
+                            curLine.b.Y = curPoint.Y - e.Location.Y;
+                            break;
+                     }
+                    points[curLineIndex] = (object)curLine;
                     //отрисовка фигур из хранилища
-
+                    foreach (SLine point in points)
+                    {
+                        bmpGr.DrawLine(l2, point.a, point.b);
+                        bmpGr.DrawLine(l1, point.a, point.b);
+                    }
+                    //отрисовка текущего изображения, того которое тянем
+                    ///хоть это и здорово не пойму почему тут получается рисование полузпрозрачным?
+                    bmpGr.DrawLine(l2, curLine.a, curLine.b);
+                    bmpGr.DrawLine(l1, curLine.a, e.Location);
+                    canvas.DrawImage(bmp, 0, 0);
                 }
                 else 
                 {
-                    bmpGr.Clear(Color.White);
+                    
                     foreach (SLine point in points)
                     {
                         bmpGr.DrawLine(l2, point.a, point.b);
@@ -200,7 +200,7 @@ namespace shareData
 
                 }
             }
-            //ставим на место
+           
             
         }
 
