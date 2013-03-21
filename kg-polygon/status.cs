@@ -193,10 +193,10 @@ namespace shareData
                                 int dx = e.Location.X - curPoint.X;
                                 int dy = e.Location.Y - curPoint.Y;
 
-                                tempLine.a.X = Math.Abs(e.Location.X - (curLine.a.X - curPoint.X));
-                                tempLine.a.Y = Math.Abs(e.Location.Y - (curLine.a.Y - curPoint.Y));
-                                tempLine.b.X = Math.Abs(e.Location.X - (curLine.b.X - curPoint.X));
-                                tempLine.b.Y = Math.Abs(e.Location.Y - (curLine.b.Y - curPoint.Y));
+                                tempLine.a.X = e.Location.X + (curLine.a.X - curPoint.X);
+                                tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
+                                tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
+                                tempLine.b.Y = e.Location.Y + (curLine.b.Y - curPoint.Y);
                                 break;
                         }
                         if (curCaptures != (int)captures.TAKE_CENTR)
