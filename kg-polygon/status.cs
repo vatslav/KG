@@ -43,46 +43,64 @@ namespace shareData
         }
         public void drawingDown(MouseEventArgs e) 
         {
-            if (curModes == (int)modes.MODE_DROW)
+            switch(curModes) 
             {
-                isDragging = true;
-                curPoint = e.Location;
-                curLine.a = e.Location;
-            }
-            else if (curModes == (int)modes.MODE_MOVE)
-            {
-                //testD(e.Location);
-                int index = getLine(e.Location);
-                //если мы куда попали в фигуру
-                if (curCaptures != (int)captures.TAKE_NONE)
-                {
-                    /*включаем режим перетаскивания
-                      запоминаем индекс редактируемого элемента
-                     пишем редактируемую фигуру во временный контейнер
-                     удаляем ее из основного хранилища*/
+                case (int)modes.MODE_DROW:
                     isDragging = true;
-                    curLineIndex = index;
                     curPoint = e.Location;
+                    curLine.a = e.Location;
+                    break;
 
-                }
+                case (int)modes.MODE_MOVE:
+                    //testD(e.Location);
+                    int index = getLine(e.Location);
+                    //если мы куда попали в фигуру
+                    if (curCaptures != (int)captures.TAKE_NONE)
+                    {
+                        /*включаем режим перетаскивания
+                          запоминаем индекс редактируемого элемента
+                         пишем редактируемую фигуру во временный контейнер
+                         удаляем ее из основного хранилища*/
+                        isDragging = true;
+                        curLineIndex = index;
+                        curPoint = e.Location;
+                        if (curCaptures ==(int) captures.TAKE_CENTR)
+                            curLine = (SLine)points[curLineIndex];
 
+                    }
+                    break;
+
+                
+
+                case (int)modes.MODE_DELETE:
+                    curLineIndex = getLine(e.Location);
+                    if (curLineIndex != -1)
+                    {
+                        points.RemoveAt(curLineIndex);
+                        DrawingFigure(defaultCanvas, e);
+                    }
+                    break;
             }
         }
 
         public void drawingUp(MouseEventArgs e)
         {
-            if (curModes == (int)modes.MODE_DROW)
+            switch(curModes)
             {
-                isDragging = false;
-                curLine.b = e.Location;
-                points.Add(curLine);
-            }
-            else if (curModes == (int)modes.MODE_MOVE)
-            {
-                isDragging = false;
-                DrawingFigure(null, e);
+                case (int)modes.MODE_DROW:
+                    isDragging = false;
+                    curLine.b = e.Location;
+                    points.Add(curLine);
+                    break;
+                case (int)modes.MODE_MOVE:
+                    isDragging = false;
+                    DrawingFigure(null, e);
+                    break;
 
+
+            
             }
+            
         }
 
 
@@ -95,7 +113,7 @@ namespace shareData
             {
                 // Console.WriteLine(d(line.a, midPoint) + d(midPoint, line.b).ToString() + " " + d(line.a, line.b).ToString());
 
-                if (d(line.a, midPoint) + d(midPoint, line.b) - d(line.a, line.b) < 1)
+                if (d(line.a, midPoint) + d(midPoint, line.b) - d(line.a, line.b) < visibility)
                 {
 
                     if (d(line.a, midPoint) < visibility)
@@ -124,7 +142,7 @@ namespace shareData
             bmpGr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             
 
-
+            //switch(curModes){
             if (curModes == (int)modes.MODE_DROW) 
             {
                 
@@ -156,7 +174,9 @@ namespace shareData
                 bmpGr.Clear(Color.White);
                 if (isDragging)
                 {
-                    curLine = (SLine)points[curLineIndex];
+                    //if (curCaptures!=(int)captures.TAKE_CENTR)
+                        curLine = (SLine)points[curLineIndex];
+                    SLine tempLine;
                     switch (curCaptures)
                     {
                         //меняем кординаты у перетягиваемого изображения прямо в хранилище
@@ -168,10 +188,12 @@ namespace shareData
                             curLine.b = e.Location;
                             break;
                         case (int)captures.TAKE_CENTR:
-                            curLine.a.X = curPoint.X - e.Location.X;
-                            curLine.a.Y = curPoint.Y - e.Location.Y;
-                            curLine.b.X = curPoint.X - e.Location.X;
-                            curLine.b.Y = curPoint.Y - e.Location.Y;
+                            int dx = e.Location.X - curPoint.X;
+                            int dy = e.Location.Y - curPoint.Y;
+                            curLine.a.X = dx+  e.Location.X;
+                            curLine.a.Y = dy+ e.Location.Y;
+                            curLine.b.X = dx+  e.Location.X;
+                            curLine.b.Y = dy+ e.Location.Y;
                             break;
                      }
                     points[curLineIndex] = (object)curLine;
@@ -181,11 +203,21 @@ namespace shareData
                         bmpGr.DrawLine(l2, point.a, point.b);
                         bmpGr.DrawLine(l1, point.a, point.b);
                     }
-                    //отрисовка текущего изображения, того которое тянем
+                    //Эффект полупрозачности!
                     ///хоть это и здорово не пойму почему тут получается рисование полузпрозрачным?
-                    bmpGr.DrawLine(l2, curLine.a, curLine.b);
-                    bmpGr.DrawLine(l1, curLine.a, e.Location);
+                    switch (curCaptures)
+                    {
+                        case (int) captures.TAKE_PT1: 
+                            bmpGr.DrawLine(l2, curLine.a, curLine.b);
+                            bmpGr.DrawLine(l1, curLine.a, e.Location);
+                            break;
+                        case (int) captures.TAKE_PT2:
+                            bmpGr.DrawLine(l2, curLine.a, curLine.b);
+                            bmpGr.DrawLine(l1, e.Location, curLine.b);
+                            break;
+                    }
                     canvas.DrawImage(bmp, 0, 0);
+                
                 }
                 else 
                 {
@@ -199,11 +231,27 @@ namespace shareData
 
 
                 }
+                
+
+            }
+            if (curModes != (int)modes.MODE_DELETE)
+            {
+                bmpGr.Clear(Color.White);
+                foreach (SLine point in points)
+                {
+                    bmpGr.DrawLine(l2, point.a, point.b);
+                    bmpGr.DrawLine(l1, point.a, point.b);
+                }
+                canvas.DrawImage(bmp, 0, 0);
             }
            
             
         }
 
+        public void DeleteFigure(MouseEventArgs e)
+        {
+
+        }
 
         public void testD(Point e)
         {
