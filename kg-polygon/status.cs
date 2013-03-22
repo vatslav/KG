@@ -298,18 +298,15 @@ namespace shareData
             points.Clear();
             char[] delimeterChar = { ' ', ',' };
             string[] lines = System.IO.File.ReadAllLines(path);
-            Console.WriteLine("LOADFILE!");
+            
             string[] tempStr;
             
             
 
             foreach (string line in lines)
             {
-                Console.WriteLine(line);
+                
                 tempStr = line.Split(delimeterChar);
-                foreach (string str in tempStr)
-                    Console.Write(str + "|");
-                Console.WriteLine("");
                 curLine.typeObj = Convert.ToInt32(tempStr[0]);
                 curLine.a.X = Convert.ToInt32(tempStr[1]);
                 curLine.a.Y = Convert.ToInt32(tempStr[2]);
