@@ -100,9 +100,14 @@ namespace kg_polygon
 
         private void bLoad_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.Filter = "VectorFugireFiles|*.vff";
-            openFileDialog1.Title = "Выберети файл - векторное хранилища для загрузки в прогрумму";
+            OpenFileDialog askLoad = new OpenFileDialog();
+            askLoad.Filter = "VectorFugireFiles|*.vff";
+            askLoad.Title = "Выберети файл - векторное хранилища для загрузки в прогрумму";
+            askLoad.ShowDialog();
+            if (askLoad.FileName != "")
+                state.loadStorage(askLoad.FileName);
+
+
             
         }
     }

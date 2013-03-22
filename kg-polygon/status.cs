@@ -280,8 +280,8 @@ namespace shareData
             {
                 foreach (SLine line in points)
                 {
-                    textFile.WriteLine(line.a.ToString() + " " + line.b.ToString());
-                    textFile.WriteLine("{0},{1}, {2},{3}", line.a.X, line.a.Y, line.b.X, line.b.Y);
+                   // textFile.WriteLine(line.a.ToString() + " " + line.b.ToString());
+                    textFile.WriteLine("{4} {0},{1} {2},{3}", line.a.X, line.a.Y, line.b.X, line.b.Y, line.typeObj);
                 }
 
             }
@@ -293,13 +293,47 @@ namespace shareData
             textFile.Close();
         }
 
+        public void loadStorage(string path)
+        {
+            points.Clear();
+            char[] delimeterChar = { ' ', ',' };
+            string[] lines = System.IO.File.ReadAllLines(path);
+            Console.WriteLine("LOADFILE!");
+            string[] tempStr;
+            
+            
+
+            foreach (string line in lines)
+            {
+                Console.WriteLine(line);
+                tempStr = line.Split(delimeterChar);
+                foreach (string str in tempStr)
+                    Console.Write(str + "|");
+                Console.WriteLine("");
+                curLine.typeObj = Convert.ToInt32(tempStr[0]);
+                curLine.a.X = Convert.ToInt32(tempStr[1]);
+                curLine.a.Y = Convert.ToInt32(tempStr[2]);
+                curLine.b.X = Convert.ToInt32(tempStr[3]);
+                curLine.b.Y = Convert.ToInt32(tempStr[4]);
+                points.Add(curLine);
+            }
+            DrawingFigure(null,null);
+
+        }
+
 
     }
     
     struct SLine
     {
+        public int typeObj;
         public Point a, b;
-        SLine(Point a, Point b) { this.a = a; this.b = b; }
+
+        SLine(Point a, Point b) { this.a = a; this.b = b; typeObj = 0; }
+        SLine(Point a, Point b, int t) { this.a = a; this.b = b; typeObj = t; }
+        //SLine(int t) { typeObj = t; a. }
+        //public int typeObj;
+        
 
     }
 }
