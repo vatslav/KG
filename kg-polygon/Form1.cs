@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+//using System.Timers;
 using shareData;
 
 
@@ -22,16 +23,29 @@ namespace kg_polygon
         //состояние программы
         editor state = new editor();
 
+        
         //Timer t = new Timer();
         //t.Tick+= new System.EventHandler(this, t_Tick);
         //void t_Tick(object sender, EventArgs e) { }
+        //void tickF() { state.DrawingFigure(null, null); }
         public Form1()
         {
-            
+             
             InitializeComponent();
             state.initial(pictureBox1);
             //canvas=pictureBox1.CreateGraphics(); //присваиваем канвасу уазатель, чем он
             state.curModes = (int)modes.MODE_DROW; //режим работы по умолчанию
+            //Timer reDraw = new Timer();
+            //reDraw.Elapsed += new ElapsedEventHandler(state.DrawingFigure(null,null);
+            //reDraw.Interval = 50;
+            //reDraw.Start();
+            //System.Timers.Timer timer = new System.Timers.Timer();
+            //timer.AutoReset = true;
+            //timer.Interval = 1000; //in milliseconds
+            //timer.Elapsed += new System.Timers.ElapsedEventHandler(state.DrawingFigure);
+
+            //// включаем таймер
+            //timer.Enabled = true;
         }
 
         private void pictureBox1_Click(object sender, EventArgs e) { }
@@ -42,6 +56,7 @@ namespace kg_polygon
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             state.drawingDown(e);
+
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
@@ -67,55 +82,33 @@ namespace kg_polygon
         {
             state.curModes = (int)modes.MODE_DELETE;
         }
+
+        private void bSafe_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog askSave = new SaveFileDialog();
+            askSave.Filter = "VectorFugireFiles|*.vff";
+            askSave.Title = "Выберети файл - векторное хранилища для сохранения данных прогруммы";
+            askSave.ShowDialog();
+            //File = File.OpenText(filename);
+            //StreamWriter sw = File.CreateText(filename)
+            
+            if (askSave.FileName != "")
+             state.safeStorage(askSave.FileName);
+
+            
+        }
+
+        private void bLoad_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "VectorFugireFiles|*.vff";
+            openFileDialog1.Title = "Выберети файл - векторное хранилища для загрузки в прогрумму";
+            
+        }
     }
 
 
-    struct SLine
-    {
-        public Point a, b;
-        SLine(Point a, Point b) { this.a = a; this.b = b; }
-        
-    }
+
 
 
 }
-///UP===
-//switch (state.curCaptures)
-//{
-//    case (int)captures.TAKE_PT1:
-//        SLine changeLine = (SLine) state.points[state.curLineIndex];
-//        changeLine.a = e.Location;
-//        state.points[state.curLineIndex] = (object)changeLine;
-//        state.DrawingFigure(pictureBox1, e);
-//        break;
-//    case (int) captures.TAKE_PT2:
-//        SLine changeLine2 = (SLine) state.points[state.curLineIndex];
-//        changeLine2.b = e.Location;
-//        state.points[state.curLineIndex] = (object)changeLine2;
-//        break;
-//    case (int) captures.TAKE_CENTR:
-//        MessageBox.Show("not implemented");
-//        break;
-//}
-
-
-///DOWN===
-///  //state.curLine = (SLine)state.points[index];
-//state.points.RemoveAt(index);
-
-//switch (state.curCaptures)
-//{
-//    case (int)captures.TAKE_PT1:
-//        object A = state.points[index];
-//        SLine a = (SLine)A;
-//        a.a = e.Location;
-//        A = (object) a;
-//        state.points[index] = A;
-//        break;
-
-//}
-
-
-//foreach(SLine line in iter)
-
-//Console.WriteLine(temp.a.ToString() + " " + temp.b.ToString());

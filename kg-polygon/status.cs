@@ -52,15 +52,10 @@ namespace shareData
                     break;
 
                 case (int)modes.MODE_MOVE:
-                    //testD(e.Location);
                     int index = getLine(e.Location);
                     //если мы куда попали в фигуру
                     if (curCaptures != (int)captures.TAKE_NONE)
                     {
-                        /*включаем режим перетаскивания
-                          запоминаем индекс редактируемого элемента
-                         пишем редактируемую фигуру во временный контейнер
-                         удаляем ее из основного хранилища*/
                         isDragging = true;
                         curLineIndex = index;
                         curPoint = e.Location;
@@ -130,6 +125,12 @@ namespace shareData
             curCaptures = (int)captures.TAKE_NONE;
             return -1;
         }
+        public void DrawingFigure(object source, System.Timers.ElapsedEventArgs e)
+        {
+            DrawingFigure(null,e);
+        }
+
+
         public void DrawingFigure(PictureBox pictureBox1, MouseEventArgs e)
         {
             if (pictureBox1 == null) pictureBox1 = defaultCanvas;
@@ -140,8 +141,17 @@ namespace shareData
             Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             Graphics bmpGr = Graphics.FromImage(bmp);
             bmpGr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-
+            if (e==null)
+            {
+                 bmpGr.Clear(Color.White);
+                foreach (SLine point in points)
+                        {
+                            bmpGr.DrawLine(l2, point.a, point.b);
+                            bmpGr.DrawLine(l1, point.a, point.b);
+                        }
+                canvas.DrawImage(bmp, 0, 0);
+                return;
+            }
             switch (curModes)
             {
                 case (int)modes.MODE_DROW:
@@ -175,33 +185,30 @@ namespace shareData
                     bmpGr.Clear(Color.White);
                     if (isDragging)
                     {
-                        if (curCaptures!=(int)captures.TAKE_CENTR)
-                            curLine = (SLine)points[curLineIndex];
+
                         SLine tempLine = (SLine)points[curLineIndex];
                         switch (curCaptures)
                         {
                             //меняем кординаты у перетягиваемого изображения прямо в хранилище
                             //готовимся к отрисовке
                             case (int)captures.TAKE_PT1:
+                                curLine = (SLine)points[curLineIndex];
                                 curLine.a = e.Location;
+                                points[curLineIndex] = (object)curLine;
                                 break;
                             case (int)captures.TAKE_PT2:
+                                curLine = (SLine)points[curLineIndex];
                                 curLine.b = e.Location;
+                                points[curLineIndex] = (object)curLine;
                                 break;
                             case (int)captures.TAKE_CENTR:
-                                
-                                int dx = e.Location.X - curPoint.X;
-                                int dy = e.Location.Y - curPoint.Y;
-
                                 tempLine.a.X = e.Location.X + (curLine.a.X - curPoint.X);
                                 tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
                                 tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
                                 tempLine.b.Y = e.Location.Y + (curLine.b.Y - curPoint.Y);
+                                points[curLineIndex] = (object)tempLine;
                                 break;
                         }
-                        if (curCaptures != (int)captures.TAKE_CENTR)
-                            points[curLineIndex] = (object)curLine;
-                        else points[curLineIndex] = (object)tempLine;
                         //отрисовка фигур из хранилища
                         foreach (SLine point in points)
                         {
@@ -220,6 +227,10 @@ namespace shareData
                                 bmpGr.DrawLine(l2, curLine.a, curLine.b);
                                 bmpGr.DrawLine(l1, e.Location, curLine.b);
                                 break;
+                            //case (int)captures.TAKE_CENTR:
+                            //    bmpGr.DrawLine(l2, curLine.a, curLine.b);
+                            //    bmpGr.DrawLine(l1, curLine.a, curLine.b);
+                            //    break;
                         }
                         canvas.DrawImage(bmp, 0, 0);
 
@@ -252,30 +263,6 @@ namespace shareData
 
             }
         }
-
-        public void DeleteFigure(MouseEventArgs e)
-        {
-
-        }
-
-        public void testD(Point e)
-        {
-            Point a = e;
-            Point b = e;
-            Point c = e;
-
-
-            c.X = 5;
-            c.Y = 0;
-
-            a.X = 0;
-            a.Y = 0;
-
-            b.X = 10;
-            b.Y = 0;
-            Console.WriteLine(d(a, c).ToString() + " " + d(b, c).ToString() + " " + d(a, b).ToString());
-
-        }
         
         public void pointsDebug()
         {
@@ -286,6 +273,33 @@ namespace shareData
             }
         }
 
+        public void safeStorage(string path)
+        {
+            System.IO.StreamWriter textFile = new System.IO.StreamWriter(path);
+            try
+            {
+                foreach (SLine line in points)
+                {
+                    textFile.WriteLine(line.a.ToString() + " " + line.b.ToString());
+                    textFile.WriteLine("{0},{1}, {2},{3}", line.a.X, line.a.Y, line.b.X, line.b.Y);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                textFile.Close();
+                MessageBox.Show("Ошибка: " + ex.Message);
+            }
+            textFile.Close();
+        }
+
+
+    }
+    
+    struct SLine
+    {
+        public Point a, b;
+        SLine(Point a, Point b) { this.a = a; this.b = b; }
 
     }
 }

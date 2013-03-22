@@ -32,6 +32,8 @@
             this.bDrow = new System.Windows.Forms.Button();
             this.bEdit = new System.Windows.Forms.Button();
             this.bDel = new System.Windows.Forms.Button();
+            this.bSafe = new System.Windows.Forms.Button();
+            this.bLoad = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -78,11 +80,33 @@
             this.bDel.UseVisualStyleBackColor = true;
             this.bDel.Click += new System.EventHandler(this.bDel_Click);
             // 
+            // bSafe
+            // 
+            this.bSafe.Location = new System.Drawing.Point(376, 24);
+            this.bSafe.Name = "bSafe";
+            this.bSafe.Size = new System.Drawing.Size(117, 73);
+            this.bSafe.TabIndex = 4;
+            this.bSafe.Text = "Сохранить";
+            this.bSafe.UseVisualStyleBackColor = true;
+            this.bSafe.Click += new System.EventHandler(this.bSafe_Click);
+            // 
+            // bLoad
+            // 
+            this.bLoad.Location = new System.Drawing.Point(499, 24);
+            this.bLoad.Name = "bLoad";
+            this.bLoad.Size = new System.Drawing.Size(126, 73);
+            this.bLoad.TabIndex = 5;
+            this.bLoad.Text = "Загрузить";
+            this.bLoad.UseVisualStyleBackColor = true;
+            this.bLoad.Click += new System.EventHandler(this.bLoad_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(679, 377);
+            this.Controls.Add(this.bLoad);
+            this.Controls.Add(this.bSafe);
             this.Controls.Add(this.bDel);
             this.Controls.Add(this.bEdit);
             this.Controls.Add(this.bDrow);
@@ -103,6 +127,8 @@
         private System.Windows.Forms.Button bDrow;
         private System.Windows.Forms.Button bEdit;
         private System.Windows.Forms.Button bDel;
+        private System.Windows.Forms.Button bSafe;
+        private System.Windows.Forms.Button bLoad;
     }
 }
 
