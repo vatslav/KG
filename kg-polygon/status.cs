@@ -295,13 +295,13 @@ namespace shareData
 
         public void loadStorage(string path)
         {
-            points.Clear();
+            
             char[] delimeterChar = { ' ', ',' };
             string[] lines = System.IO.File.ReadAllLines(path);
             
             string[] tempStr;
-            
-            
+
+            ArrayList tempArr = new ArrayList();
 
             foreach (string line in lines)
             {
@@ -312,7 +312,15 @@ namespace shareData
                 curLine.a.Y = Convert.ToInt32(tempStr[2]);
                 curLine.b.X = Convert.ToInt32(tempStr[3]);
                 curLine.b.Y = Convert.ToInt32(tempStr[4]);
-                points.Add(curLine);
+                tempArr.Add(curLine);
+            }
+            points.Clear();
+            foreach (object obj in tempArr)
+            {
+                //curLine = (SLine)obj;
+                points.Add((SLine)obj);
+
+
             }
             DrawingFigure(null,null);
 
