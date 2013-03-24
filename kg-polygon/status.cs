@@ -16,6 +16,7 @@ namespace shareData
         public int curModes;
         public int curCaptures;
         public bool isDragging;
+        public int pen;
         public Point curPoint;
         public SLine curLine;
         public int curLineIndex;
@@ -43,59 +44,72 @@ namespace shareData
         }
         public void drawingDown(MouseEventArgs e) 
         {
-            switch(curModes) 
+            switch (pen)
             {
-                case (int)modes.MODE_DROW:
-                    isDragging = true;
-                    curPoint = e.Location;
-                    curLine.a = e.Location;
-                    break;
-
-                case (int)modes.MODE_MOVE:
-                    int index = getLine(e.Location);
-                    //если мы куда попали в фигуру
-                    if (curCaptures != (int)captures.TAKE_NONE)
+                case (int)penType.line:
+                    switch(curModes) 
                     {
-                        isDragging = true;
-                        curLineIndex = index;
-                        curPoint = e.Location;
-                        if (curCaptures ==(int) captures.TAKE_CENTR)
-                            curLine = (SLine)points[curLineIndex];
+                        case (int)modes.MODE_DROW:
+                            isDragging = true;
+                            curPoint = e.Location;
+                            curLine.a = e.Location;
+                            break;
 
-                    }
-                    break;
+                        case (int)modes.MODE_MOVE:
+                            int index = getLine(e.Location);
+                            //если мы куда попали в фигуру
+                            if (curCaptures != (int)captures.TAKE_NONE)
+                            {
+                                isDragging = true;
+                                curLineIndex = index;
+                                curPoint = e.Location;
+                                if (curCaptures ==(int) captures.TAKE_CENTR)
+                                    curLine = (SLine)points[curLineIndex];
+
+                            }
+                            break;
 
                 
 
-                case (int)modes.MODE_DELETE:
-                    curLineIndex = getLine(e.Location);
-                    if (curLineIndex != -1)
-                    {
-                        points.RemoveAt(curLineIndex);
-                        DrawingFigure(defaultCanvas, e);
+                        case (int)modes.MODE_DELETE:
+                            curLineIndex = getLine(e.Location);
+                            if (curLineIndex != -1)
+                            {
+                                points.RemoveAt(curLineIndex);
+                                DrawingFigure(defaultCanvas, e);
+                            }
+                            break;
                     }
+                    break;
+                case (int) penType.poligon:
                     break;
             }
         }
 
         public void drawingUp(MouseEventArgs e)
         {
-            switch(curModes)
+            switch (pen)
             {
-                case (int)modes.MODE_DROW:
-                    isDragging = false;
-                    curLine.b = e.Location;
-                    points.Add(curLine);
-                    break;
-                case (int)modes.MODE_MOVE:
-                    isDragging = false;
-                    DrawingFigure(null, e);
-                    break;
+                case (int)penType.line:
+                    switch (curModes)
+                    {
+                        case (int)modes.MODE_DROW:
+                            isDragging = false;
+                            curLine.b = e.Location;
+                            points.Add(curLine);
+                            break;
+                        case (int)modes.MODE_MOVE:
+                            isDragging = false;
+                            DrawingFigure(null, e);
+                            break;
 
 
-            
+
+                    }
+                    break;
+                case (int)penType.poligon:
+                    break;
             }
-            
         }
 
 
@@ -267,9 +281,11 @@ namespace shareData
         public void pointsDebug()
         {
             Console.WriteLine("----------------");
+            int ptr = 0;
             foreach (SLine line in points)
             {
-                Console.WriteLine(line.a.ToString() + " " + line.b.ToString());
+                Console.WriteLine(ptr.ToString()+"|"+line.a.ToString() + " " + line.b.ToString());
+                ptr++;
             }
         }
 
@@ -298,23 +314,28 @@ namespace shareData
             
             char[] delimeterChar = { ' ', ',' };
             string[] lines = System.IO.File.ReadAllLines(path);
-            
+            SLine tempLine = curLine; ;
             string[] tempStr;
 
             ArrayList tempArr = new ArrayList();
-
+            tempArr.Clear();
+            int ptr = 0;
             foreach (string line in lines)
             {
-                
+                if (line == "") break;
                 tempStr = line.Split(delimeterChar);
-                curLine.typeObj = Convert.ToInt32(tempStr[0]);
-                curLine.a.X = Convert.ToInt32(tempStr[1]);
-                curLine.a.Y = Convert.ToInt32(tempStr[2]);
-                curLine.b.X = Convert.ToInt32(tempStr[3]);
-                curLine.b.Y = Convert.ToInt32(tempStr[4]);
-                tempArr.Add(curLine);
+                tempLine.typeObj = Convert.ToInt32(tempStr[0]);
+                tempLine.a.X = Convert.ToInt32(tempStr[1]);
+                tempLine.a.Y = Convert.ToInt32(tempStr[2]);
+                tempLine.b.X = Convert.ToInt32(tempStr[3]);
+                tempLine.b.Y = Convert.ToInt32(tempStr[4]);
+                tempArr.Add(tempLine);
+                ptr++;
             }
+            Console.WriteLine(ptr.ToString());
             points.Clear();
+
+            //if (tempArr.Count > 0) MessageBox.Show("alert{0}", tempArr.Count.ToString());
             foreach (object obj in tempArr)
             {
                 //curLine = (SLine)obj;
@@ -322,7 +343,11 @@ namespace shareData
 
 
             }
+            Console.WriteLine("{0}, {1}", points.Count.ToString(), tempArr.Count.ToString());
             DrawingFigure(null,null);
+            Console.WriteLine("{0}, {1}", tempArr.Count, points.Count);
+            tempArr.Clear();
+            
 
         }
 
@@ -336,7 +361,7 @@ namespace shareData
 
         SLine(Point a, Point b) { this.a = a; this.b = b; typeObj = 0; }
         SLine(Point a, Point b, int t) { this.a = a; this.b = b; typeObj = t; }
-        //SLine(int t) { typeObj = t; a. }
+        //SLine() { typeObj = 0; }
         //public int typeObj;
         
 

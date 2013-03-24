@@ -17,6 +17,7 @@ namespace kg_polygon
     enum captures { TAKE_PT1, TAKE_PT2, TAKE_CENTR, TAKE_NONE };
     //режим рисования: рисования, перемешение, удаление
     enum modes { MODE_DROW, MODE_MOVE, MODE_DELETE };
+    enum penType { line, poligon };
 
     public partial class Form1 : Form
     {
@@ -35,6 +36,9 @@ namespace kg_polygon
             state.initial(pictureBox1);
             //canvas=pictureBox1.CreateGraphics(); //присваиваем канвасу уазатель, чем он
             state.curModes = (int)modes.MODE_DROW; //режим работы по умолчанию
+            rLine.Checked = true;
+            
+
             //Timer reDraw = new Timer();
             //reDraw.Elapsed += new ElapsedEventHandler(state.DrawingFigure(null,null);
             //reDraw.Interval = 50;
@@ -55,6 +59,7 @@ namespace kg_polygon
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
+            
             state.drawingDown(e);
 
         }
@@ -62,12 +67,12 @@ namespace kg_polygon
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             state.drawingUp(e);
+            state.pointsDebug();
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             state.DrawingFigure(pictureBox1, e);
-            state.pointsDebug();
 
         }
 
@@ -100,6 +105,8 @@ namespace kg_polygon
 
         private void bLoad_Click(object sender, EventArgs e)
         {
+            int tempMode = state.curModes;
+            state.curModes = (int) modes.MODE_DROW;
             try
             {
                 OpenFileDialog askLoad = new OpenFileDialog();
@@ -113,9 +120,31 @@ namespace kg_polygon
             {
                 MessageBox.Show("Ошибка: " + ex.Message);
             }
+            state.curModes = tempMode;
 
 
             
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            pictureBox1.Width = Width - 5;
+            pictureBox1.Height = Height - 5;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void rLine_CheckedChanged(object sender, EventArgs e)
+        {
+            state.pen = (int)penType.line;
+        }
+
+        private void rPolygon_CheckedChanged(object sender, EventArgs e)
+        {
+            state.pen = (int)penType.poligon;
         }
     }
 
