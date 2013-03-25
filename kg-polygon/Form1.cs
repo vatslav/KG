@@ -72,7 +72,7 @@ namespace kg_polygon
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            state.DrawingFigure(pictureBox1, e);
+            state.drawingSciene(pictureBox1, e);
 
         }
 
