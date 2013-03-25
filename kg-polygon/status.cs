@@ -54,8 +54,11 @@ namespace shareData
         }
         public void drawingDown(MouseEventArgs e) 
         {
+            //тут потом сделать правильно не всегда делать ее блек
+            curLine.color = Color.Black;
             switch (pen)
             {
+                
                 case (int)penType.line:
                     switch(curModes) 
                     {
@@ -153,53 +156,47 @@ namespace shareData
         //{
         //    DrawingFigure(null,e);
         //}
-        public void DrawingSciene()
+        public void drawingScieneOnly()
         {
-            bmpGr.Clear(Color.White);
             foreach (SLine line in points)
             {
                 blade.Color = line.color;
                 bmpGr.DrawLine(blade, line.a, line.b);
             }
+        }
+
+        public void drawingSciene()
+        {
+            bmpGr.Clear(Color.White);
+            drawingScieneOnly();
             canvas.DrawImage(bmp, 0, 0);
             return;
         }
+        public void drawingSciene(SLine line)
+        {
+            bmpGr.Clear(Color.White);
+            drawingScieneOnly();
+            blade.Color = line.color;
+            bmpGr.DrawLine(blade, line.a, line.b);
+            canvas.DrawImage(bmp, 0, 0);
+            return;
+        }
+        
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
         {
-            if (pictureBox1 == null) pictureBox1 = defaultCanvas;
 
             if (e==null)
             {
-                DrawingSciene();
+                drawingSciene();
                 return;
             }
             switch (curModes)
             {
                 case (int)modes.MODE_DROW:
-
-
+                    curLine.b = e.Location;
                     if (isDragging)
-                    {
-
-                        bmpGr.Clear(Color.White);
-                        //отрисовка фигур из хранилища
-                        foreach (SLine point in points)
-                        {
-                            bmpGr.DrawLine(blade, point.a, point.b);
-                           // bmpGr.DrawLine(l1, point.a, point.b);
-                        }
-                        //отрисовка текущего изображения, того которое тянем
-                        bmpGr.DrawLine(blade, curLine.a, e.Location);
-                        //bmpGr.DrawLine(l1, curLine.a, e.Location);
-                        canvas.DrawImage(bmp, 0, 0);
-
-
-                    }
-                    else
-                    {
-                        curLine.b = e.Location;//хоть и работает и понимаю что делает, когда мы сюда попадем?
-                    }
+                        drawingSciene(curLine);
                     break;
                 case (int)modes.MODE_MOVE:
 
