@@ -179,48 +179,47 @@ namespace shareData
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
         {
 
-            switch (curModes)
+            if (curModes == (int)modes.MODE_DROW)
             {
-                case (int)modes.MODE_DROW:
-                    curLine.b = e.Location;
-                    if (isDragging)
-                        drawingSciene(curLine);
-                    break;
-                case (int)modes.MODE_MOVE:
-                    if (isDragging)
-                    {
 
-                        switch (curCaptures)
-                        {
-                            //меняем кординаты у перетягиваемого изображения прямо в хранилище
-                            //готовимся к отрисовке
-                            case (int)captures.TAKE_PT1:
-                                curLine = (SLine)points[curLineIndex];
-                                curLine.a = e.Location;
-                                points[curLineIndex] = (object)curLine;
-                                break;
-                            case (int)captures.TAKE_PT2:
-                                curLine = (SLine)points[curLineIndex];
-                                curLine.b = e.Location;
-                                points[curLineIndex] = (object)curLine;
-                                break;
-                            case (int)captures.TAKE_CENTR:
-                                SLine tempLine = (SLine)points[curLineIndex];
-                                tempLine.a.X = e.Location.X + (curLine.a.X - curPoint.X);
-                                tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
-                                tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
-                                tempLine.b.Y = e.Location.Y + (curLine.b.Y - curPoint.Y);
-                                points[curLineIndex] = (object)tempLine;
-                                break;
-                        }
-                        drawingSciene();
+                curLine.b = e.Location;
+                if (isDragging)
+                    drawingSciene(curLine);
+            }
+
+            else
+            {
+                if (isDragging)
+                    switch (curCaptures)
+                    {
+                        //меняем кординаты у перетягиваемого изображения прямо в хранилище
+                        //готовимся к отрисовке
+                        case (int)captures.TAKE_PT1:
+                            curLine = (SLine)points[curLineIndex];
+                            curLine.a = e.Location;
+                            points[curLineIndex] = (object)curLine;
+                            break;
+                        case (int)captures.TAKE_PT2:
+                            curLine = (SLine)points[curLineIndex];
+                            curLine.b = e.Location;
+                            points[curLineIndex] = (object)curLine;
+                            break;
+                        case (int)captures.TAKE_CENTR:
+                            SLine tempLine = (SLine)points[curLineIndex];
+                            tempLine.a.X = e.Location.X + (curLine.a.X - curPoint.X);
+                            tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
+                            tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
+                            tempLine.b.Y = e.Location.Y + (curLine.b.Y - curPoint.Y);
+                            points[curLineIndex] = (object)tempLine;
+                            break;
                     }
-                    break;
-                case (int)modes.MODE_DELETE:
-                    drawingSciene();
-                    break;
+                
+
+                drawingSciene();
+
 
             }
+                    
         }
         
         public void pointsDebug()
