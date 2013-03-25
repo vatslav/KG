@@ -55,7 +55,7 @@ namespace shareData
         public void drawingDown(MouseEventArgs e) 
         {
             //тут потом сделать правильно не всегда делать ее блек
-            curLine.color = Color.Black;
+            
             switch (pen)
             {
                 
@@ -66,6 +66,7 @@ namespace shareData
                             isDragging = true;
                             curPoint = e.Location;
                             curLine.a = e.Location;
+                            curLine.color = Color.Black;
                             break;
 
                         case (int)modes.MODE_MOVE:
@@ -115,9 +116,6 @@ namespace shareData
                             isDragging = false;
                             drawingSciene();
                             break;
-
-
-
                     }
                     break;
                 case (int)penType.poligon:
@@ -133,8 +131,6 @@ namespace shareData
             int ptr = 0;
             foreach (SLine line in points)
             {
-                // Console.WriteLine(d(line.a, midPoint) + d(midPoint, line.b).ToString() + " " + d(line.a, line.b).ToString());
-
                 if (d(line.a, midPoint) + d(midPoint, line.b) - d(line.a, line.b) < visibility)
                 {
 
