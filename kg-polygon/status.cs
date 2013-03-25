@@ -113,7 +113,7 @@ namespace shareData
                             break;
                         case (int)modes.MODE_MOVE:
                             isDragging = false;
-                            drawingSciene(null, e);
+                            drawingSciene();
                             break;
 
 
@@ -152,10 +152,7 @@ namespace shareData
             curCaptures = (int)captures.TAKE_NONE;
             return -1;
         }
-        //public void DrawingFigure(object source, System.Timers.ElapsedEventArgs e)
-        //{
-        //    DrawingFigure(null,e);
-        //}
+
         public void drawingScieneOnly()
         {
             foreach (SLine line in points)
@@ -186,11 +183,6 @@ namespace shareData
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
         {
 
-            if (e==null)
-            {
-                drawingSciene();
-                return;
-            }
             switch (curModes)
             {
                 case (int)modes.MODE_DROW:
@@ -199,13 +191,9 @@ namespace shareData
                         drawingSciene(curLine);
                     break;
                 case (int)modes.MODE_MOVE:
-
-
-                    bmpGr.Clear(Color.White);
                     if (isDragging)
                     {
 
-                        SLine tempLine = (SLine)points[curLineIndex];
                         switch (curCaptures)
                         {
                             //меняем кординаты у перетягиваемого изображения прямо в хранилище
@@ -221,6 +209,7 @@ namespace shareData
                                 points[curLineIndex] = (object)curLine;
                                 break;
                             case (int)captures.TAKE_CENTR:
+                                SLine tempLine = (SLine)points[curLineIndex];
                                 tempLine.a.X = e.Location.X + (curLine.a.X - curPoint.X);
                                 tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
                                 tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
@@ -228,56 +217,11 @@ namespace shareData
                                 points[curLineIndex] = (object)tempLine;
                                 break;
                         }
-                        //отрисовка фигур из хранилища
-                        foreach (SLine point in points)
-                        {
-                            bmpGr.DrawLine(blade, point.a, point.b);
-                            //bmpGr.DrawLine(l1, point.a, point.b);
-                        }
-                        //Эффект полупрозачности!
-                        ///хоть это и здорово не пойму почему тут получается рисование полузпрозрачным?
-                        switch (curCaptures)
-                        {
-                            case (int)captures.TAKE_PT1:
-                                bmpGr.DrawLine(blade, curLine.a, curLine.b);
-                               // bmpGr.DrawLine(l1, curLine.a, e.Location);
-                                break;
-                            case (int)captures.TAKE_PT2:
-                                bmpGr.DrawLine(blade, curLine.a, curLine.b);
-                               // bmpGr.DrawLine(l1, e.Location, curLine.b);
-                                break;
-                            //case (int)captures.TAKE_CENTR:
-                            //    bmpGr.DrawLine(blade, curLine.a, curLine.b);
-                            //    bmpGr.DrawLine(l1, curLine.a, curLine.b);
-                            //    break;
-                        }
-                        canvas.DrawImage(bmp, 0, 0);
-
+                        drawingSciene();
                     }
-                    else
-                    {
-
-                        foreach (SLine point in points)
-                        {
-                            bmpGr.DrawLine(blade, point.a, point.b);
-                            //bmpGr.DrawLine(l1, point.a, point.b);
-                        }
-                        canvas.DrawImage(bmp, 0, 0);
-
-
-                    }
-
-
                     break;
                 case (int)modes.MODE_DELETE:
-
-                    bmpGr.Clear(Color.White);
-                    foreach (SLine point in points)
-                    {
-                        bmpGr.DrawLine(blade, point.a, point.b);
-                       // bmpGr.DrawLine(l1, point.a, point.b);
-                    }
-                    canvas.DrawImage(bmp, 0, 0);
+                    drawingSciene();
                     break;
 
             }
@@ -337,20 +281,10 @@ namespace shareData
                 tempArr.Add(tempLine);
                 ptr++;
             }
-            Console.WriteLine(ptr.ToString());
             points.Clear();
-
-            //if (tempArr.Count > 0) MessageBox.Show("alert{0}", tempArr.Count.ToString());
             foreach (object obj in tempArr)
-            {
-                //curLine = (SLine)obj;
-                points.Add((SLine)obj);
-
-
-            }
-            Console.WriteLine("{0}, {1}", points.Count.ToString(), tempArr.Count.ToString());
-            drawingSciene(null,null);
-            Console.WriteLine("{0}, {1}", tempArr.Count, points.Count);
+              points.Add((SLine)obj);
+            drawingSciene();
             tempArr.Clear();
             
 
