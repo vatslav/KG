@@ -20,14 +20,13 @@ namespace shareData
         public Point curPoint;
         public SLine curLine;
         public int curLineIndex;
-        protected int visibility = 4;
+        protected int visibility = 15;
         protected Graphics canvas;
         protected PictureBox defaultCanvas;
-       // protected Pen l1 = new Pen(Color.Blue, 2.0f);//цвет линии
-        protected Pen blade = new Pen(Color.Blue, 2.0f);//фон
-        //сглаживание
+        protected Pen primaryPen = new Pen(Color.Blue, 2.0f);//линия
+        protected Pen secondryPen = new Pen(Color.DarkOrange, 1.0f);//лиkния
         protected Bitmap bmp;
-        protected Graphics bmpGr;
+        protected Graphics bmpGr;         //сглаживание
         
         public void initial(PictureBox initialForm)
         {
@@ -36,10 +35,17 @@ namespace shareData
             bmp  = new Bitmap(initialForm.Width, initialForm.Height);
             bmpGr = Graphics.FromImage(bmp);
             bmpGr.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            if (true)
+            {
+                curModes = (int) modes.MODE_DROW;
+                //string path = @ "\\vmware-host\Shared Folders\Документы\1.vff";
+                //loadStorage("\\\\vmware-host\\Shared Folders\\Документы\\1.vff");
+
+            }
             
         }
 
-        public ArrayList points = new ArrayList();
+        public List<SLine> points = new List<SLine>();
         
         protected double d(Point a, Point b)
         {
@@ -54,7 +60,6 @@ namespace shareData
         }
         public void drawingDown(MouseEventArgs e) 
         {
-            //тут потом сделать правильно не всегда делать ее блек
             
             switch (pen)
             {
@@ -77,9 +82,10 @@ namespace shareData
                                 isDragging = true;
                                 curLineIndex = index;
                                 curPoint = e.Location;
-                                if (curCaptures ==(int) captures.TAKE_CENTR)
+                                if (curCaptures == (int)captures.TAKE_CENTR)
+                                {
                                     curLine = (SLine)points[curLineIndex];
-
+                                }
                             }
                             break;
 
@@ -90,7 +96,7 @@ namespace shareData
                             if (curLineIndex != -1)
                             {
                                 points.RemoveAt(curLineIndex);
-                                drawingSciene(defaultCanvas, e);
+                                drawingSciene();
                             }
                             break;
                     }
@@ -122,23 +128,36 @@ namespace shareData
                     break;
             }
         }
-
+        private bool dForSquare(Point primary, Point curPoint)
+        {
+            foreach (Point point in getPointsTransform(primary))
+                if (d(point, curPoint) <= visibility)
+                    return true;
+            return false;
+        }
 
         public int getLine(Point midPoint)
         {
-            int dx = (int)midPoint.X;
-            int dy = (int)midPoint.Y;
             int ptr = 0;
             foreach (SLine line in points)
             {
-                if (d(line.a, midPoint) + d(midPoint, line.b) - d(line.a, line.b) < visibility)
+                foreach (Point p in getPointsTransform(midPoint))
                 {
+                    Console.WriteLine("{0} - {1}",p, d(p,midPoint));
+                    
+                }
+                
+                Console.WriteLine("||{0} + {1} - {2} = {4} < {3} ", d(line.a, midPoint), d(midPoint, line.b), d(line.a, line.b), visibility, d(line.a, midPoint) + d(midPoint, line.b) - d(line.a, line.b));
+                if (d(line.a, midPoint) + d(midPoint, line.b) - d(line.a, line.b) < visibility || dForSquare(line.a, midPoint) || dForSquare(line.b,midPoint) )
+                {
+                    Console.WriteLine("POPAL");
 
                     if (d(line.a, midPoint) < visibility)
                         curCaptures = (int)captures.TAKE_PT1;
                     else if (d(line.b, midPoint) < visibility)
                         curCaptures = (int)captures.TAKE_PT2;
-                    else curCaptures = (int)captures.TAKE_CENTR;
+                    else 
+                        curCaptures = (int)captures.TAKE_CENTR;
                     return ptr;
                 }
 
@@ -148,19 +167,35 @@ namespace shareData
             curCaptures = (int)captures.TAKE_NONE;
             return -1;
         }
+        protected Point[] getPointsTransform(Point primary)
+        {
+            int mathVis = (int) (visibility / ( Math.Sqrt(2)));
+            Point a = new Point(primary.X - mathVis, primary.Y - mathVis);
+            Point b = new Point(primary.X - mathVis, primary.Y + mathVis);
+            Point c = new Point(primary.X + mathVis, primary.Y + mathVis);
+            Point d = new Point(primary.X + mathVis, primary.Y - mathVis);
+            Point[] arr = new Point[]{a,b,c,d};
+            return arr;
+        }
 
         public void drawingScieneOnly()
         {
             foreach (SLine line in points)
             {
-                blade.Color = line.color;
-                bmpGr.DrawLine(blade, line.a, line.b);
+                primaryPen.Color = line.color;
+                bmpGr.DrawLine(primaryPen, line.a, line.b);
+            }
+            if (curModes == (int)modes.MODE_MOVE && curLineIndex!=-1)
+            {
+                bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].a));
+                bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].b));
             }
         }
 
         public void drawingSciene()
         {
             bmpGr.Clear(Color.White);
+
             drawingScieneOnly();
             canvas.DrawImage(bmp, 0, 0);
             return;
@@ -169,8 +204,8 @@ namespace shareData
         {
             bmpGr.Clear(Color.White);
             drawingScieneOnly();
-            blade.Color = line.color;
-            bmpGr.DrawLine(blade, line.a, line.b);
+            primaryPen.Color = line.color;
+            bmpGr.DrawLine(primaryPen, line.a, line.b);
             canvas.DrawImage(bmp, 0, 0);
             return;
         }
@@ -189,28 +224,29 @@ namespace shareData
 
             else
             {
+                
                 if (isDragging)
                     switch (curCaptures)
                     {
                         //меняем кординаты у перетягиваемого изображения прямо в хранилище
                         //готовимся к отрисовке
                         case (int)captures.TAKE_PT1:
-                            curLine = (SLine)points[curLineIndex];
+                            curLine = points[curLineIndex];
                             curLine.a = e.Location;
-                            points[curLineIndex] = (object)curLine;
+                            points[curLineIndex] = curLine;
                             break;
                         case (int)captures.TAKE_PT2:
-                            curLine = (SLine)points[curLineIndex];
+                            curLine = points[curLineIndex];
                             curLine.b = e.Location;
-                            points[curLineIndex] = (object)curLine;
+                            points[curLineIndex] = curLine;
                             break;
                         case (int)captures.TAKE_CENTR:
-                            SLine tempLine = (SLine)points[curLineIndex];
+                            SLine tempLine = points[curLineIndex];
                             tempLine.a.X = e.Location.X + (curLine.a.X - curPoint.X);
                             tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
                             tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
                             tempLine.b.Y = e.Location.Y + (curLine.b.Y - curPoint.Y);
-                            points[curLineIndex] = (object)tempLine;
+                            points[curLineIndex] = tempLine;
                             break;
                     }
                 
@@ -240,7 +276,6 @@ namespace shareData
             {
                 foreach (SLine line in points)
                 {
-                   // textFile.WriteLine(line.a.ToString() + " " + line.b.ToString());
                     textFile.WriteLine("{4} {0},{1} {2},{3}", line.a.X, line.a.Y, line.b.X, line.b.Y, line.typeObj);
                 }
 
@@ -255,7 +290,7 @@ namespace shareData
 
         public void loadStorage(string path)
         {
-            
+            Console.WriteLine(path);
             char[] delimeterChar = { ' ', ',' };
             string[] lines = System.IO.File.ReadAllLines(path);
             SLine tempLine = curLine; ;
@@ -294,11 +329,10 @@ namespace shareData
         public Color color;
         public Point a, b;
         public Point aW, bW;
-        SLine(Point a, Point b) { this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; }
-        SLine(Point a, Point b, int t, Color c) { this.a = aW= a; this.b = bW= b; typeObj = t; color = c; }
-        //SLine() { typeObj = 0; }
-        //public int typeObj;
-        
+        public List<SLine> figures;
+        //public Point[] figures;
+        SLine(Point a, Point b) { this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>();}
+        SLine(Point a, Point b, int t, Color c) { this.a = aW= a; this.b = bW= b; typeObj = t; color = c; figures = new List<SLine>();}
 
     }
 }
