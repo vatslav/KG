@@ -81,8 +81,43 @@ namespace shareData
                             break;
                     }
                     break;
+                    //==========================================================================
                 case (int) penType.poligon:
+                    switch(curModes)
+                    {
+                        case (int)modes.MODE_DROW:
+                            isDragging = true;
+                            curPoint = e.Location;
+                            curLine.a = e.Location;
+                            break;
+
+                        case (int)modes.MODE_MOVE:
+                            int index = getLine(e.Location);
+                            //если мы куда попали в фигуру
+                            if (curCaptures != (int)captures.TAKE_NONE)
+                            {
+                                isDragging = true;
+                                curLineIndex = index;
+                                curPoint = e.Location;
+                                if (curCaptures ==(int) captures.TAKE_CENTR)
+                                    curLine = (SLine)points[curLineIndex];
+
+                            }
+                            break;
+
+                
+
+                        case (int)modes.MODE_DELETE:
+                            curLineIndex = getLine(e.Location);
+                            if (curLineIndex != -1)
+                            {
+                                points.RemoveAt(curLineIndex);
+                                DrawingFigure(defaultCanvas, e);
+                            }
+                            break;
+                    }
                     break;
+
             }
         }
 
@@ -353,7 +388,12 @@ namespace shareData
 
 
     }
-    
+    struct fillPolygon
+    {
+
+
+    }
+
     struct SLine
     {
         public int typeObj;
