@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Collections;
 using kg_polygon;
 using drawingObjects;
+using System.Drawing.Drawing2D;
 namespace shareData
 {
     class editor
@@ -27,6 +28,7 @@ namespace shareData
         protected Pen secondryPen = new Pen(Color.DarkOrange, 1.0f);//лиkния
         protected Bitmap bmp;
         protected Graphics bmpGr;         //сглаживание
+        protected int dx, dy;
         
         public void initial(PictureBox initialForm)
         {
@@ -43,6 +45,12 @@ namespace shareData
 
             }
             
+        }
+        private Point addition(Point a, Point b)
+        {
+            a.X += b.X;
+            a.Y += b.Y;
+            return a;
         }
 
         public List<SLine> points = new List<SLine>();
@@ -85,6 +93,8 @@ namespace shareData
                                 if (curCaptures == (int)captures.TAKE_CENTR)
                                 {
                                     curLine = (SLine)points[curLineIndex];
+                                    dx = e.Location.X - curLine.a.X ;
+                                    dy = e.Location.Y - curLine.a.Y ;
                                 }
                             }
                             break;
@@ -168,7 +178,7 @@ namespace shareData
             return -1;
         }
         protected Point[] getPointsTransform(Point primary)
-        {
+        { //тут должно быть еще умножение на угол
             int mathVis = (int) (visibility / ( Math.Sqrt(2)));
             Point a = new Point(primary.X - mathVis, primary.Y - mathVis);
             Point b = new Point(primary.X - mathVis, primary.Y + mathVis);
@@ -231,6 +241,7 @@ namespace shareData
                         //меняем кординаты у перетягиваемого изображения прямо в хранилище
                         //готовимся к отрисовке
                         case (int)captures.TAKE_PT1:
+                            
                             curLine = points[curLineIndex];
                             curLine.a = e.Location;
                             points[curLineIndex] = curLine;
@@ -242,10 +253,26 @@ namespace shareData
                             break;
                         case (int)captures.TAKE_CENTR:
                             SLine tempLine = points[curLineIndex];
-                            tempLine.a.X = e.Location.X + (curLine.a.X - curPoint.X);
-                            tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
-                            tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
-                            tempLine.b.Y = e.Location.Y + (curLine.b.Y - curPoint.Y);
+                            //tempLine.a.X = e.Location.X + (curLine.a.X - curPoint.X);
+                            //tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
+                            //tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
+                            //tempLine.b.Y = e.Location.Y + (curLine.b.Y - curPoint.Y);
+                            //Point[] ps;
+                            tempLine.affinMatrix = new Matrix(1, 0, 0, 1, e.Location.X - curPoint.X, e.Location.Y - curPoint.Y);
+                            curPoint.X = e.Location.X;
+                            curPoint.Y = e.Location.Y;
+                            Point[] ps = new Point[2];
+                            ps[0]=tempLine.a;
+                            ps[1]=tempLine.b;
+                            tempLine.affinMatrix.TransformPoints(ps);
+                            tempLine.a = ps[0];
+                            tempLine.b = ps[1];
+                           // ps = {tempLine.a, tempLine.b};
+                            //Point p = new Point(1, 0);
+
+                            //Point[] ps = {new Point( 1, 0), new Point(0, 0), new Point(1, 0), 
+                            //              new Point(e.Location.X - curPoint.X), new Point (e.Location.Y - curPoint.Y), 1 };
+                            //tempLine.affinMatrix = new Matrix(1, 0, 0, 0, 1, 0, e.Location.X - curPoint.X, e.Location.Y - curPoint.Y, 1);
                             points[curLineIndex] = tempLine;
                             break;
                     }
@@ -320,6 +347,8 @@ namespace shareData
 
         }
 
+        
+
 
     }
     
@@ -328,11 +357,14 @@ namespace shareData
         public int typeObj;
         public Color color;
         public Point a, b;
-        public Point aW, bW;
-        public List<SLine> figures;
+        public Point aW, bW;// нудно сделать использование их везде
+       // public List<Matrix> affinMatrixes; //список матриц афинного преобразования
+        public Matrix affinMatrix;
+        public List<SLine> figures; //список тоек - для не отрезков (может сделать отрезки частью этого?)
         //public Point[] figures;
-        SLine(Point a, Point b) { this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>();}
-        SLine(Point a, Point b, int t, Color c) { this.a = aW= a; this.b = bW= b; typeObj = t; color = c; figures = new List<SLine>();}
+
+        SLine(Point a, Point b) { this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(); }
+        //SLine(Point a, Point b, int t, Color c) { this.a = aW = a; this.b = bW = b; typeObj = t; color = c; figures = new List<SLine>(); affinMatrix = new List<Matrix>(); }
 
     }
 }
