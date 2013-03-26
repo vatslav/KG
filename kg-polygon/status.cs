@@ -29,6 +29,7 @@ namespace shareData
         protected Bitmap bmp;
         protected Graphics bmpGr;         //сглаживание
         
+        
         public void initial(PictureBox initialForm)
         {
             canvas = initialForm.CreateGraphics();
@@ -251,12 +252,9 @@ namespace shareData
                             break;
                         case (int)captures.TAKE_CENTR:
                             SLine tempLine = points[curLineIndex];
-                            //tempLine.a.X = e.Location.X + (curLine.a.X - curPoint.X);
-                            //tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
-                            //tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
-                            //tempLine.b.Y = e.Location.Y + (curLine.b.Y - curPoint.Y);
-
-                            tempLine.affinMatrix = new Matrix(1, 0, 0, 1, e.Location.X - curPoint.X, e.Location.Y - curPoint.Y);
+                            //tempLine.affinMatrix = new Matrix(1, 0, 0, 1, e.Location.X - curPoint.X, e.Location.Y - curPoint.Y);
+                            tempLine.affinMatrix.Elements[7] = e.Location.X - curPoint.X;
+                            tempLine.affinMatrix.Elements[8] = e.Location.Y - curPoint.Y;
                             curPoint.X = e.Location.X;
                             curPoint.Y = e.Location.Y;
                             Point[] ps = new Point[2];
@@ -353,10 +351,10 @@ namespace shareData
         public Point aW, bW;// нудно сделать использование их везде
        // public List<Matrix> affinMatrixes; //список матриц афинного преобразования
         public Matrix affinMatrix;
-        public List<SLine> figures; //список тоек - для не отрезков (может сделать отрезки частью этого?)
-        //public Point[] figures;
+        public List<Point> storage; //список тоек - для не отрезков (может сделать отрезки частью этого?)
+        public List<Point> storageW;
 
-        SLine(Point a, Point b) { this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(); }
+        SLine(Point a, Point b) { this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; storageW = new List<Point>(); storage = new List<Point>(); affinMatrix = new Matrix(1,0, 0,1, 0,0); }
         //SLine(Point a, Point b, int t, Color c) { this.a = aW = a; this.b = bW = b; typeObj = t; color = c; figures = new List<SLine>(); affinMatrix = new List<Matrix>(); }
 
     }
