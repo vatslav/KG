@@ -28,7 +28,6 @@ namespace shareData
         protected Pen secondryPen = new Pen(Color.DarkOrange, 1.0f);//лиkния
         protected Bitmap bmp;
         protected Graphics bmpGr;         //сглаживание
-        protected int dx, dy;
         
         public void initial(PictureBox initialForm)
         {
@@ -93,8 +92,7 @@ namespace shareData
                                 if (curCaptures == (int)captures.TAKE_CENTR)
                                 {
                                     curLine = (SLine)points[curLineIndex];
-                                    dx = e.Location.X - curLine.a.X ;
-                                    dy = e.Location.Y - curLine.a.Y ;
+
                                 }
                             }
                             break;
@@ -223,7 +221,7 @@ namespace shareData
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
         {
-
+            
             if (curModes == (int)modes.MODE_DROW)
             {
 
@@ -257,7 +255,7 @@ namespace shareData
                             //tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
                             //tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
                             //tempLine.b.Y = e.Location.Y + (curLine.b.Y - curPoint.Y);
-                            //Point[] ps;
+
                             tempLine.affinMatrix = new Matrix(1, 0, 0, 1, e.Location.X - curPoint.X, e.Location.Y - curPoint.Y);
                             curPoint.X = e.Location.X;
                             curPoint.Y = e.Location.Y;
@@ -267,12 +265,7 @@ namespace shareData
                             tempLine.affinMatrix.TransformPoints(ps);
                             tempLine.a = ps[0];
                             tempLine.b = ps[1];
-                           // ps = {tempLine.a, tempLine.b};
-                            //Point p = new Point(1, 0);
 
-                            //Point[] ps = {new Point( 1, 0), new Point(0, 0), new Point(1, 0), 
-                            //              new Point(e.Location.X - curPoint.X), new Point (e.Location.Y - curPoint.Y), 1 };
-                            //tempLine.affinMatrix = new Matrix(1, 0, 0, 0, 1, 0, e.Location.X - curPoint.X, e.Location.Y - curPoint.Y, 1);
                             points[curLineIndex] = tempLine;
                             break;
                     }
