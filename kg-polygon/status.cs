@@ -285,11 +285,11 @@ namespace shareData
                             SLine tempLine = points[curLineIndex];
 
 
-                            Matrix Coordinans = new Matrix(1,0, 0,1, 
+                            Matrix coordinans = new Matrix(1,0, 0,1, 
                                 (e.Location.X - curPoint.X),
                                 (e.Location.Y - curPoint.Y) );
 
-                            tempLine.affinMatrix = Coordinans;
+                            tempLine.affinMatrix = coordinans;
                             curPoint.X = e.Location.X;
                             curPoint.Y = e.Location.Y;
 
