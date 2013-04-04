@@ -39,9 +39,6 @@ namespace shareData
             if (true)
             {
                 curModes = (int) modes.MODE_DROW;
-                //string path = @ "\\vmware-host\Shared Folders\Документы\1.vff";
-                //loadStorage("\\\\vmware-host\\Shared Folders\\Документы\\1.vff");
-
             }
             
         }
@@ -78,6 +75,7 @@ namespace shareData
                             isDragging = true;
                             curPoint = e.Location;
                             curLine.a = e.Location;
+                            curLine.aW = e.Location;
                             curLine.color = Color.Black;
                             curLine.affinMatrix = new Matrix(1,0, 0,1, 0,0); 
                             break;
@@ -125,6 +123,7 @@ namespace shareData
                         case (int)modes.MODE_DROW:
                             isDragging = false;
                             curLine.b = e.Location;
+                            curLine.bW = e.Location;
                             points.Add(curLine);
                             break;
                         case (int)modes.MODE_MOVE:
@@ -156,14 +155,14 @@ namespace shareData
                     
                 }
                 
-                Console.WriteLine("||{0} + {1} - {2} = {4} < {3} ", d(line.a, midPoint), d(midPoint, line.b), d(line.a, line.b), visibility, d(line.a, midPoint) + d(midPoint, line.b) - d(line.a, line.b));
-                if (d(line.a, midPoint) + d(midPoint, line.b) - d(line.a, line.b) < visibility || dForSquare(line.a, midPoint) || dForSquare(line.b,midPoint) )
+                Console.WriteLine("||{0} + {1} - {2} = {4} < {3} ", d(line.aW, midPoint), d(midPoint, line.bW), d(line.aW, line.bW), visibility, d(line.aW, midPoint) + d(midPoint, line.bW) - d(line.aW, line.bW));
+                if (d(line.aW, midPoint) + d(midPoint, line.bW) - d(line.aW, line.bW) < visibility || dForSquare(line.aW, midPoint) || dForSquare(line.bW,midPoint) )
                 {
                     Console.WriteLine("POPAL");
 
-                    if (d(line.a, midPoint) < visibility)
+                    if (d(line.aW, midPoint) < visibility)
                         curCaptures = (int)captures.TAKE_PT1;
-                    else if (d(line.b, midPoint) < visibility)
+                    else if (d(line.bW, midPoint) < visibility)
                         curCaptures = (int)captures.TAKE_PT2;
                     else 
                         curCaptures = (int)captures.TAKE_CENTR;
@@ -202,35 +201,30 @@ namespace shareData
 
         public void drawingScieneOnly()
         {
-            int ptr = 0;
+
             foreach (SLine line in points)
             {
                 primaryPen.Color = line.color;
-                bmpGr.DrawLine(primaryPen, line.a, line.b);
+                bmpGr.DrawLine(primaryPen, line.aW, line.bW);
 
-
-                
-
-
-
-                ptr ++;
-                //points[curLineIndex] = tempLine;
             }
 
             //отрисовка короба
             if (curModes == (int)modes.MODE_MOVE && curLineIndex != -1)
             {
-                bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].a));
-                bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].b));
-                SLine tempLine = points[ptr];
+                bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].aW));
+                bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].bW));
+
+                SLine tempLine = points[curLineIndex];
                 Point[] ps = new Point[2];
-                ps[0] = line.a;
-                ps[1] = line.b;
-                line.affinMatrix.TransformPoints(ps);
+
+                ps[0] = tempLine.a;
+                ps[1] = tempLine.b;
+                tempLine.affinMatrix.TransformPoints(ps);
                
-                tempLine.a = ps[0];
-                tempLine.b = ps[1];
-                points[ptr] = tempLine;
+                tempLine.aW = ps[0];
+                tempLine.bW = ps[1];
+                points[curLineIndex] = tempLine;
 
             }
 
@@ -251,7 +245,7 @@ namespace shareData
             bmpGr.Clear(Color.White);
             drawingScieneOnly();
             primaryPen.Color = line.color;
-            bmpGr.DrawLine(primaryPen, line.a, line.b);
+            bmpGr.DrawLine(primaryPen, line.aW, line.bW);
             canvas.DrawImage(bmp, 0, 0);
             return;
         }
@@ -263,7 +257,7 @@ namespace shareData
             if (curModes == (int)modes.MODE_DROW)
             {
 
-                curLine.b = e.Location;
+                curLine.bW = e.Location;
                 if (isDragging)
                     drawingSciene(curLine);
             }
@@ -316,7 +310,7 @@ namespace shareData
             int ptr = 0;
             foreach (SLine line in points)
             {
-                Console.WriteLine(ptr.ToString()+"|"+line.a.ToString() + " " + line.b.ToString());
+                Console.WriteLine(ptr.ToString()+"|"+line.aW.ToString() + " " + line.bW.ToString());
                 ptr++;
             }
         }
@@ -328,7 +322,7 @@ namespace shareData
             {
                 foreach (SLine line in points)
                 {
-                    textFile.WriteLine("{4} {0},{1} {2},{3}", line.a.X, line.a.Y, line.b.X, line.b.Y, line.typeObj);
+                    textFile.WriteLine("{4} {0},{1} {2},{3}", line.aW.X, line.aW.Y, line.bW.X, line.bW.Y, line.typeObj);
                 }
 
             }
