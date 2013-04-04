@@ -79,6 +79,7 @@ namespace shareData
                             curPoint = e.Location;
                             curLine.a = e.Location;
                             curLine.color = Color.Black;
+                            curLine.affinMatrix = new Matrix(1,0, 0,1, 0,0); 
                             break;
 
                         case (int)modes.MODE_MOVE:
@@ -186,18 +187,55 @@ namespace shareData
             return arr;
         }
 
+        private void applyMatrix(int indexLine)
+        {
+            SLine tempLine = points[indexLine];
+            Point[] ps = new Point[2];
+            ps[0] = tempLine.a;
+            ps[1] = tempLine.b;
+            tempLine.affinMatrix.TransformPoints(ps);
+            tempLine.aW = ps[0];
+            tempLine.bW = ps[1];
+            points[indexLine] = tempLine;
+            return;
+        }
+
         public void drawingScieneOnly()
         {
+            int ptr = 0;
             foreach (SLine line in points)
             {
                 primaryPen.Color = line.color;
                 bmpGr.DrawLine(primaryPen, line.a, line.b);
+
+
+                
+
+
+
+                ptr ++;
+                //points[curLineIndex] = tempLine;
             }
-            if (curModes == (int)modes.MODE_MOVE && curLineIndex!=-1)
+
+            //отрисовка короба
+            if (curModes == (int)modes.MODE_MOVE && curLineIndex != -1)
             {
                 bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].a));
                 bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].b));
+                SLine tempLine = points[ptr];
+                Point[] ps = new Point[2];
+                ps[0] = line.a;
+                ps[1] = line.b;
+                line.affinMatrix.TransformPoints(ps);
+               
+                tempLine.a = ps[0];
+                tempLine.b = ps[1];
+                points[ptr] = tempLine;
+
             }
+
+            
+
         }
 
         public void drawingSciene()
@@ -251,22 +289,16 @@ namespace shareData
                             break;
                         case (int)captures.TAKE_CENTR:
                             SLine tempLine = points[curLineIndex];
-                            //tempLine.a.X = e.Location.X + (curLine.a.X - curPoint.X);
-                            //tempLine.a.Y = e.Location.Y + (curLine.a.Y - curPoint.Y);
-                            //tempLine.b.X = e.Location.X + (curLine.b.X - curPoint.X);
-                            //tempLine.b.Y = e.Location.Y + (curLine.b.Y - curPoint.Y);
 
-                            tempLine.affinMatrix = new Matrix(1, 0, 0, 1, e.Location.X - curPoint.X, e.Location.Y - curPoint.Y);
+
+                            Matrix Coordinans = new Matrix(1,0, 0,1, 
+                                (e.Location.X - curPoint.X),
+                                (e.Location.Y - curPoint.Y) );
+
+                            tempLine.affinMatrix = Coordinans;
                             curPoint.X = e.Location.X;
                             curPoint.Y = e.Location.Y;
-                            Point[] ps = new Point[2];
-                            ps[0]=tempLine.a;
-                            ps[1]=tempLine.b;
-                            tempLine.affinMatrix.TransformPoints(ps);
-                            tempLine.a = ps[0];
-                            tempLine.b = ps[1];
 
-                            points[curLineIndex] = tempLine;
                             break;
                     }
                 
