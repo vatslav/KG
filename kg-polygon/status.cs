@@ -61,6 +61,7 @@ namespace shareData
             c.X = (a.X + b.X) / 2;
             c.Y = (a.Y + b.Y) / 2;
             return c;
+            
         }
         public void drawingDown(MouseEventArgs e) 
         {
@@ -289,7 +290,8 @@ namespace shareData
                                 (e.Location.X - curPoint.X),
                                 (e.Location.Y - curPoint.Y) );
 
-                            tempLine.affinMatrix = coordinans;
+                           // tempLine.affinMatrix = coordinans;
+                            tempLine.affinMatrix.Multiply(coordinans);
                             curPoint.X = e.Location.X;
                             curPoint.Y = e.Location.Y;
 
