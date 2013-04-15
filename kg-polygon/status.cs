@@ -199,6 +199,19 @@ namespace shareData
             points[indexLine] = tempLine;
             return;
         }
+        private void popMatrix(int indexLine)
+        {
+            SLine tempLine = points[indexLine];
+            Point[] ps = new Point[2];
+            ps[0] = tempLine.a;
+            ps[1] = tempLine.b;
+            tempLine.affinMatrix.TransformPoints(ps);
+            tempLine.a = ps[0];
+            tempLine.b = ps[1];
+            tempLine.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
+            points[indexLine] = tempLine;
+            return;
+        }
 
         public void drawingScieneOnly()
         {
@@ -216,16 +229,29 @@ namespace shareData
                 bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].aW));
                 bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].bW));
 
-                SLine tempLine = points[curLineIndex];
-                Point[] ps = new Point[2];
 
-                ps[0] = tempLine.a;
-                ps[1] = tempLine.b;
-                tempLine.affinMatrix.TransformPoints(ps);
-               
-                tempLine.aW = ps[0];
-                tempLine.bW = ps[1];
-                points[curLineIndex] = tempLine;
+                applyMatrix(curLineIndex);
+                SLine tempLine = points[curLineIndex];
+                if (tempLine.bW.X - tempLine.aW.X == 0)
+                    tempLine.bW.X += 1;
+                double gip = (int) d(tempLine.aW,tempLine.bW);
+                double xN = tempLine.bW.X - tempLine.aW.X;
+                double yN = Math.Sqrt((xN * xN) + (gip * gip));
+                double k = yN * (3.14 / 180); //(double)(tempLine.bW.Y - tempLine.aW.Y) / (double)(tempLine.bW.X - tempLine.aW.X);
+                double shisl = tempLine.bW.Y - tempLine.aW.Y;
+                double znam = tempLine.bW.X - tempLine.aW.X;
+                double Fi = (90-Math.Atan(k)) ;
+                
+                int c = 200;
+                int dC = (int)(d(tempLine.aW, tempLine.bW));
+                int x = (int)(  Math.Cos(Fi)) * c +((tempLine.aW.X + tempLine.bW.X)/2 );
+                int y = (int)( Math.Sin(Fi)) * c  +((tempLine.aW.Y + tempLine.bW.Y) / 2) ;
+                Console.WriteLine("k={0}, Fi={1}, x={2}, y={3} ||  atan=k{4}, yN = {5}", k, Fi, x, y, Math.Atan(k), yN);
+               // Console.WriteLine("bY={0}, aW.Y={1}, bw.X={2}, bw.Y={3}",tempLine.bW.Y, tempLine.aW.Y, tempLine.bW.X, tempLine.aW.X);
+                
+                Point trancePoint = new Point(x,y );
+                
+               bmpGr.DrawEllipse(secondryPen, trancePoint.X, trancePoint.Y, 5, 5);
 
             }
 
@@ -272,25 +298,24 @@ namespace shareData
                         //меняем кординаты у перетягиваемого изображения прямо в хранилище
                         //готовимся к отрисовке
                         case (int)captures.TAKE_PT1:
-                            
+                            popMatrix(curLineIndex);
                             curLine = points[curLineIndex];
                             curLine.a = e.Location;
                             points[curLineIndex] = curLine;
                             break;
                         case (int)captures.TAKE_PT2:
+                            popMatrix(curLineIndex);
                             curLine = points[curLineIndex];
                             curLine.b = e.Location;
                             points[curLineIndex] = curLine;
                             break;
                         case (int)captures.TAKE_CENTR:
                             SLine tempLine = points[curLineIndex];
-
-
                             Matrix coordinans = new Matrix(1,0, 0,1, 
                                 (e.Location.X - curPoint.X),
                                 (e.Location.Y - curPoint.Y) );
 
-                           // tempLine.affinMatrix = coordinans;
+
                             tempLine.affinMatrix.Multiply(coordinans);
                             curPoint.X = e.Location.X;
                             curPoint.Y = e.Location.Y;
