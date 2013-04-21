@@ -219,6 +219,39 @@ namespace shareData
             tempLine.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
             return;
         }
+        private Point tranformPoint(float ugol, Point pTrance, Point pSelf)
+        {
+            Matrix angel = new Matrix(1, 0, 0, 1, 0, 0);
+            PointF tempP = pTrance;
+            PointF tempPTr = pSelf;
+            angel.RotateAt(ugol, tempP);
+            PointF[] arrCenter = { tempPTr };
+            angel.TransformPoints(arrCenter);
+            pSelf.X = (int)arrCenter[0].X;
+            pSelf.Y = (int)arrCenter[0].Y;
+            return pSelf;
+
+        }
+        private Point[] tranformPoint(float ugol, Point pTrance, Point[] pSelf)
+        {
+            for (int i = 0; i < pSelf.Count(); i++)
+            {
+                pSelf[i] = tranformPoint(ugol, pTrance, pSelf[i]);
+                i++;
+            }
+            return pSelf;
+
+        }
+        private SLine tranformPoint(float ugol, SLine temp)
+        {
+            Point[] tempArr = {temp.a,temp.b};
+            tempArr = tranformPoint(ugol, temp.a, tempArr);
+            temp.a = tempArr[0];
+            temp.b = tempArr[1];
+            return temp;
+
+
+        }
 
         public void drawingScieneOnly()
         {
@@ -244,15 +277,11 @@ namespace shareData
                 int x = (int) ((myLine.a.X + myLine.bW.X) / 2);
                 int y = (int)((myLine.a.Y + myLine.b.Y) / 2);
                 
-                PointF center = new PointF(x, y);
-                Matrix angel = new Matrix(1,0, 0,1, 0,0);
-                angel.RotateAt(90, center);
-                //myLine.affinMatrix.TransformPoints(myLine.tranform
-                //myLine.popMatrix();
-                PointF trancePoint = new PointF(myLine.b.X, myLine.b.Y);
-                PointF[] arrCenter = { myLine.a,myLine.b };
-                angel.TransformPoints(arrCenter);
-                trancePoint = arrCenter[1];
+                Point center = new Point(x, y);
+                Point trancePoint = tranformPoint(90-(float)findAngel(myLine), center , myLine.b);
+                SLine tp = tranformPoint(90 - (float)findAngel(myLine), myLine);
+                bmpGr.DrawLine(primaryPen, tp.a, tp.b);
+
 
 
 
