@@ -238,28 +238,26 @@ namespace shareData
 
 
                 applyMatrix(curLineIndex);
-                SLine tempLine = points[curLineIndex];
-                if (tempLine.bW.X - tempLine.aW.X == 0)
-                    tempLine.bW.X += 1;
-                double gip = (int) d(tempLine.aW,tempLine.bW);
-                double xN = tempLine.bW.X - tempLine.aW.X;
-                double yN = Math.Sqrt((xN * xN) + (gip * gip));
-                double k = yN * (3.14 / 180); //(double)(tempLine.bW.Y - tempLine.aW.Y) / (double)(tempLine.bW.X - tempLine.aW.X);
-                double shisl = tempLine.bW.Y - tempLine.aW.Y;
-                double znam = tempLine.bW.X - tempLine.aW.X;
-                double Fi = (90-Math.Atan(k)) ;
+             
+                SLine myLine =  points[curLineIndex];
+                myLine.tranform = myLine.b;
+                int x = (int) ((myLine.a.X + myLine.bW.X) / 2);
+                int y = (int)((myLine.a.Y + myLine.b.Y) / 2);
                 
-                int c = 200;
-                int dC = (int)(d(tempLine.aW, tempLine.bW));
-                int x = (int)(  Math.Cos(Fi)) * c +((tempLine.aW.X + tempLine.bW.X)/2 );
-                int y = (int)( Math.Sin(Fi)) * c  +((tempLine.aW.Y + tempLine.bW.Y) / 2) ;
-               // Console.WriteLine("k={0}, Fi={1}, x={2}, y={3} ||  atan=k{4}, yN = {5}", k, Fi, x, y, Math.Atan(k), yN);
-               // Console.WriteLine("bY={0}, aW.Y={1}, bw.X={2}, bw.Y={3}",tempLine.bW.Y, tempLine.aW.Y, tempLine.bW.X, tempLine.aW.X);
-                Console.WriteLine(findAngel(points[curLineIndex]));
-                Point trancePoint = new Point(x,y );
-                
-               bmpGr.DrawEllipse(secondryPen, trancePoint.X, trancePoint.Y, 5, 5);
+                PointF center = new PointF(x, y);
+                Matrix angel = new Matrix(1,0, 0,1, 0,0);
+                angel.RotateAt(90, center);
+                //myLine.affinMatrix.TransformPoints(myLine.tranform
+                //myLine.popMatrix();
+                PointF trancePoint = new PointF(myLine.b.X, myLine.b.Y);
+                PointF[] arrCenter = { myLine.a,myLine.b };
+                angel.TransformPoints(arrCenter);
+                trancePoint = arrCenter[1];
 
+
+
+                bmpGr.DrawEllipse(secondryPen, trancePoint.X, trancePoint.Y, 5, 5);
+               //bmpGr.DrawLine(primaryPen, myLine.a, myLine.b);
             }
 
             
@@ -408,8 +406,19 @@ namespace shareData
             double c = d(myLine.a, myLine.b);
             double a = Math.Abs(myLine.a.X - myLine.b.X);
             double b = Math.Abs(myLine.a.Y - myLine.b.Y);
+            //косинус
             double cosAngel = (- b*b + c*c + a*a) / (2* a * c);
             double angel = Math.Acos(cosAngel) * (180 / Math.PI);
+            if (a == 0)
+                angel = 90;
+            
+           // double p = a+b+c;
+            //синус
+          //  double R = (a * b * c) / (4 * Math.Sqrt( p * (p - a) * (p - b) * (p - c)));
+           // double sinAngel = b / (2 * R);
+           // double angel = Math.Asin(sinAngel) * (180 / Math.PI);
+
+
             return angel;
         }
 
