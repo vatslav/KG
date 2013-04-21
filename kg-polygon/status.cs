@@ -28,6 +28,7 @@ namespace shareData
         protected Pen secondryPen = new Pen(Color.DarkOrange, 1.0f);//лиkния
         protected Bitmap bmp;
         protected Graphics bmpGr;         //сглаживание
+        public List<SLine> points = new List<SLine>();
         
         public void initial(PictureBox initialForm)
         {
@@ -42,14 +43,8 @@ namespace shareData
             }
             
         }
-        private Point addition(Point a, Point b)
-        {
-            a.X += b.X;
-            a.Y += b.Y;
-            return a;
-        }
 
-        public List<SLine> points = new List<SLine>();
+       
         
         protected double d(Point a, Point b)
         {
@@ -213,6 +208,18 @@ namespace shareData
             return;
         }
 
+        private void popMatrix(SLine tempLine)
+        {
+            Point[] ps = new Point[2];
+            ps[0] = tempLine.a;
+            ps[1] = tempLine.b;
+            tempLine.affinMatrix.TransformPoints(ps);
+            tempLine.a = ps[0];
+            tempLine.b = ps[1];
+            tempLine.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
+            return;
+        }
+
         public void drawingScieneOnly()
         {
 
@@ -246,9 +253,9 @@ namespace shareData
                 int dC = (int)(d(tempLine.aW, tempLine.bW));
                 int x = (int)(  Math.Cos(Fi)) * c +((tempLine.aW.X + tempLine.bW.X)/2 );
                 int y = (int)( Math.Sin(Fi)) * c  +((tempLine.aW.Y + tempLine.bW.Y) / 2) ;
-                Console.WriteLine("k={0}, Fi={1}, x={2}, y={3} ||  atan=k{4}, yN = {5}", k, Fi, x, y, Math.Atan(k), yN);
+               // Console.WriteLine("k={0}, Fi={1}, x={2}, y={3} ||  atan=k{4}, yN = {5}", k, Fi, x, y, Math.Atan(k), yN);
                // Console.WriteLine("bY={0}, aW.Y={1}, bw.X={2}, bw.Y={3}",tempLine.bW.Y, tempLine.aW.Y, tempLine.bW.X, tempLine.aW.X);
-                
+                Console.WriteLine(findAngel(points[curLineIndex]));
                 Point trancePoint = new Point(x,y );
                 
                bmpGr.DrawEllipse(secondryPen, trancePoint.X, trancePoint.Y, 5, 5);
@@ -266,6 +273,7 @@ namespace shareData
             drawingScieneOnly();
             canvas.DrawImage(bmp, 0, 0);
             return;
+            
         }
         public void drawingSciene(SLine line)
         {
@@ -393,7 +401,17 @@ namespace shareData
 
         }
 
-        
+        public double findAngel(SLine line)
+        {
+            SLine myLine = line;
+            myLine.popMatrix();
+            double c = d(myLine.a, myLine.b);
+            double a = Math.Abs(myLine.a.X - myLine.b.X);
+            double b = Math.Abs(myLine.a.Y - myLine.b.Y);
+            double cosAngel = (- b*b + c*c + a*a) / (2* a * c);
+            double angel = Math.Acos(cosAngel) * (180 / Math.PI);
+            return angel;
+        }
 
 
     }
@@ -404,13 +422,26 @@ namespace shareData
         public Color color;
         public Point a, b;
         public Point aW, bW;// нудно сделать использование их везде
+        public Point tranform;
        // public List<Matrix> affinMatrixes; //список матриц афинного преобразования
         public Matrix affinMatrix;
         public List<SLine> figures; //список тоек - для не отрезков (может сделать отрезки частью этого?)
         //public Point[] figures;
 
-        SLine(Point a, Point b) { this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(); }
+        SLine(Point a, Point b) { this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(); tranform = new Point(0, 0); }
         //SLine(Point a, Point b, int t, Color c) { this.a = aW = a; this.b = bW = b; typeObj = t; color = c; figures = new List<SLine>(); affinMatrix = new List<Matrix>(); }
+        public void popMatrix()
+        {
+            Point[] ps = new Point[2];
+            ps[0] = this.a;
+            ps[1] = this.b;
+            this.affinMatrix.TransformPoints(ps);
+            this.a = ps[0];
+            this.b = ps[1];
+            this.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
+            return;
+        }
+
 
     }
 }

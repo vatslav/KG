@@ -37,6 +37,7 @@ namespace kg_polygon
             //canvas=pictureBox1.CreateGraphics(); //присваиваем канвасу уазатель, чем он
             state.curModes = (int)modes.MODE_DROW; //режим работы по умолчанию
             rLine.Checked = true;
+            //text.Text = "asdasd";
             
 
             //Timer reDraw = new Timer();

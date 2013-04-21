@@ -36,6 +36,7 @@
             this.bLoad = new System.Windows.Forms.Button();
             this.rPolygon = new System.Windows.Forms.RadioButton();
             this.rLine = new System.Windows.Forms.RadioButton();
+            this.text = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -128,11 +129,19 @@
             this.rLine.UseVisualStyleBackColor = true;
             this.rLine.CheckedChanged += new System.EventHandler(this.rLine_CheckedChanged);
             // 
+            // text
+            // 
+            this.text.Location = new System.Drawing.Point(743, 24);
+            this.text.Name = "text";
+            this.text.Size = new System.Drawing.Size(179, 20);
+            this.text.TabIndex = 8;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(949, 428);
+            this.Controls.Add(this.text);
             this.Controls.Add(this.rLine);
             this.Controls.Add(this.rPolygon);
             this.Controls.Add(this.bLoad);
@@ -164,6 +173,7 @@
         private System.Windows.Forms.Button bLoad;
         private System.Windows.Forms.RadioButton rPolygon;
         private System.Windows.Forms.RadioButton rLine;
+        private System.Windows.Forms.TextBox text;
     }
 }
 
