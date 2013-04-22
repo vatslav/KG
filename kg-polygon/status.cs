@@ -224,30 +224,42 @@ namespace shareData
             Matrix angel = new Matrix(1, 0, 0, 1, 0, 0);
             PointF tempP = pTrance;
             PointF tempPTr = pSelf;
+        
             angel.RotateAt(ugol, tempP);
             PointF[] arrCenter = { tempPTr };
+           // Console.WriteLine("arrcenter*=" + arrCenter[0].ToString());
             angel.TransformPoints(arrCenter);
+            
+           // Console.WriteLine("arrcenter*=" + arrCenter[0].ToString());
             pSelf.X = (int)arrCenter[0].X;
             pSelf.Y = (int)arrCenter[0].Y;
+          //  Console.WriteLine("pSelf*=" + pSelf.ToString());
             return pSelf;
 
         }
         private Point[] tranformPoint(float ugol, Point pTrance, Point[] pSelf)
         {
+           // Console.WriteLine("point one " + pSelf[0].ToString());
             for (int i = 0; i < pSelf.Count(); i++)
             {
+
                 pSelf[i] = tranformPoint(ugol, pTrance, pSelf[i]);
+
                 i++;
             }
+         //   Console.WriteLine("point two " + pSelf[0].ToString());
             return pSelf;
 
         }
         private SLine tranformPoint(float ugol, SLine temp)
         {
             Point[] tempArr = {temp.a,temp.b};
-            tempArr = tranformPoint(ugol, temp.a, tempArr);
+            Point c = new Point(40, 40);
+            tempArr = tranformPoint(ugol, temp.b, tempArr);
+         //   Console.WriteLine(tempArr[0].ToString() + " " + temp.ToString());
             temp.a = tempArr[0];
             temp.b = tempArr[1];
+            Console.WriteLine(temp.ToString());
             return temp;
 
 
@@ -277,15 +289,23 @@ namespace shareData
                 int x = (int) ((myLine.a.X + myLine.bW.X) / 2);
                 int y = (int)((myLine.a.Y + myLine.b.Y) / 2);
                 
-                Point center = new Point(x, y);
-                Point trancePoint = tranformPoint(90-(float)findAngel(myLine), center , myLine.b);
+                Point centerHard = new Point(x, y);
+                //-(float)findAngel(myLine)
+                Point trancePoint = tranformPoint(90, centerHard , myLine.b);
                 SLine tp = tranformPoint(90 - (float)findAngel(myLine), myLine);
-                bmpGr.DrawLine(primaryPen, tp.a, tp.b);
+                //Console.WriteLine(tp.ToString());
+                //bmpGr.DrawLine(primaryPen, tp.a, tp.b);
+                //Console.WriteLine(tranformPoint(
+                Console.WriteLine(findAngel(myLine));
+                Console.WriteLine(myLine.ToString());
+
+                Point center = new Point(Math.Max(myLine.a.X, myLine.b.X), Math.Min(myLine.b.Y, myLine.a.Y));
 
 
 
 
                 bmpGr.DrawEllipse(secondryPen, trancePoint.X, trancePoint.Y, 5, 5);
+                bmpGr.DrawEllipse(secondryPen, center.X, center.Y, 5, 5);
                //bmpGr.DrawLine(primaryPen, myLine.a, myLine.b);
             }
 
@@ -433,19 +453,26 @@ namespace shareData
             SLine myLine = line;
             myLine.popMatrix();
             double c = d(myLine.a, myLine.b);
-            double a = Math.Abs(myLine.a.X - myLine.b.X);
-            double b = Math.Abs(myLine.a.Y - myLine.b.Y);
-            //косинус
-            double cosAngel = (- b*b + c*c + a*a) / (2* a * c);
-            double angel = Math.Acos(cosAngel) * (180 / Math.PI);
-            if (a == 0)
-                angel = 90;
-            
-           // double p = a+b+c;
+            double a = myLine.a.X - myLine.b.X;
+            double b = myLine.a.Y - myLine.b.Y;
+
+
             //синус
-          //  double R = (a * b * c) / (4 * Math.Sqrt( p * (p - a) * (p - b) * (p - c)));
-           // double sinAngel = b / (2 * R);
-           // double angel = Math.Asin(sinAngel) * (180 / Math.PI);
+            double p = (a + b + c)/2;
+            double R = (a * b * c) / (4 * Math.Sqrt(p * (p - a) * (p - b) * (p - c)));
+            double sinAngel = b / (2 * R);
+            double angel = Math.Asin(sinAngel) * (180 / Math.PI);
+            Console.WriteLine("a={0},b={1},c={2},p={3},R={4}, sinAngel={5}, angel={6}", a, b, c, p, R, sinAngel, angel);
+            if (a == 0 || b == 0 || c == 0)
+                angel = 0;
+
+
+
+            //косинус
+            //double cosAngel = (-b * b + c * c + a * a) / (2 * a * c);
+            //angel = Math.Acos(cosAngel) * (180 / Math.PI);
+            //if (a == 0)
+            //    angel = 90;
 
 
             return angel;
@@ -480,6 +507,32 @@ namespace shareData
             return;
         }
 
-
+        public override string ToString()
+        {
+            string str = "a:" + this.a.ToString()+" b:"+this.b.ToString()+" color:"+this.color.ToString();//, this.a;
+            return str;
+        }
+        public double findAngel()
+        {
+            SLine myLine = this;
+            myLine.popMatrix();
+            double c = d();
+            double a = Math.Abs(myLine.a.X - myLine.b.X);
+            double b = Math.Abs(myLine.a.Y - myLine.b.Y);
+            //косинус
+            double cosAngel = (-b * b + c * c + a * a) / (2 * a * c);
+            double angel = Math.Acos(cosAngel) * (180 / Math.PI);
+            if (a == 0)
+                angel = 90;
+            return angel;
+        }
+        public string angelString()
+        {
+            return findAngel().ToString();
+        }
+        public double d()
+        {
+            return Math.Sqrt(Math.Pow((this.b.X - this.a.X), 2) + Math.Pow(this.b.Y - this.a.Y, 2));
+        }
     }
 }
