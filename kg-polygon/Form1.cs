@@ -14,7 +14,7 @@ using shareData;
 namespace kg_polygon
 {
     //состояния: в первую, во вторую, в центр)
-    enum captures { TAKE_PT1, TAKE_PT2, TAKE_CENTR, TAKE_NONE };
+    enum captures { TAKE_PT1, TAKE_PT2, TAKE_CENTR, TAKE_NONE, TAKE_TURN };
     //режим рисования: рисования, перемешение, удаление
     enum modes { MODE_DROW, MODE_MOVE, MODE_DELETE };
     enum penType { line, poligon };
@@ -87,6 +87,7 @@ namespace kg_polygon
         private void bDel_Click(object sender, EventArgs e)
         {
             state.curModes = (int)modes.MODE_DELETE;
+            state.drawingScieneOnly();
         }
 
         private void bSafe_Click(object sender, EventArgs e)
@@ -146,6 +147,11 @@ namespace kg_polygon
         private void rPolygon_CheckedChanged(object sender, EventArgs e)
         {
             state.pen = (int)penType.poligon;
+        }
+
+        private void bDel_EnabledChanged(object sender, EventArgs e)
+        {
+            state.drawingScieneOnly();
         }
     }
 

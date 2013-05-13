@@ -82,6 +82,7 @@
             this.bDel.TabIndex = 3;
             this.bDel.Text = "Delet";
             this.bDel.UseVisualStyleBackColor = true;
+            this.bDel.EnabledChanged += new System.EventHandler(this.bDel_EnabledChanged);
             this.bDel.Click += new System.EventHandler(this.bDel_Click);
             // 
             // bSafe
