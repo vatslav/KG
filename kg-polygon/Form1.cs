@@ -17,6 +17,7 @@ namespace kg_polygon
     enum captures { TAKE_PT1, TAKE_PT2, TAKE_CENTR, TAKE_NONE, TAKE_TURN };
     //режим рисования: рисования, перемешение, удаление
     enum modes { MODE_DROW, MODE_MOVE, MODE_DELETE };
+    
     enum penType { line, poligon };
 
     public partial class Form1 : Form
@@ -152,6 +153,12 @@ namespace kg_polygon
         private void bDel_EnabledChanged(object sender, EventArgs e)
         {
             state.drawingScieneOnly();
+        }
+
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            MouseEventArgs me = (MouseEventArgs)e;
+            state.changeZoom(me);
         }
     }
 

@@ -29,6 +29,7 @@ namespace shareData
         protected Bitmap bmp;
         protected Graphics bmpGr;         //сглаживание
         public List<SLine> points = new List<SLine>();
+        public bool zoom = false;
         
         public void initial(PictureBox initialForm)
         {
@@ -43,7 +44,17 @@ namespace shareData
             }
             
         }
-
+        public void changeZoom(MouseEventArgs e)
+        {
+            if (curModes == (int)modes.MODE_MOVE && curCaptures != (int)captures.TAKE_NONE)
+            {
+                if (zoom)
+                    zoom = false;
+                else
+                    zoom = true;
+            }
+            Console.WriteLine(zoom.ToString());
+        }
        
         
         protected double d(Point a, Point b)
@@ -84,11 +95,11 @@ namespace shareData
                                 isDragging = true;
                                 curLineIndex = index;
                                 curPoint = e.Location;
-                                if (curCaptures == (int)captures.TAKE_CENTR)
-                                {
+                                //if (curCaptures == (int)captures.TAKE_CENTR)
+                                //{
                                     curLine = (SLine)points[curLineIndex];
 
-                                }
+                                //}
                             }
                             break;
 
@@ -308,7 +319,7 @@ namespace shareData
 
                 }
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
                 {
                 }
 
@@ -358,42 +369,59 @@ namespace shareData
                         case (int)captures.TAKE_TURN:
                            
                             SLine tempLine1 = points[curLineIndex];
-                           // changeTurnPoint(ref tempLine1);
                             double angel = d(e.Location, tempLine1.turnPoint)/5;
-                            //Matrix coordinans1 = new Matrix(
-                            //    (int)Math.Cos(angel), (int)Math.Sin(angel),
-                            //    -(int)Math.Sin(angel), (int)Math.Cos(angel), 
-                            //    0,0     );
-                            
                             PointF pf = new PointF(tempLine1.turnPoint.X, tempLine1.turnPoint.Y);
                             tempLine1.affinMatrix.RotateAt((float)angel, pf);
-                            
-                           // tempLine1.affinMatrix.Multiply(coordinans1);
-
                             break;
 
 
                         case (int)captures.TAKE_PT1:
-                            popMatrix(curLineIndex);
-                            curLine = points[curLineIndex];
-                            
-                            curLine.a = e.Location;
-                            points[curLineIndex] = curLine;
+                            if (zoom)
+                            {
+                                popMatrix(curLineIndex);
+                                curLine = points[curLineIndex];
+
+                                curLine.a = e.Location;
+                                points[curLineIndex] = curLine;
+                            }
+                            else
+                            {
+                                SLine tempLine = points[curLineIndex];
+                                //float x = (float) ( d(e.Location,tempLine.b ) / d(tempLine.a,tempLine.b ) );
+                                float x = (float)Math.Abs((e.Location.X - tempLine.b.X) / (tempLine.aW.X - tempLine.bW.X));
+                                float y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (tempLine.aW.Y - tempLine.bW.Y));
+                                //Matrix coordinans = new Matrix(x, 0,
+                                //    0, x,
+                                //    0,0);
+
+
+                                //tempLine.affinMatrix.Multiply(coordinans);
+                                float k = (float) 0.5;
+                                tempLine.affinMatrix.Scale(x, y);
+
+                            }
                             break;
                         case (int)captures.TAKE_PT2:
-                            popMatrix(curLineIndex);
-                            curLine = points[curLineIndex];
-                            curLine.b = e.Location;
-                            points[curLineIndex] = curLine;
+                            if (zoom)
+                            {
+                                popMatrix(curLineIndex);
+                                curLine = points[curLineIndex];
+                                curLine.b = e.Location;
+                                points[curLineIndex] = curLine;
+                            }
+                            else
+                            {
+
+                            }
                             break;
                         case (int)captures.TAKE_CENTR:
-                            SLine tempLine = points[curLineIndex];
-                            Matrix coordinans = new Matrix(1,0, 0,1, 
+                            SLine tempLine3 = points[curLineIndex];
+                            Matrix coordinans3 = new Matrix(1,0, 0,1, 
                                 (e.Location.X - curPoint.X),
                                 (e.Location.Y - curPoint.Y) );
 
 
-                            tempLine.affinMatrix.Multiply(coordinans);
+                            tempLine3.affinMatrix.Multiply(coordinans3);
                             curPoint.X = e.Location.X;
                             curPoint.Y = e.Location.Y;
 
