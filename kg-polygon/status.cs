@@ -292,6 +292,20 @@ namespace shareData
                     applyMatrix(curLineIndex);
                     SLine myLine = points[curLineIndex];
                     bmpGr.DrawEllipse(secondryPen, myLine.turnPoint.X, myLine.turnPoint.Y, 5, 5);
+
+
+
+                    //Point x = new Point();
+                    //Point y = new Point();
+                    //x.X = Math.Max(myLine.aW.X, myLine.bW.X);
+                    //x.Y = Math.Min(myLine.aW.Y, myLine.bW.Y);
+
+                    //y.X = Math.Min(myLine.aW.X, myLine.bW.X);
+                    //y.Y = Math.Max(myLine.aW.Y, myLine.bW.Y);
+                    //bmpGr.DrawEllipse(secondryPen,x.X, x.Y, 5, 5);
+                    //bmpGr.DrawEllipse(secondryPen, y.X, y.Y, 5, 5);
+
+
                 }
             }
             catch (ArgumentOutOfRangeException e)
@@ -345,7 +359,7 @@ namespace shareData
                            
                             SLine tempLine1 = points[curLineIndex];
                            // changeTurnPoint(ref tempLine1);
-                            double angel = d(e.Location, tempLine1.turnPoint);
+                            double angel = d(e.Location, tempLine1.turnPoint)/5;
                             //Matrix coordinans1 = new Matrix(
                             //    (int)Math.Cos(angel), (int)Math.Sin(angel),
                             //    -(int)Math.Sin(angel), (int)Math.Cos(angel), 
