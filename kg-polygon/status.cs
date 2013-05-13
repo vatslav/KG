@@ -283,8 +283,13 @@ namespace shareData
                 {
                     bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].aW));
                     bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].bW));
+                    if (curCaptures != (int) captures.TAKE_TURN)
+                    {
+                       
+                        changeTurnPoint();
+
+                    }
                     applyMatrix(curLineIndex);
-                    changeTurnPoint();
                     SLine myLine = points[curLineIndex];
                     bmpGr.DrawEllipse(secondryPen, myLine.turnPoint.X, myLine.turnPoint.Y, 5, 5);
                 }
@@ -339,7 +344,7 @@ namespace shareData
                         case (int)captures.TAKE_TURN:
                            
                             SLine tempLine1 = points[curLineIndex];
-                            changeTurnPoint(ref tempLine1);
+                           // changeTurnPoint(ref tempLine1);
                             double angel = d(e.Location, tempLine1.turnPoint);
                             //Matrix coordinans1 = new Matrix(
                             //    (int)Math.Cos(angel), (int)Math.Sin(angel),
@@ -350,8 +355,7 @@ namespace shareData
                             tempLine1.affinMatrix.RotateAt((float)angel, pf);
                             
                            // tempLine1.affinMatrix.Multiply(coordinans1);
-                            curPoint.X = e.Location.X;
-                            curPoint.Y = e.Location.Y;
+
                             break;
 
 
