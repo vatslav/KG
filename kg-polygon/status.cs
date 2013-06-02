@@ -61,6 +61,7 @@ namespace shareData
         {
             return Math.Sqrt(Math.Pow((b.X - a.X), 2) + Math.Pow(b.Y - a.Y, 2));
         }
+
         protected Point segmentCenter(Point a, Point b)
         {
             Point c = a;
@@ -304,7 +305,7 @@ namespace shareData
                     SLine myLine = points[curLineIndex];
                     bmpGr.DrawEllipse(secondryPen, myLine.turnPoint.X, myLine.turnPoint.Y, 5, 5);
 
-
+                    Console.WriteLine(findAngel(points[curLineIndex]));
 
                     //Point x = new Point();
                     //Point y = new Point();
@@ -388,8 +389,9 @@ namespace shareData
                             {
                                 SLine tempLine = points[curLineIndex];
                                 //float x = (float) ( d(e.Location,tempLine.b ) / d(tempLine.a,tempLine.b ) );
-                                float x = (float)Math.Abs((e.Location.X - tempLine.b.X) / (tempLine.aW.X - tempLine.bW.X));
-                                float y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (tempLine.aW.Y - tempLine.bW.Y));
+                                printLine(tempLine);
+                                float x = (float)Math.Abs((e.Location.X - tempLine.b.X) / (tempLine.aW.X - tempLine.b.X));
+                                float y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (tempLine.aW.Y - tempLine.b.Y));
                                 //Matrix coordinans = new Matrix(x, 0,
                                 //    0, x,
                                 //    0,0);
@@ -465,7 +467,11 @@ namespace shareData
             }
             textFile.Close();
         }
-
+        private void printLine(SLine line)
+        {
+            Console.WriteLine("!{0}, {1} - {2},{3}",  line.a.X, line.a.Y, line.b.X, line.b.Y);
+            Console.WriteLine("!!{0}, {1} - {2},{3}", line.aW.X, line.aW.Y, line.bW.X, line.bW.Y);
+        }
         public void loadStorage(string path)
         {
             Console.WriteLine(path);
@@ -511,13 +517,22 @@ namespace shareData
             cur.turnPoint.Y = (int)((cur.aW.Y + cur.bW.Y) / 2);
             points[curLineIndex] = cur;
         }
+        public bool findDirection(int lineIndex)
+        {
+
+            if (points[lineIndex].b.X - points[lineIndex].a.X > 0)
+                return true;
+            else if (points[lineIndex].b.X - points[lineIndex].a.X < 0)
+                return false;
+            else return true;
+        }
 
         public double findAngel(SLine line)
         {
             SLine myLine = line;
             myLine.popMatrix();
             double c = d(myLine.a, myLine.b);
-            double a = myLine.a.X - myLine.b.X;
+            double a = myLine.a.X - myLine.b.X; //поворот на 90 градусов, от того кто а, кто б
             double b = myLine.a.Y - myLine.b.Y;
 
 
@@ -527,8 +542,8 @@ namespace shareData
             double sinAngel = b / (2 * R);
             double angel = Math.Asin(sinAngel) * (180 / Math.PI);
             Console.WriteLine("a={0},b={1},c={2},p={3},R={4}, sinAngel={5}, angel={6}", a, b, c, p, R, sinAngel, angel);
-            if (a == 0 || b == 0 || c == 0)
-                angel = 0;
+            //if (a == 0 || b == 0 || c == 0)
+            //    angel = 0;
 
 
 

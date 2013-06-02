@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="auxiliaryClasses.cs" />
+    <Compile Include="console.cs" />
     <Compile Include="drawingObjects.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
