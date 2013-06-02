@@ -517,14 +517,40 @@ namespace shareData
             cur.turnPoint.Y = (int)((cur.aW.Y + cur.bW.Y) / 2);
             points[curLineIndex] = cur;
         }
-        public bool findDirection(int lineIndex)
+        public int findDirection(int lineIndex)
         {
+            int x,y;
+            bool axisY, axisX = false;
+            
+            //опередяляем направление вдоль оси Х, х=0 => совпадают с осью
+            if (points[lineIndex].bW.X - points[lineIndex].aW.X > 0)
+                x = 1;
+            else if (points[lineIndex].bW.X - points[lineIndex].aW.X < 0)
+                x = -1;
+            else
+                x = -1;
 
-            if (points[lineIndex].b.X - points[lineIndex].a.X > 0)
-                return true;
-            else if (points[lineIndex].b.X - points[lineIndex].a.X < 0)
-                return false;
-            else return true;
+            if (points[lineIndex].bW.Y - points[lineIndex].aW.Y < 0)
+                y = 1;
+            else if (points[lineIndex].bW.Y - points[lineIndex].aW.Y > 0)
+                y = -1;
+            else
+                y = -1;
+            Console.WriteLine("x=" + x.ToString() + " " + "y=" + y.ToString());
+          //  MessageBox.Show("da"); if (x == 1 && y == 1)
+            if (x == 1 && y == 1)
+                return 1;                
+            if (x == -1 && y == 1)
+                return 2;
+            if (x == -1 && y == -1)
+                return 3;
+            if (x == 1 && y == -1)
+                return 4;
+            //if (x == 0 && y == -1)
+            //    return 4;
+
+
+            return 0;
         }
 
         public double findAngel(SLine line)
@@ -541,10 +567,35 @@ namespace shareData
             double R = (a * b * c) / (4 * Math.Sqrt(p * (p - a) * (p - b) * (p - c)));
             double sinAngel = b / (2 * R);
             double angel = Math.Asin(sinAngel) * (180 / Math.PI);
-            Console.WriteLine("a={0},b={1},c={2},p={3},R={4}, sinAngel={5}, angel={6}", a, b, c, p, R, sinAngel, angel);
+            sinAngel = angel;
+           // angel = Math.Abs(angel);
             //if (a == 0 || b == 0 || c == 0)
             //    angel = 0;
+            int direction = findDirection(curLineIndex);
+            Console.WriteLine("direction=" + direction.ToString());
+            switch (direction)
+            {
+                case (1):
+                    angel *= -1;
+                    break;
+                case (2):
+                    angel = 90 + (90 - Math.Abs(angel));
+                    break;
+                case (3):
+                    angel = angel + 90 + angel;
+                    break;
+                case (4):
+                    angel = 365 - Math.Abs(angel);
+                    break;
+                case (0):
 
+                    MessageBox.Show("wow!");
+                    angel = 999;
+                    break;
+
+            }
+           //angel = sinAngel;
+            Console.WriteLine("a={0},b={1},c={2},p={3},R={4}, sinAngel={5}, angel={6}", a, b, c, p, R, sinAngel, angel);
 
 
             //косинус
