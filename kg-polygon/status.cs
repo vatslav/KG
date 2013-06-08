@@ -410,10 +410,11 @@ namespace shareData
                                 else
                                     y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (float)(tempLine.aW.Y - tempLine.b.Y));
                                 if (y == 1) y = 1;
+                                points[curLineIndex] = tempLine ;
                                 int focusX = 0;
-                                angel = findAngel(tempLine);
-                                if (angel == 0)
-                                    focusX = 1;
+                                
+                                //if (angel == 0)
+                                //    focusX = 1;
                                 popMatrix(curLineIndex);
                                 Point a = new Point(tempLine.a.X, tempLine.a.Y);
                                 Point b = new Point(tempLine.b.X, tempLine.b.Y);
@@ -435,7 +436,27 @@ namespace shareData
                                     0, 1,
                                     curLine.turnPoint.X, curLine.turnPoint.Y + focusX);//==!!! 3 афинных преобразования
                                 points[curLineIndex].affinMatrix.Multiply(coordinans0);
+                                angel = findAngel(tempLine);
+                                //if (angel == 90)
+                                //{
+
+                                //}
+                                //    points[curLineIndex].a.X = (object) 0.1;
+
+
                                 Console.WriteLine("x={0}, y={1}", x, y);
+
+                                //if (a == 0)
+                                //    line.a.X += 1;
+                                //if (b == 0)
+                                //    line.a.X += 1;
+                                //if (c == 0)
+                                //{
+                                //    line.a.X += 1;
+                                //    line.a.Y += 1;
+                                //}
+
+
 
                                 popMatrix(curLineIndex);
 
@@ -601,15 +622,7 @@ namespace shareData
 
 
             //синус
-            if (a == 0)
-                line.a.X+=1;
-            if (b == 0)
-                line.a.X += 1;
-            if (c == 0)
-            {
-                line.a.X += 1;
-                line.a.Y += 1;
-            }
+
                 
             double p = (a + b + c)/2;
             double R = (a * b * c) / (4 * Math.Sqrt(p * (p - a) * (p - b) * (p - c)));
