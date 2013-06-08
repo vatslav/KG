@@ -160,6 +160,11 @@ namespace kg_polygon
             MouseEventArgs me = (MouseEventArgs)e;
             state.changeZoom(me);
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            state.pass();
+        }
     }
 
 

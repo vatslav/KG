@@ -207,6 +207,7 @@ namespace shareData
             tempLine.affinMatrix.TransformPoints(ps);
             tempLine.aW = ps[0];
             tempLine.bW = ps[1];
+            //tempLine.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
             points[indexLine] = tempLine;
             return;
         }
@@ -302,6 +303,7 @@ namespace shareData
 
                     }
                     applyMatrix(curLineIndex);
+                    //popMatrix(curLineIndex);
                     SLine myLine = points[curLineIndex];
                     bmpGr.DrawEllipse(secondryPen, myLine.turnPoint.X, myLine.turnPoint.Y, 5, 5);
 
@@ -346,6 +348,10 @@ namespace shareData
             canvas.DrawImage(bmp, 0, 0);
             return;
         }
+        public void pass() 
+        { 
+            int a; 
+        }
         
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
@@ -369,10 +375,14 @@ namespace shareData
                         //готовимся к отрисовке
                         case (int)captures.TAKE_TURN:
                            
-                            SLine tempLine1 = points[curLineIndex];
-                            double angel = d(e.Location, tempLine1.turnPoint)/5;
-                            PointF pf = new PointF(tempLine1.turnPoint.X, tempLine1.turnPoint.Y);
-                            tempLine1.affinMatrix.RotateAt((float)angel, pf);
+                            
+                            double angel = findAngel(points[curLineIndex]);
+                            PointF pf = new PointF(points[curLineIndex].turnPoint.X, points[curLineIndex].turnPoint.Y);
+
+
+                            //tempLine1.affinMatrix.r
+                            points[curLineIndex].affinMatrix.RotateAt((float)angel, pf);
+                            popMatrix(curLineIndex);
                             break;
 
 
@@ -381,7 +391,7 @@ namespace shareData
                             {
                                 popMatrix(curLineIndex);
                                 curLine = points[curLineIndex];
-
+                               // points[curLineIndex]. = e.Location;
                                 curLine.a = e.Location;
                                 points[curLineIndex] = curLine;
                             }
@@ -390,16 +400,40 @@ namespace shareData
                                 SLine tempLine = points[curLineIndex];
                                 //float x = (float) ( d(e.Location,tempLine.b ) / d(tempLine.a,tempLine.b ) );
                                 printLine(tempLine);
-                                float x = (float)Math.Abs((e.Location.X - tempLine.b.X) / (tempLine.aW.X - tempLine.b.X));
-                                float y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (tempLine.aW.Y - tempLine.b.Y));
-                                //Matrix coordinans = new Matrix(x, 0,
-                                //    0, x,
-                                //    0,0);
+                                float x,y;
+                                if (tempLine.aW.X - tempLine.b.X == 0)
+                                    x = (float)1;
+                                else
+                                    x = (float)Math.Abs((e.Location.X - tempLine.b.X) / (float)(tempLine.aW.X - tempLine.b.X));
+                                if (tempLine.aW.Y - tempLine.b.Y == 0)
+                                    y = (float)1.1;
+                                else
+                                    y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (float)(tempLine.aW.Y - tempLine.b.Y));
+                                if (y == 1) y = 1;
+                                popMatrix(curLineIndex);
+                                Point a = new Point(tempLine.a.X, tempLine.a.Y);
+                                Point b = new Point(tempLine.b.X, tempLine.b.Y);
+                                int dx = curLine.turnPoint.X - points[curLineIndex].turnPoint.X;
+                                int dy = curLine.turnPoint.Y - points[curLineIndex].turnPoint.Y;
+                                Matrix coordinans0 = new Matrix(1, 0, 
+                                    0, 1,
+                                    -curLine.turnPoint.X, -curLine.turnPoint.Y);
+                                points[curLineIndex].affinMatrix.Multiply(coordinans0);
+                                popMatrix(curLineIndex);
 
+                                coordinans0 = new Matrix(x, 0, 
+                                    0, y+(float)0.1,
+                                    0, 0);
+                                points[curLineIndex].affinMatrix.Multiply(coordinans0);
+                                popMatrix(curLineIndex);
 
-                                //tempLine.affinMatrix.Multiply(coordinans);
-                                float k = (float) 0.5;
-                                tempLine.affinMatrix.Scale(x, y);
+                                coordinans0 = new Matrix(1, 0,
+                                    0, 1,
+                                    curLine.turnPoint.X, curLine.turnPoint.Y);//==!!! 3 афинных преобразования
+                                points[curLineIndex].affinMatrix.Multiply(coordinans0);
+                                Console.WriteLine("x={0}, y={1}", x, y);
+
+                                popMatrix(curLineIndex);
 
                             }
                             break;
@@ -539,13 +573,13 @@ namespace shareData
             Console.WriteLine("x=" + x.ToString() + " " + "y=" + y.ToString());
           //  MessageBox.Show("da"); if (x == 1 && y == 1)
             if (x == 1 && y == 1)
-                return 1;                
+                return 3;                
             if (x == -1 && y == 1)
-                return 2;
-            if (x == -1 && y == -1)
-                return 3;
-            if (x == 1 && y == -1)
                 return 4;
+            if (x == -1 && y == -1)
+                return 1;
+            if (x == 1 && y == -1)
+                return 2;
             //if (x == 0 && y == -1)
             //    return 4;
 
@@ -569,23 +603,20 @@ namespace shareData
             double angel = Math.Asin(sinAngel) * (180 / Math.PI);
             sinAngel = angel;
            // angel = Math.Abs(angel);
-            //if (a == 0 || b == 0 || c == 0)
-            //    angel = 0;
+            if (a == 0 || b == 0 || c == 0)
+                angel = 0;
             int direction = findDirection(curLineIndex);
             Console.WriteLine("direction=" + direction.ToString());
             switch (direction)
             {
-                case (1):
-                    angel *= -1;
-                    break;
                 case (2):
-                    angel = 90 + (90 - Math.Abs(angel));
+                    angel = -1 * angel  + 90;
                     break;
                 case (3):
-                    angel = angel + 90 + angel;
+                    angel = -1 * angel + 180;
                     break;
                 case (4):
-                    angel = 365 - Math.Abs(angel);
+                    angel = + 270;
                     break;
                 case (0):
 
@@ -595,6 +626,9 @@ namespace shareData
 
             }
            //angel = sinAngel;
+           // angel = 5;
+            //if (Math.Abs(angel - 360) < 3)
+            //    angel = 3;
             Console.WriteLine("a={0},b={1},c={2},p={3},R={4}, sinAngel={5}, angel={6}", a, b, c, p, R, sinAngel, angel);
 
 
@@ -604,7 +638,7 @@ namespace shareData
             //if (a == 0)
             //    angel = 90;
 
-
+            
             return angel;
         }
 
