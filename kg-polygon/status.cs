@@ -410,6 +410,10 @@ namespace shareData
                                 else
                                     y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (float)(tempLine.aW.Y - tempLine.b.Y));
                                 if (y == 1) y = 1;
+                                int focusX = 0;
+                                angel = findAngel(tempLine);
+                                if (angel == 0)
+                                    focusX = 1;
                                 popMatrix(curLineIndex);
                                 Point a = new Point(tempLine.a.X, tempLine.a.Y);
                                 Point b = new Point(tempLine.b.X, tempLine.b.Y);
@@ -422,14 +426,14 @@ namespace shareData
                                 popMatrix(curLineIndex);
 
                                 coordinans0 = new Matrix(x, 0, 
-                                    0, y+(float)0.1,
+                                    0, y,
                                     0, 0);
                                 points[curLineIndex].affinMatrix.Multiply(coordinans0);
                                 popMatrix(curLineIndex);
 
                                 coordinans0 = new Matrix(1, 0,
                                     0, 1,
-                                    curLine.turnPoint.X, curLine.turnPoint.Y);//==!!! 3 афинных преобразования
+                                    curLine.turnPoint.X, curLine.turnPoint.Y + focusX);//==!!! 3 афинных преобразования
                                 points[curLineIndex].affinMatrix.Multiply(coordinans0);
                                 Console.WriteLine("x={0}, y={1}", x, y);
 
@@ -597,6 +601,16 @@ namespace shareData
 
 
             //синус
+            if (a == 0)
+                line.a.X+=1;
+            if (b == 0)
+                line.a.X += 1;
+            if (c == 0)
+            {
+                line.a.X += 1;
+                line.a.Y += 1;
+            }
+                
             double p = (a + b + c)/2;
             double R = (a * b * c) / (4 * Math.Sqrt(p * (p - a) * (p - b) * (p - c)));
             double sinAngel = b / (2 * R);
@@ -610,13 +624,13 @@ namespace shareData
             switch (direction)
             {
                 case (2):
-                    angel = -1 * angel  + 90;
+                    angel = 90 - (-1 * angel) + 90;
                     break;
                 case (3):
                     angel = -1 * angel + 180;
                     break;
                 case (4):
-                    angel = + 270;
+                    angel = (90-angel) + 270;
                     break;
                 case (0):
 
