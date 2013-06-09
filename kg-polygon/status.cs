@@ -318,7 +318,7 @@ namespace shareData
                     SLine myLine = points[curLineIndex];
                     bmpGr.DrawEllipse(secondryPen, myLine.turnPoint.X, myLine.turnPoint.Y, 5, 5);
 
-                    Console.WriteLine(findAngel(points[curLineIndex]));
+
 
                     //Point x = new Point();
                     //Point y = new Point();
@@ -393,13 +393,14 @@ namespace shareData
                             
                             
                             PointF pf = new PointF(points[curLineIndex].turnPoint.X, points[curLineIndex].turnPoint.Y);
-                            
 
-                            //tempLine1.affinMatrix.r
-                            points[curLineIndex].affinMatrix.RotateAt((float) (angel-curAngel), pf);
+                            points[curLineIndex].affinMatrix.RotateAt((float) (curAngel-angel), pf);
                             curAngel = angel;
-                            popMatrix(curLineIndex);
-                            changeTurnPoint();
+                            //curLine = points[curLineIndex];
+                            //curLine.turnPoint = e.Location;
+                            //points[curLineIndex] = curLine;
+                            //changeTurnPoint();
+                            drawingScieneOnly();
                             break;
 
 
@@ -656,7 +657,10 @@ namespace shareData
         }
 
         public double findAngel(double a, double b, double c, int direction)
-        {  
+        {
+            if (a == 0) a = 0.000000000001;
+            if (c == 0) c = 0.000000000001;
+            if (b == 0) b = 0.000000000001;
             double p = (a + b + c)/2;
             double R = (a * b * c) / (4 * Math.Sqrt(p * (p - a) * (p - b) * (p - c)));
             double sinAngel = b / (2 * R);
