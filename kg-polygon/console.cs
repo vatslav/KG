@@ -33,5 +33,9 @@ namespace kg_polygon
             //execComands
 
         }
+        public void Print(string str)
+        {
+            consoleWindow.Text += "                                            " + str;
+        }
     }
 }

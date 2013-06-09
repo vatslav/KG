@@ -142,7 +142,6 @@
             // 
             // consoleWindow
             // 
-            this.consoleWindow.Enabled = false;
             this.consoleWindow.Location = new System.Drawing.Point(743, 103);
             this.consoleWindow.Name = "consoleWindow";
             this.consoleWindow.Size = new System.Drawing.Size(202, 292);

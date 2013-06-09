@@ -30,6 +30,8 @@ namespace shareData
         protected Graphics bmpGr;         //сглаживание
         public List<SLine> points = new List<SLine>();
         public bool zoom = false;
+        public console konsole = new console();
+        public double curAngel=0;
         
         public void initial(PictureBox initialForm)
         {
@@ -43,6 +45,14 @@ namespace shareData
                 curModes = (int) modes.MODE_DROW;
             }
             
+            
+            
+        }
+        public void initial(RichTextBox rtb, TextBox tb)
+        {
+            konsole.init(rtb, tb);
+
+
         }
         public void changeZoom(MouseEventArgs e)
         {
@@ -53,7 +63,7 @@ namespace shareData
                 else
                     zoom = true;
             }
-            Console.WriteLine(zoom.ToString());
+            
         }
        
         
@@ -185,6 +195,7 @@ namespace shareData
 
             }
             curCaptures = (int)captures.TAKE_NONE;
+
             return -1;
         }
         protected Point[] getPointsTransform(Point primary)
@@ -376,13 +387,19 @@ namespace shareData
                         case (int)captures.TAKE_TURN:
                            
                             
-                            double angel = findAngel(points[curLineIndex]);
+                            //double angel = findAngel(points[curLineIndex]);
+                            double angel = findAngel(points[curLineIndex].turnPoint, e.Location);
+                            konsole.Print(angel.ToString());
+                            
+                            
                             PointF pf = new PointF(points[curLineIndex].turnPoint.X, points[curLineIndex].turnPoint.Y);
-
+                            
 
                             //tempLine1.affinMatrix.r
-                            points[curLineIndex].affinMatrix.RotateAt((float)angel, pf);
+                            points[curLineIndex].affinMatrix.RotateAt((float) (angel-curAngel), pf);
+                            curAngel = angel;
                             popMatrix(curLineIndex);
+                            changeTurnPoint();
                             break;
 
 
@@ -564,34 +581,39 @@ namespace shareData
         }
         private void changeTurnPoint(ref SLine line)
         {
-            line.turnPoint.X = (int)((line.aW.X + line.bW.X) / 2);
-            line.turnPoint.Y = (int)((line.aW.Y + line.bW.Y) / 2);
+            line.turnPoint.X = (int)((line.aW.X + line.bW.X) / 2 + 20);
+            line.turnPoint.Y = (int)((line.aW.Y + line.bW.Y) / 2 + 35);
             return;
         }
 
         private void changeTurnPoint()
         {
             SLine cur = points[curLineIndex];
-            cur.turnPoint.X = (int)((cur.aW.X + cur.bW.X) / 2);
-            cur.turnPoint.Y = (int)((cur.aW.Y + cur.bW.Y) / 2);
+            cur.turnPoint.X = (int)((cur.aW.X + cur.bW.X) / 2 + 20 );
+            cur.turnPoint.Y = (int)((cur.aW.Y + cur.bW.Y) / 2 + 35);
             points[curLineIndex] = cur;
         }
         public int findDirection(int lineIndex)
+        {
+            return findDirection(points[lineIndex].aW, points[lineIndex].bW);
+        }
+
+        public int findDirection(Point a, Point b)
         {
             int x,y;
             bool axisY, axisX = false;
             
             //опередяляем направление вдоль оси Х, х=0 => совпадают с осью
-            if (points[lineIndex].bW.X - points[lineIndex].aW.X > 0)
+            if (b.X - a.X > 0)
                 x = 1;
-            else if (points[lineIndex].bW.X - points[lineIndex].aW.X < 0)
+            else if (b.X - a.X < 0)
                 x = -1;
             else
                 x = -1;
 
-            if (points[lineIndex].bW.Y - points[lineIndex].aW.Y < 0)
+            if (b.Y - a.Y < 0)
                 y = 1;
-            else if (points[lineIndex].bW.Y - points[lineIndex].aW.Y > 0)
+            else if (b.Y - a.Y > 0)
                 y = -1;
             else
                 y = -1;
@@ -611,29 +633,40 @@ namespace shareData
 
             return 0;
         }
-
         public double findAngel(SLine line)
         {
-            SLine myLine = line;
-            myLine.popMatrix();
-            double c = d(myLine.a, myLine.b);
-            double a = myLine.a.X - myLine.b.X; //поворот на 90 градусов, от того кто а, кто б
-            double b = myLine.a.Y - myLine.b.Y;
+            double c = d(line.a, line.b); //длина отрезка
+            double a = line.a.X - line.b.X; //проекциия на Х  //поворот на 90 градусов, от того кто а, кто б
+            double b = line.a.Y - line.b.Y; // проекция на У
+
+            //return findAngel(a, b, c, findDirection(curLineIndex));
 
 
-            //синус
+            return findAngel(line.a, line.b);
 
-                
+
+        }
+
+        public double findAngel(Point A, Point B)
+        {
+            double c = d(A,B);
+            double b = A.Y - B.Y;
+            double a = A.X - B.X;
+            return findAngel(a, b, c, findDirection(A,B));
+        }
+
+        public double findAngel(double a, double b, double c, int direction)
+        {  
             double p = (a + b + c)/2;
             double R = (a * b * c) / (4 * Math.Sqrt(p * (p - a) * (p - b) * (p - c)));
             double sinAngel = b / (2 * R);
             double angel = Math.Asin(sinAngel) * (180 / Math.PI);
             sinAngel = angel;
-           // angel = Math.Abs(angel);
             if (a == 0 || b == 0 || c == 0)
                 angel = 0;
-            int direction = findDirection(curLineIndex);
+             
             Console.WriteLine("direction=" + direction.ToString());
+            //преобразования для предания реальности угла
             switch (direction)
             {
                 case (2):
@@ -652,13 +685,8 @@ namespace shareData
                     break;
 
             }
-           //angel = sinAngel;
-           // angel = 5;
-            //if (Math.Abs(angel - 360) < 3)
-            //    angel = 3;
+
             Console.WriteLine("a={0},b={1},c={2},p={3},R={4}, sinAngel={5}, angel={6}", a, b, c, p, R, sinAngel, angel);
-
-
             //косинус
             //double cosAngel = (-b * b + c * c + a * a) / (2 * a * c);
             //angel = Math.Acos(cosAngel) * (180 / Math.PI);

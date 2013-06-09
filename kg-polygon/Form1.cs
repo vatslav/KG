@@ -35,6 +35,7 @@ namespace kg_polygon
              
             InitializeComponent();
             state.initial(pictureBox1);
+            state.initial(consoleWindow, consoleEntry);
             //canvas=pictureBox1.CreateGraphics(); //присваиваем канвасу уазатель, чем он
             state.curModes = (int)modes.MODE_DROW; //режим работы по умолчанию
             rLine.Checked = true;
