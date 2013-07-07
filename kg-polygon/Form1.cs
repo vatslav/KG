@@ -164,7 +164,12 @@ namespace kg_polygon
 
         private void button1_Click(object sender, EventArgs e)
         {
-            state.pass();
+         
+        }
+
+        private void consoleWindow_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

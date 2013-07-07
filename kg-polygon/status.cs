@@ -32,6 +32,7 @@ namespace shareData
         public bool zoom = false;
         public console konsole = new console();
         public double curAngel=0;
+        public SLine bufLine;
         
         public void initial(PictureBox initialForm)
         {
@@ -55,7 +56,7 @@ namespace shareData
 
         }
         public void changeZoom(MouseEventArgs e)
-        {
+        {//смена состояние (маштабирвоание/тансформация
             if (curModes == (int)modes.MODE_MOVE && curCaptures != (int)captures.TAKE_NONE)
             {
                 if (zoom)
@@ -68,12 +69,12 @@ namespace shareData
        
         
         protected double d(Point a, Point b)
-        {
+        {//растояние между 2 точками
             return Math.Sqrt(Math.Pow((b.X - a.X), 2) + Math.Pow(b.Y - a.Y, 2));
         }
 
         protected Point segmentCenter(Point a, Point b)
-        {
+        {//середина между 2 точкми
             Point c = a;
             c.X = (a.X + b.X) / 2;
             c.Y = (a.Y + b.Y) / 2;
@@ -81,7 +82,7 @@ namespace shareData
             
         }
         public void drawingDown(MouseEventArgs e) 
-        {
+        {//при нажатии ЛКМ на холсте
             
             switch (pen)
             {
@@ -132,7 +133,7 @@ namespace shareData
         }
 
         public void drawingUp(MouseEventArgs e)
-        {
+        {//при отпускание ЛКМ на холсте
             switch (pen)
             {
                 case (int)penType.line:
@@ -158,7 +159,7 @@ namespace shareData
             }
         }
         private bool dForSquare(Point primary, Point curPoint)
-        {
+        {//находится ли curPoint в окрености primary (окресность = visibility)
             foreach (Point point in getPointsTransform(primary))
                 if (d(point, curPoint) <= visibility)
                     return true;
@@ -166,7 +167,7 @@ namespace shareData
         }
 
         public int getLine(Point midPoint)
-        {
+        {//возвращает индекс линии, которой принадлежит данная точка
             int ptr = 0;
             foreach (SLine line in points)
             {
@@ -199,7 +200,7 @@ namespace shareData
             return -1;
         }
         protected Point[] getPointsTransform(Point primary)
-        { //тут должно быть еще умножение на угол
+        { //массив точек для трансформации (см. место где вызываю данную функцию)
             int mathVis = (int) (visibility / ( Math.Sqrt(2)));
             Point a = new Point(primary.X - mathVis, primary.Y - mathVis);
             Point b = new Point(primary.X - mathVis, primary.Y + mathVis);
@@ -210,7 +211,7 @@ namespace shareData
         }
 
         private void applyMatrix(int indexLine)
-        {
+        {//применить матрицу афинных преобразований, без сброса самой матрицы
             SLine tempLine = points[indexLine];
             Point[] ps = new Point[2];
             ps[0] = tempLine.a;
@@ -223,7 +224,7 @@ namespace shareData
             return;
         }
         private void popMatrix(int indexLine)
-        {
+        {//применить матрицу афинных преобразований к фигуре и сбросить матрицу афинных преобразований
             SLine tempLine = points[indexLine];
             Point[] ps = new Point[2];
             ps[0] = tempLine.a;
@@ -248,7 +249,7 @@ namespace shareData
             return;
         }
         private Point tranformPoint(float ugol, Point pTrance, Point pSelf)
-        {
+        {//возвращает по некоторому эзетерическому алгоритму точку, за через которую потом будем делать поворот
             Matrix angel = new Matrix(1, 0, 0, 1, 0, 0);
             PointF tempP = pTrance;
             PointF tempPTr = pSelf;
@@ -263,7 +264,7 @@ namespace shareData
 
         }
         private Point[] tranformPoint(float ugol, Point pTrance, Point[] pSelf)
-        {
+        {// -||- но массив
            // Console.WriteLine("point one " + pSelf[0].ToString());
             for (int i = 0; i < pSelf.Count(); i++)
             {
@@ -277,7 +278,7 @@ namespace shareData
 
         }
         private SLine tranformPoint(float ugol, SLine temp)
-        {
+        {//100500 функция, которая пытается дать правильные координаты (тщетно)
             Point[] tempArr = {temp.a,temp.b};
             Point c = new Point(40, 40);
             tempArr = tranformPoint(ugol, temp.b, tempArr);
@@ -289,9 +290,20 @@ namespace shareData
 
 
         }
+        public void repaitуLine(int index)
+        {//востановление линии в случае, если произошло переполнение
+            SLine temp = new SLine();
+            temp = points[index];
+            temp.aW = curLine.a;
+            temp.bW = curLine.b;
+            points[index] = temp;
+
+
+        }
 
         public void drawingScieneOnly()
-        {
+        {//отрисовки всех фигур + короб (без пост и пред действий)
+            //потому что иногда нужна толко отрисовка без других действий
 
             foreach (SLine line in points)
             {
@@ -299,12 +311,23 @@ namespace shareData
                 bmpGr.DrawLine(primaryPen, line.aW, line.bW);
 
             }
-
+            SLine tempL = new SLine();
             //отрисовка короба
             try
             {
                 if (curModes == (int)modes.MODE_MOVE && curLineIndex != -1)
                 {
+                    tempL = points[curLineIndex];
+                    Console.WriteLine(points[curLineIndex].aW);    
+                    if (double.IsNaN(points[curLineIndex].aW.X) || double.IsNaN(points[curLineIndex].aW.Y) || points[curLineIndex].aW.X < -99999 ||
+                    points[curLineIndex].aW.X > 99999)
+                    {
+                        Console.WriteLine(points[curLineIndex].aW);
+                        printLine(points[curLineIndex]);
+                        //popMatrix(points[curLineIndex]);
+                        repaitуLine(curLineIndex);
+                        return;
+                    }
                     bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].aW));
                     bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].bW));
                     if (curCaptures != (int) captures.TAKE_TURN)
@@ -333,8 +356,10 @@ namespace shareData
 
                 }
             }
-            catch (ArgumentOutOfRangeException)
+            catch (StackOverflowException)
                 {
+                   // points[curLineIndex]= curLine;
+                    //applyMatrix(curLineIndex);
                 }
 
             
@@ -342,7 +367,7 @@ namespace shareData
         }
 
         public void drawingSciene()
-        {
+        {//очистка холста, отрисовка, подмена холста
             bmpGr.Clear(Color.White);
 
             drawingScieneOnly();
@@ -351,7 +376,7 @@ namespace shareData
             
         }
         public void drawingSciene(SLine line)
-        {
+        {//очистка холста, отрисовка, отрисовка текущей линии (которая меняем), подмена холста
             bmpGr.Clear(Color.White);
             drawingScieneOnly();
             primaryPen.Color = line.color;
@@ -359,14 +384,11 @@ namespace shareData
             canvas.DrawImage(bmp, 0, 0);
             return;
         }
-        public void pass() 
-        { 
-            int a; 
-        }
+      
         
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
-        {
+        {//отрисовка + выполнение действий пользователя (поворот, маштабирвоание, трансформ, деформ)
             
             if (curModes == (int)modes.MODE_DROW)
             {
@@ -390,8 +412,8 @@ namespace shareData
                             //double angel = findAngel(points[curLineIndex]);
                             double angel = findAngel(points[curLineIndex].turnPoint, e.Location);
                             konsole.Print(angel.ToString());
-                            
-                            
+
+                            curLine = points[curLineIndex];
                             PointF pf = new PointF(points[curLineIndex].turnPoint.X, points[curLineIndex].turnPoint.Y);
 
                             points[curLineIndex].affinMatrix.RotateAt((float) (curAngel-angel), pf);
@@ -400,6 +422,10 @@ namespace shareData
                             //curLine.turnPoint = e.Location;
                             //points[curLineIndex] = curLine;
                             //changeTurnPoint();
+                            konsole.Print(points[curLineIndex].aW.ToString());
+                            //Console.WriteLine("AWX" + points[curLineIndex].aW.ToString());
+
+                            
                             drawingScieneOnly();
                             break;
 
@@ -462,7 +488,7 @@ namespace shareData
                                 //    points[curLineIndex].a.X = (object) 0.1;
 
 
-                                Console.WriteLine("x={0}, y={1}", x, y);
+                               // Console.WriteLine("x={0}, y={1}", x, y);
 
                                 //if (a == 0)
                                 //    line.a.X += 1;
@@ -516,18 +542,18 @@ namespace shareData
         }
         
         public void pointsDebug()
-        {
-            Console.WriteLine("----------------");
+        {//выводил состояние точек (да, у нас не практикуется использовать отладчик)
+           // Console.WriteLine("----------------");
             int ptr = 0;
             foreach (SLine line in points)
             {
-                Console.WriteLine(ptr.ToString()+"|"+line.aW.ToString() + " " + line.bW.ToString());
+                //Console.WriteLine(ptr.ToString()+"|"+line.aW.ToString() + " " + line.bW.ToString());
                 ptr++;
             }
         }
 
         public void safeStorage(string path)
-        {
+        {//сохранить состояние в файл (шас работает с багами)
             System.IO.StreamWriter textFile = new System.IO.StreamWriter(path);
             try
             {
@@ -545,13 +571,13 @@ namespace shareData
             textFile.Close();
         }
         private void printLine(SLine line)
-        {
+        {//вывести состояние линии
             Console.WriteLine("!{0}, {1} - {2},{3}",  line.a.X, line.a.Y, line.b.X, line.b.Y);
             Console.WriteLine("!!{0}, {1} - {2},{3}", line.aW.X, line.aW.Y, line.bW.X, line.bW.Y);
         }
         public void loadStorage(string path)
-        {
-            Console.WriteLine(path);
+        {//загрузка состяония из файла
+            //Console.WriteLine(path);
             char[] delimeterChar = { ' ', ',' };
             string[] lines = System.IO.File.ReadAllLines(path);
             SLine tempLine = curLine; ;
@@ -581,7 +607,7 @@ namespace shareData
 
         }
         private void changeTurnPoint(ref SLine line)
-        {
+        {//изменить точку поворота, ее нужна менять отдельно, каждый раз забываю почему такой апендикс
             line.turnPoint.X = (int)((line.aW.X + line.bW.X) / 2 + 20);
             line.turnPoint.Y = (int)((line.aW.Y + line.bW.Y) / 2 + 35);
             return;
@@ -595,12 +621,12 @@ namespace shareData
             points[curLineIndex] = cur;
         }
         public int findDirection(int lineIndex)
-        {
+        {//найти угол по индексу линии
             return findDirection(points[lineIndex].aW, points[lineIndex].bW);
         }
 
         public int findDirection(Point a, Point b)
-        {
+        {//найти направление отрезка, проходящего через 2 данные точки
             int x,y;
             bool axisY, axisX = false;
             
@@ -618,8 +644,7 @@ namespace shareData
                 y = -1;
             else
                 y = -1;
-            Console.WriteLine("x=" + x.ToString() + " " + "y=" + y.ToString());
-          //  MessageBox.Show("da"); if (x == 1 && y == 1)
+          
             if (x == 1 && y == 1)
                 return 3;                
             if (x == -1 && y == 1)
@@ -628,14 +653,10 @@ namespace shareData
                 return 1;
             if (x == 1 && y == -1)
                 return 2;
-            //if (x == 0 && y == -1)
-            //    return 4;
-
-
             return 0;
         }
         public double findAngel(SLine line)
-        {
+        {//найти угол данной линии
             double c = d(line.a, line.b); //длина отрезка
             double a = line.a.X - line.b.X; //проекциия на Х  //поворот на 90 градусов, от того кто а, кто б
             double b = line.a.Y - line.b.Y; // проекция на У
@@ -649,7 +670,7 @@ namespace shareData
         }
 
         public double findAngel(Point A, Point B)
-        {
+        {//находит угол отрезка проход. через 2 данные точки (функция обертка)
             double c = d(A,B);
             double b = A.Y - B.Y;
             double a = A.X - B.X;
@@ -657,7 +678,7 @@ namespace shareData
         }
 
         public double findAngel(double a, double b, double c, int direction)
-        {
+        {//находит угол - тут  вся математика - функция ядро
             if (a == 0) a = 0.000000000001;
             if (c == 0) c = 0.000000000001;
             if (b == 0) b = 0.000000000001;
@@ -668,9 +689,7 @@ namespace shareData
             sinAngel = angel;
             if (a == 0 || b == 0 || c == 0)
                 angel = 0;
-             
-            Console.WriteLine("direction=" + direction.ToString());
-            //преобразования для предания реальности угла
+
             switch (direction)
             {
                 case (2):
@@ -689,15 +708,6 @@ namespace shareData
                     break;
 
             }
-
-            Console.WriteLine("a={0},b={1},c={2},p={3},R={4}, sinAngel={5}, angel={6}", a, b, c, p, R, sinAngel, angel);
-            //косинус
-            //double cosAngel = (-b * b + c * c + a * a) / (2 * a * c);
-            //angel = Math.Acos(cosAngel) * (180 / Math.PI);
-            //if (a == 0)
-            //    angel = 90;
-
-            
             return angel;
         }
 
@@ -706,7 +716,7 @@ namespace shareData
     
     
     struct SLine
-    {
+    {//структура хранения (здаровая и не поворотливая)
         public int typeObj;
         public Color color;
         public Point a, b;
@@ -720,7 +730,7 @@ namespace shareData
         SLine(Point a, Point b) { turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(); }
         //SLine(Point a, Point b, int t, Color c) { this.a = aW = a; this.b = bW = b; typeObj = t; color = c; figures = new List<SLine>(); affinMatrix = new List<Matrix>(); }
         public void popMatrix()
-        {
+        {//внутрение применение афинных преобразований
             Point[] ps = new Point[2];
             ps[0] = this.a;
             ps[1] = this.b;
@@ -733,31 +743,14 @@ namespace shareData
         }
 
         public override string ToString()
-        {
+        {//перегрузка метода ToString
             string str = "a:" + this.a.ToString()+" b:"+this.b.ToString()+" color:"+this.color.ToString();//, this.a;
             return str;
         }
 
-        public double findAngel()
-        {
-            SLine myLine = this;
-            myLine.popMatrix();
-            double c = d();
-            double a = Math.Abs(myLine.a.X - myLine.b.X);
-            double b = Math.Abs(myLine.a.Y - myLine.b.Y);
-            //косинус
-            double cosAngel = (-b * b + c * c + a * a) / (2 * a * c);
-            double angel = Math.Acos(cosAngel) * (180 / Math.PI);
-            if (a == 0)
-                angel = 90;
-            return angel;
-        }
-        public string angelString()
-        {
-            return findAngel().ToString();
-        }
+
         public double d()
-        {
+        {//растояние как метод
             return Math.Sqrt(Math.Pow((this.b.X - this.a.X), 2) + Math.Pow(this.b.Y - this.a.Y, 2));
         }
     }

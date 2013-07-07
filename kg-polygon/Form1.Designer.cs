@@ -147,6 +147,7 @@
             this.consoleWindow.Size = new System.Drawing.Size(202, 292);
             this.consoleWindow.TabIndex = 9;
             this.consoleWindow.Text = "";
+            this.consoleWindow.TextChanged += new System.EventHandler(this.consoleWindow_TextChanged);
             // 
             // button1
             // 
