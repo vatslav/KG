@@ -290,13 +290,16 @@ namespace shareData
 
 
         }
-        public void repaitуLine(int index)
+        public void repaireLine(int index)
         {//востановление линии в случае, если произошло переполнение
             SLine temp = new SLine();
+            
             temp = points[index];
+            temp.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
             temp.aW = curLine.a;
             temp.bW = curLine.b;
             points[index] = temp;
+            //points[index].affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
 
 
         }
@@ -325,7 +328,7 @@ namespace shareData
                         Console.WriteLine(points[curLineIndex].aW);
                         printLine(points[curLineIndex]);
                         //popMatrix(points[curLineIndex]);
-                        repaitуLine(curLineIndex);
+                        repaireLine(curLineIndex);
                         return;
                     }
                     bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].aW));
@@ -481,24 +484,6 @@ namespace shareData
                                     curLine.turnPoint.X, curLine.turnPoint.Y + focusX);//==!!! 3 афинных преобразования
                                 points[curLineIndex].affinMatrix.Multiply(coordinans0);
                                 angel = findAngel(tempLine);
-                                //if (angel == 90)
-                                //{
-
-                                //}
-                                //    points[curLineIndex].a.X = (object) 0.1;
-
-
-                               // Console.WriteLine("x={0}, y={1}", x, y);
-
-                                //if (a == 0)
-                                //    line.a.X += 1;
-                                //if (b == 0)
-                                //    line.a.X += 1;
-                                //if (c == 0)
-                                //{
-                                //    line.a.X += 1;
-                                //    line.a.Y += 1;
-                                //}
 
 
 
