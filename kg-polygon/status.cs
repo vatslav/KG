@@ -386,7 +386,17 @@ namespace shareData
             canvas.DrawImage(bmp, 0, 0);
             return;
         }
-      
+
+        public Matrix addMatrix(Matrix mx1, Matrix mx2)
+        {
+            float [] elem1 = mx1.Elements;
+            float [] elem2 = mx1.Elements;
+            //a = mx
+            Matrix tmp = new Matrix(elem1[0] + elem2[0], elem1[1] + elem2[1], elem1[2] + elem2[2],
+                elem1[3] + elem2[3], elem1[4] + elem2[4], elem1[5] + elem2[5]);
+            return tmp;
+            
+        }
         
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
@@ -444,7 +454,7 @@ namespace shareData
                             else
                             {//если  маштаб
                                 SLine tempLine = points[curLineIndex];
-                                tempLine.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
+                                //tempLine.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
                                 printLine(tempLine);
                                 float x,y;
                                 x = (float)Math.Abs((e.Location.X - tempLine.b.X) / (float)(tempLine.a.X - tempLine.b.X));
@@ -463,31 +473,32 @@ namespace shareData
                                 }
 
 
-                                popMatrix(curLineIndex);
+                                //popMatrix(curLineIndex);
   
                                 Matrix coordinans0 = new Matrix(1, 0, 
                                     0, 1,
                                     -curLine.turnPoint.X, -curLine.turnPoint.Y);
-                                points[curLineIndex].affinMatrix.Multiply(coordinans0);
-                                
-                                popMatrix(curLineIndex);
+                                //points[curLineIndex].affinMatrix = coordinans0 + coordinans0;
+                                Matrix buf = new Matrix();
+                                buf = addMatrix(points[curLineIndex].affinMatrix, coordinans0);
+                                //popMatrix(curLineIndex);
 
                                 coordinans0 = new Matrix(x, 0, 
                                     0, y,
                                     0, 0);
-                                points[curLineIndex].affinMatrix.Multiply(coordinans0);
-                                popMatrix(curLineIndex);
-
+                                //points[curLineIndex].affinMatrix.Multiply(coordinans0);
+                                //popMatrix(curLineIndex);
+                                buf = addMatrix(buf, coordinans0);
                                 coordinans0 = new Matrix(1, 0,
                                     0, 1,
                                     curLine.turnPoint.X, curLine.turnPoint.Y);
-                                points[curLineIndex].affinMatrix.Multiply(coordinans0);
+                                //coordinans0.ёpoints[curLineIndex].affinMatrix.Multiply(coordinans0);
                                 //angel = findAngel(tempLine);
-
-
-
+                                buf = addMatrix(buf, coordinans0);
+                                tempLine.affinMatrix = buf;
+                                points[curLineIndex] = tempLine;
+                                //applyMatrix(curLineIndex);
                                 popMatrix(curLineIndex);
-
                             }
                             break;
                         case (int)captures.TAKE_PT2:
@@ -738,4 +749,5 @@ namespace shareData
             return Math.Sqrt(Math.Pow((this.b.X - this.a.X), 2) + Math.Pow(this.b.Y - this.a.Y, 2));
         }
     }
+    
 }
