@@ -232,6 +232,8 @@ namespace shareData
             tempLine.affinMatrix.TransformPoints(ps);
             tempLine.a = ps[0];
             tempLine.b = ps[1];
+            //tempLine.aW = ps[0];
+            //tempLine.bW = ps[1];
             tempLine.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
             points[indexLine] = tempLine;
             return;
@@ -299,9 +301,6 @@ namespace shareData
             temp.aW = curLine.a;
             temp.bW = curLine.b;
             points[index] = temp;
-            //points[index].affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
-
-
         }
 
         public void drawingScieneOnly()
@@ -435,7 +434,7 @@ namespace shareData
 
                         case (int)captures.TAKE_PT1:
                             if (zoom)
-                            {
+                            {//если деформ
                                 popMatrix(curLineIndex);
                                 curLine = points[curLineIndex];
                                // points[curLineIndex]. = e.Location;
@@ -443,34 +442,34 @@ namespace shareData
                                 points[curLineIndex] = curLine;
                             }
                             else
-                            {
+                            {//если  маштаб
                                 SLine tempLine = points[curLineIndex];
-                                //float x = (float) ( d(e.Location,tempLine.b ) / d(tempLine.a,tempLine.b ) );
+                                tempLine.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
                                 printLine(tempLine);
                                 float x,y;
-                                if (tempLine.aW.X - tempLine.b.X == 0)
-                                    x = (float)1;
-                                else
-                                    x = (float)Math.Abs((e.Location.X - tempLine.b.X) / (float)(tempLine.aW.X - tempLine.b.X));
-                                if (tempLine.aW.Y - tempLine.b.Y == 0)
-                                    y = (float)1.1;
-                                else
-                                    y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (float)(tempLine.aW.Y - tempLine.b.Y));
-                                if (y == 1) y = 1;
-                                points[curLineIndex] = tempLine ;
-                                int focusX = 0;
-                                
-                                //if (angel == 0)
-                                //    focusX = 1;
+                                x = (float)Math.Abs((e.Location.X - tempLine.b.X) / (float)(tempLine.a.X - tempLine.b.X));
+                                y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (float)(tempLine.a.Y - tempLine.b.Y));
+                                if (points[curLineIndex].a.X == points[curLineIndex].b.X ||
+                                    points[curLineIndex].aW.X == points[curLineIndex].bW.X)
+                                {
+                                    //y = 2;
+                                    //x = 2;
+                                }
+                                if (points[curLineIndex].a.Y == points[curLineIndex].b.Y ||
+                                   points[curLineIndex].aW.Y == points[curLineIndex].bW.Y)
+                                {
+                                    //x = 2;
+                                 //   y = 2;
+                                }
+
+
                                 popMatrix(curLineIndex);
-                                Point a = new Point(tempLine.a.X, tempLine.a.Y);
-                                Point b = new Point(tempLine.b.X, tempLine.b.Y);
-                                int dx = curLine.turnPoint.X - points[curLineIndex].turnPoint.X;
-                                int dy = curLine.turnPoint.Y - points[curLineIndex].turnPoint.Y;
+  
                                 Matrix coordinans0 = new Matrix(1, 0, 
                                     0, 1,
                                     -curLine.turnPoint.X, -curLine.turnPoint.Y);
                                 points[curLineIndex].affinMatrix.Multiply(coordinans0);
+                                
                                 popMatrix(curLineIndex);
 
                                 coordinans0 = new Matrix(x, 0, 
@@ -481,9 +480,9 @@ namespace shareData
 
                                 coordinans0 = new Matrix(1, 0,
                                     0, 1,
-                                    curLine.turnPoint.X, curLine.turnPoint.Y + focusX);//==!!! 3 афинных преобразования
+                                    curLine.turnPoint.X, curLine.turnPoint.Y);
                                 points[curLineIndex].affinMatrix.Multiply(coordinans0);
-                                angel = findAngel(tempLine);
+                                //angel = findAngel(tempLine);
 
 
 
@@ -613,7 +612,7 @@ namespace shareData
         public int findDirection(Point a, Point b)
         {//найти направление отрезка, проходящего через 2 данные точки
             int x,y;
-            bool axisY, axisX = false;
+
             
             //опередяляем направление вдоль оси Х, х=0 => совпадают с осью
             if (b.X - a.X > 0)
@@ -712,7 +711,7 @@ namespace shareData
         public List<SLine> figures; //список тоек - для не отрезков (может сделать отрезки частью этого?)
         //public Point[] figures;
 
-        SLine(Point a, Point b) { turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(); }
+        SLine(Point a, Point b) { turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(1,0, 0,1, 0,0); }
         //SLine(Point a, Point b, int t, Color c) { this.a = aW = a; this.b = bW = b; typeObj = t; color = c; figures = new List<SLine>(); affinMatrix = new List<Matrix>(); }
         public void popMatrix()
         {//внутрение применение афинных преобразований
