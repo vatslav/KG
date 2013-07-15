@@ -10,6 +10,7 @@ using System.Collections;
 using kg_polygon;
 using drawingObjects;
 using System.Drawing.Drawing2D;
+using NLog;
 namespace shareData
 {
     class editor
@@ -18,9 +19,9 @@ namespace shareData
         public int curCaptures;
         public bool isDragging;
         public int pen;
-        public Point curPoint;
-        public SLine curLine;
-        public int curLineIndex;
+        protected Point curPoint;
+        protected SLine curLine;
+        protected int curLineIndex;
         protected int visibility = 15;
         protected Graphics canvas;
         protected PictureBox defaultCanvas;
@@ -28,14 +29,15 @@ namespace shareData
         protected Pen secondryPen = new Pen(Color.DarkOrange, 1.0f);//лиkния
         protected Bitmap bmp;
         protected Graphics bmpGr;         //сглаживание
-        public List<SLine> points = new List<SLine>();
-        public bool zoom = false;
-        public console konsole = new console();
-        public double curAngel=0;
-        public SLine bufLine;
+        protected List<SLine> points = new List<SLine>();
+        protected bool zoom = false;
+        protected console konsole = new console();
+        protected double curAngel = 0;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
+       
         
         public void initial(PictureBox initialForm)
-        {
+        {//связывание холста и пиктербокса + включение сглаживания
             canvas = initialForm.CreateGraphics();
             defaultCanvas = initialForm;
             bmp  = new Bitmap(initialForm.Width, initialForm.Height);
@@ -50,8 +52,19 @@ namespace shareData
             
         }
         public void initial(RichTextBox rtb, TextBox tb)
-        {
+        {//инициализация консоли
             konsole.init(rtb, tb);
+            logger.Trace("logger.Trace");
+
+            logger.Debug("logger.Debug");
+
+            logger.Info("logger.Info");
+
+            logger.Warn("logger.Warn");
+
+            logger.Error("logger.Error");
+
+            logger.Fatal("logger.Fatal");
 
 
         }
@@ -81,6 +94,7 @@ namespace shareData
             return c;
             
         }
+        //отрисовка  холста с учетом надатия ЛКМ
         public void drawingDown(MouseEventArgs e) 
         {//при нажатии ЛКМ на холсте
             
@@ -107,17 +121,11 @@ namespace shareData
                                 isDragging = true;
                                 curLineIndex = index;
                                 curPoint = e.Location;
-                                //if (curCaptures == (int)captures.TAKE_CENTR)
-                                //{
-                                    curLine = (SLine)points[curLineIndex];
+                                curLine = points[curLineIndex];
 
-                                //}
                             }
                             break;
-
-                
-
-                        case (int)modes.MODE_DELETE:
+                    case (int)modes.MODE_DELETE:
                             curLineIndex = getLine(e.Location);
                             if (curLineIndex != -1)
                             {
@@ -131,7 +139,7 @@ namespace shareData
                     break;
             }
         }
-
+        //отрисовка событий с учетом отпускания ЛКМ на холсте
         public void drawingUp(MouseEventArgs e)
         {//при отпускание ЛКМ на холсте
             switch (pen)
@@ -148,7 +156,7 @@ namespace shareData
                         case (int)modes.MODE_MOVE:
                             isDragging = false;
                             applyMatrix(curLineIndex);
-                            popMatrix(curLineIndex);
+                            //popMatrix(curLineIndex);
 
                             drawingSciene();
                             break;
@@ -171,13 +179,7 @@ namespace shareData
             int ptr = 0;
             foreach (SLine line in points)
             {
-                foreach (Point p in getPointsTransform(midPoint))
-                {
-                    Console.WriteLine("{0} - {1}",p, d(p,midPoint));
-                    
-                }
-                
-                Console.WriteLine("||{0} + {1} - {2} = {4} < {3} ", d(line.aW, midPoint), d(midPoint, line.bW), d(line.aW, line.bW), visibility, d(line.aW, midPoint) + d(midPoint, line.bW) - d(line.aW, line.bW));
+                //Console.WriteLine("||{0} + {1} - {2} = {4} < {3} ", d(line.aW, midPoint), d(midPoint, line.bW), d(line.aW, line.bW), visibility, d(line.aW, midPoint) + d(midPoint, line.bW) - d(line.aW, line.bW));
                 if (d(line.aW, midPoint) + d(midPoint, line.bW) - d(line.aW, line.bW) < visibility || dForSquare(line.aW, midPoint) || dForSquare(line.bW,midPoint) )
                 {
                     Console.WriteLine("POPAL");
@@ -724,18 +726,6 @@ namespace shareData
 
         SLine(Point a, Point b) { turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(1,0, 0,1, 0,0); }
         //SLine(Point a, Point b, int t, Color c) { this.a = aW = a; this.b = bW = b; typeObj = t; color = c; figures = new List<SLine>(); affinMatrix = new List<Matrix>(); }
-        public void popMatrix()
-        {//внутрение применение афинных преобразований
-            Point[] ps = new Point[2];
-            ps[0] = this.a;
-            ps[1] = this.b;
-            this.affinMatrix.TransformPoints(ps);
-            this.a = ps[0];
-            this.b = ps[1];
-
-            this.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
-            return;
-        }
 
         public override string ToString()
         {//перегрузка метода ToString
