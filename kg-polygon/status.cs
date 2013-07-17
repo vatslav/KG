@@ -429,24 +429,8 @@ namespace shareData
                              AffinTransform aft = new AffinTransform();
                              float[] temp = aft.scale(ref tempLine, e.Location);
                              konsole.Print(""+ temp[0]+ "\n"+ temp[1]);
-                             //float x, y;
-                             //x = (float)Math.Abs((e.Location.X - tempLine.bW.X) / (float)(tempLine.aW.X - tempLine.bW.X));
-                             //y = (float)Math.Abs((e.Location.Y - tempLine.bW.Y) / (float)(tempLine.aW.Y - tempLine.bW.Y));
-                             //Point center = (segmentCenter(tempLine.aW, tempLine.bW));
-                             //Matrix amx = new Matrix(1, 0, 0, 1, -center.X, -center.Y);
-                             //tempLine.affinMatrix.Multiply(amx);
-                            
-                             //amx = new Matrix(x, 0, y, 1, 0,0);
-                             //tempLine.affinMatrix.Multiply(amx);
-                             
-                             //amx = new Matrix(1, 0, 0, 1, center.X, center.Y);
-                             //tempLine.affinMatrix.Multiply(amx);
 
                              points[curLineIndex] = tempLine;
-                             //points[curLineIndex].affinMatrix = tempLine.affinMatrix;
-
-                             
-
 
 
                             
@@ -747,10 +731,13 @@ namespace shareData
 
             //points[indexLine] = tempLine;
             //return;
-        public double d()
-        {//растояние как метод
-        
-            return Math.Sqrt(Math.Pow((this.b.X - this.a.X), 2) + Math.Pow(this.b.Y - this.a.Y, 2));
+        public double d_aW(Point eqPoint)
+        {//растояние как метод 
+            return Math.Sqrt(Math.Pow((this.aW.X - eqPoint.X), 2) + Math.Pow(this.aW.Y - eqPoint.Y, 2));
+        }
+        public double d_bW(Point eqPoint)
+        {//растояние как метод 
+         return Math.Sqrt(Math.Pow((this.bW.X - eqPoint.X), 2) + Math.Pow(this.bW.Y - eqPoint.Y, 2));
         }
     }
     

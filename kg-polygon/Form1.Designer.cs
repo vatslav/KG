@@ -63,7 +63,7 @@
    this.bDrow.Name = "bDrow";
    this.bDrow.Size = new System.Drawing.Size(116, 73);
    this.bDrow.TabIndex = 1;
-   this.bDrow.Text = "Drow";
+   this.bDrow.Text = "Draw";
    this.bDrow.UseVisualStyleBackColor = true;
    this.bDrow.Click += new System.EventHandler(this.bDrow_Click);
    // 
@@ -83,7 +83,7 @@
    this.bDel.Name = "bDel";
    this.bDel.Size = new System.Drawing.Size(111, 73);
    this.bDel.TabIndex = 3;
-   this.bDel.Text = "Delet";
+   this.bDel.Text = "Delete";
    this.bDel.UseVisualStyleBackColor = true;
    this.bDel.EnabledChanged += new System.EventHandler(this.bDel_EnabledChanged);
    this.bDel.Click += new System.EventHandler(this.bDel_Click);
