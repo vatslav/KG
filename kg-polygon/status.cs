@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace shareData
 {
-    class editor
+  public  class editor
     { 
         public int curModes;
         public int curCaptures;
@@ -22,7 +22,12 @@ namespace shareData
         public int pen;
         protected Point curPoint;
         protected SLine curLine;
-        protected int curLineIndex;
+        private int curLineIndex;
+
+        public int CurLineIndex
+        {
+         get { return curLineIndex; }
+        }
         protected int visibility = 15;
         protected Graphics canvas;
         protected PictureBox defaultCanvas;
@@ -32,8 +37,9 @@ namespace shareData
         protected Graphics bmpGr;         //сглаживание
         protected List<SLine> points = new List<SLine>();
         protected bool zoom = false;
-        protected console konsole = new console();
+        public console konsole = new console();
         protected double curAngel = 0;
+        AffinTransform aft;
 
        
         
@@ -48,6 +54,7 @@ namespace shareData
             {
                 curModes = (int) modes.MODE_DROW;
             }
+            aft = new AffinTransform(this);
             
             
             
@@ -426,9 +433,8 @@ namespace shareData
                             else
                             {//если  маштаб
                              SLine tempLine = points[curLineIndex];
-                             AffinTransform aft = new AffinTransform();
                              float[] temp = aft.scale(ref tempLine, e.Location);
-                             konsole.Print(""+ temp[0]+ "\n"+ temp[1]);
+                            // konsole.Print(""+ temp[0]+ "\n"+ temp[1]);
 
                              points[curLineIndex] = tempLine;
 

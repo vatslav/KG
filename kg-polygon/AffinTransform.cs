@@ -12,6 +12,8 @@ namespace kg_polygon
 {
  public class AffinTransform
  {
+  editor blob;
+  public AffinTransform(editor blob1) { blob = blob1; }
   public AffinTransform() { }
   enum scaleMethod { natural, apiScaleOnly, apiScaleMore, mix };
   //преобразует масштабирование линия + точка в линии + коеф. Х + коеф. У
@@ -19,25 +21,20 @@ namespace kg_polygon
   {
 
    float x, y;
-   Debug.WriteLine("CURLINE=" + curPoint);
    x = (float)Math.Abs((curPoint.X - figure.bW.X) / (float)(figure.aW.X - figure.bW.X) );
    y = (float)Math.Abs((curPoint.Y - figure.bW.Y) / (float)(figure.aW.Y - figure.bW.Y) );
    float[] myArray = { x, y };
-   
 
+   blob.konsole.Print("direcrion="+blob.findDirection(blob.CurLineIndex));
    if (double.IsNaN(x) || x == 0)
    {
     x = (float)1;
-    // MessageBox.Show(""+0);
    }
    if (double.IsNaN(y) || y == 0)
    {
     y = (float)1;
-    //MessageBox.Show("" + 1);
    }
-   //Debug.WriteLine("" + curPoint.X + " "+ figure.bW.X + " " + figure.aW.X +" " + figure.bW.X);
-   //Debug.WriteLine(""+x+ " " + y);
-   //Debug.WriteLine("" + x + y);
+
    
    scale(ref figure, x, y);
    
@@ -56,7 +53,6 @@ namespace kg_polygon
    figure.affinMatrix.Multiply(amx, MatrixOrder.Append);
 
    //масштабирование
-   Debug.WriteLine("ТОЧКИ XY" + x + " " + y);
    amx = new Matrix(x, 0, 0, y, 0, 0);
    figure.affinMatrix.Multiply(amx, MatrixOrder.Append);
 
@@ -82,32 +78,8 @@ namespace kg_polygon
   //масшатабирование  линии + коеф. Х + коеф. У в разных режимых
   public void scale(ref SLine figure, float x, float y)
   {
-   //
-   Debug.WriteLine(figure.ToString());
-   Debug.WriteLine(figure.ToStringMx());
    Drawing2DScaleMore(ref figure, x, y);
-   //Matrix amx = new Matrix(1, 0, 0, 1, -figure.getCentr(0), -figure.getCentr(1));
-   //figure.affinMatrix.Multiply(amx);
 
-   ////amx = new Matrix(x, 0, 0, y, 0, 0);
-   ////figure.affinMatrix.Multiply(amx);
-
-   //figure.affinMatrix.Scale(x, y);
-
-   //amx = new Matrix(1, 0, 0, 1, figure.getCentr(0), figure.getCentr(1));
-   //figure.affinMatrix.Multiply(amx);
-
-   //figure.applyAffinMatrix();
-
-
-
-
-   //figure.affinMatrix.Scale(x, y);
-   //figure.applyAffinMatrix();
-   //figure.affinMatrix.Shear(figure.getCentr(0), figure.getCentr(1));
-   //figure.applyAffinMatrix();
-   Debug.WriteLine(figure.ToString());
-   Debug.WriteLine(figure.ToStringMx());
   }
  }
 }
