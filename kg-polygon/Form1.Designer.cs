@@ -38,7 +38,7 @@
    this.rLine = new System.Windows.Forms.RadioButton();
    this.consoleEntry = new System.Windows.Forms.TextBox();
    this.consoleWindow = new System.Windows.Forms.RichTextBox();
-   this.button1 = new System.Windows.Forms.Button();
+   this.make = new System.Windows.Forms.Button();
    ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
    this.SuspendLayout();
    // 
@@ -150,22 +150,22 @@
    this.consoleWindow.Text = "";
    this.consoleWindow.TextChanged += new System.EventHandler(this.consoleWindow_TextChanged);
    // 
-   // button1
+   // make
    // 
-   this.button1.Location = new System.Drawing.Point(733, 24);
-   this.button1.Name = "button1";
-   this.button1.Size = new System.Drawing.Size(104, 23);
-   this.button1.TabIndex = 10;
-   this.button1.Text = "уйти в отладку";
-   this.button1.UseVisualStyleBackColor = true;
-   this.button1.Click += new System.EventHandler(this.button1_Click);
+   this.make.Location = new System.Drawing.Point(733, 24);
+   this.make.Name = "make";
+   this.make.Size = new System.Drawing.Size(104, 23);
+   this.make.TabIndex = 10;
+   this.make.Text = "уйти в отладку";
+   this.make.UseVisualStyleBackColor = true;
+   this.make.Click += new System.EventHandler(this.button1_Click);
    // 
    // Form1
    // 
    this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
    this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
    this.ClientSize = new System.Drawing.Size(966, 453);
-   this.Controls.Add(this.button1);
+   this.Controls.Add(this.make);
    this.Controls.Add(this.consoleWindow);
    this.Controls.Add(this.consoleEntry);
    this.Controls.Add(this.rLine);
@@ -201,7 +201,7 @@
         private System.Windows.Forms.RadioButton rLine;
         private System.Windows.Forms.TextBox consoleEntry;
         private System.Windows.Forms.RichTextBox consoleWindow;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button make;
     }
 }
 

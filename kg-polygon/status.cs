@@ -77,14 +77,7 @@ namespace shareData
             return Math.Sqrt(Math.Pow((b.X - a.X), 2) + Math.Pow(b.Y - a.Y, 2));
         }
 
-        protected Point segmentCenter(Point a, Point b)
-        {//середина между 2 точкми
-            Point c = a;
-            c.X = (a.X + b.X) / 2;
-            c.Y = (a.Y + b.Y) / 2;
-            return c;
-            
-        }
+
         //отрисовка  холста с учетом надатия ЛКМ
         public void drawingDown(MouseEventArgs e) 
         {//при нажатии ЛКМ на холсте
@@ -329,19 +322,6 @@ namespace shareData
                     //popMatrix(curLineIndex);
                     SLine myLine = points[curLineIndex];
                     bmpGr.DrawEllipse(secondryPen, myLine.turnPoint.X, myLine.turnPoint.Y, 5, 5);
-
-
-
-                    //Point x = new Point();
-                    //Point y = new Point();
-                    //x.X = Math.Max(myLine.aW.X, myLine.bW.X);
-                    //x.Y = Math.Min(myLine.aW.Y, myLine.bW.Y);
-
-                    //y.X = Math.Min(myLine.aW.X, myLine.bW.X);
-                    //y.Y = Math.Max(myLine.aW.Y, myLine.bW.Y);
-                    //bmpGr.DrawEllipse(secondryPen,x.X, x.Y, 5, 5);
-                    //bmpGr.DrawEllipse(secondryPen, y.X, y.Y, 5, 5);
-
 
                 }
             }
@@ -685,7 +665,14 @@ namespace shareData
             }
             return angel;
         }
-
+        public void handScale(string scaleCoef)
+        {
+         float scaleXY = (float) Convert.ToDouble(scaleCoef);
+         SLine tempLine = points[curLineIndex];
+         AffinTransform aft = new AffinTransform();
+         aft.scale(ref tempLine, scaleXY,scaleXY);
+         points[curLineIndex] = tempLine;
+        }
 
     }
     
@@ -721,6 +708,25 @@ namespace shareData
           str.Append(obj.ToString() + " ");
          }
          return str.ToString();
+        }
+
+        public int getCentr(int numberCoord)
+        {
+          if (numberCoord.Equals(0))
+           return (this.a.X + this.b.X) / 2;
+          if (numberCoord.Equals(1))
+           return (this.a.Y + this.b.Y) / 2;
+          else
+           throw new FormatException();
+        }
+
+
+        public Point getCentr()
+        {//середина между 2 точкми
+         Point c = new Point(0,0);
+         c.X = this.getCentr(0);
+         c.Y = this.getCentr(1);
+         return c;
         }
 
         public void applyAffinMatrix()

@@ -29,8 +29,27 @@ namespace kg_polygon
   {
    Debug.WriteLine(figure.ToString());
    Debug.WriteLine(figure.ToStringMx());
+
+   Matrix amx = new Matrix(1, 0, 0, 1, -figure.getCentr(0), -figure.getCentr(1));
+   figure.affinMatrix.Multiply(amx);
+
+   //amx = new Matrix(x, 0, 0, y, 0, 0);
+   //figure.affinMatrix.Multiply(amx);
+
    figure.affinMatrix.Scale(x, y);
+
+   amx = new Matrix(1, 0, 0, 1, figure.getCentr(0), figure.getCentr(1));
+   figure.affinMatrix.Multiply(amx);
+
    figure.applyAffinMatrix();
+
+
+
+
+   //figure.affinMatrix.Scale(x, y);
+   //figure.applyAffinMatrix();
+   //figure.affinMatrix.Shear(figure.getCentr(0), figure.getCentr(1));
+   //figure.applyAffinMatrix();
    Debug.WriteLine(figure.ToString());
    Debug.WriteLine(figure.ToStringMx());
   }
