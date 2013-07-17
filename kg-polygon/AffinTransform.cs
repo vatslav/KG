@@ -24,8 +24,7 @@ namespace kg_polygon
    y = (float)Math.Abs((curPoint.Y - figure.bW.Y) / (float)(figure.aW.Y - figure.bW.Y) );
    float[] myArray = { x, y };
    
-   //if (figure.d_aW(curPoint) < 5 || figure.d_bW(curPoint) < 5)
-   // return myArray;
+
    if (double.IsNaN(x) || x == 0)
    {
     x = (float)1;
