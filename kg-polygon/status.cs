@@ -171,16 +171,11 @@ namespace shareData
             int ptr = 0;
             foreach (SLine line in points)
             {
-                foreach (Point p in getPointsTransform(midPoint))
-                {
-                    Console.WriteLine("{0} - {1}",p, d(p,midPoint));
-                    
-                }
                 
-                Console.WriteLine("||{0} + {1} - {2} = {4} < {3} ", d(line.aW, midPoint), d(midPoint, line.bW), d(line.aW, line.bW), visibility, d(line.aW, midPoint) + d(midPoint, line.bW) - d(line.aW, line.bW));
+           //     Console.WriteLine("||{0} + {1} - {2} = {4} < {3} ", d(line.aW, midPoint), d(midPoint, line.bW), d(line.aW, line.bW), visibility, d(line.aW, midPoint) + d(midPoint, line.bW) - d(line.aW, line.bW));
                 if (d(line.aW, midPoint) + d(midPoint, line.bW) - d(line.aW, line.bW) < visibility || dForSquare(line.aW, midPoint) || dForSquare(line.bW,midPoint) )
                 {
-                    Console.WriteLine("POPAL");
+                    //Console.WriteLine("POPAL");
                     if (d(line.turnPoint, midPoint) < visibility)
                         curCaptures = (int)captures.TAKE_TURN;
                     else if (d(line.aW, midPoint) < visibility)
@@ -265,7 +260,6 @@ namespace shareData
         }
         private Point[] tranformPoint(float ugol, Point pTrance, Point[] pSelf)
         {// -||- но массив
-           // Console.WriteLine("point one " + pSelf[0].ToString());
             for (int i = 0; i < pSelf.Count(); i++)
             {
 
@@ -273,7 +267,7 @@ namespace shareData
 
                 i++;
             }
-         //   Console.WriteLine("point two " + pSelf[0].ToString());
+
             return pSelf;
 
         }
@@ -282,10 +276,8 @@ namespace shareData
             Point[] tempArr = {temp.a,temp.b};
             Point c = new Point(40, 40);
             tempArr = tranformPoint(ugol, temp.b, tempArr);
-         //   Console.WriteLine(tempArr[0].ToString() + " " + temp.ToString());
             temp.a = tempArr[0];
             temp.b = tempArr[1];
-            Console.WriteLine(temp.ToString());
             return temp;
 
 
@@ -320,12 +312,10 @@ namespace shareData
             {
                 if (curModes == (int)modes.MODE_MOVE && curLineIndex != -1)
                 {
-                    tempL = points[curLineIndex];
-                    Console.WriteLine(points[curLineIndex].aW);    
+                    tempL = points[curLineIndex];  
                     if (double.IsNaN(points[curLineIndex].aW.X) || double.IsNaN(points[curLineIndex].aW.Y) || points[curLineIndex].aW.X < -99999 ||
                     points[curLineIndex].aW.X > 99999)
                     {
-                        Console.WriteLine(points[curLineIndex].aW);
                         printLine(points[curLineIndex]);
                         //popMatrix(points[curLineIndex]);
                         repaireLine(curLineIndex);
@@ -426,7 +416,6 @@ namespace shareData
                             //points[curLineIndex] = curLine;
                             //changeTurnPoint();
                             konsole.Print(points[curLineIndex].aW.ToString());
-                            //Console.WriteLine("AWX" + points[curLineIndex].aW.ToString());
 
                             
                             drawingScieneOnly();
@@ -447,29 +436,27 @@ namespace shareData
                                 SLine tempLine = points[curLineIndex];
                                 //float x = (float) ( d(e.Location,tempLine.b ) / d(tempLine.a,tempLine.b ) );
                                 printLine(tempLine);
-                                float x,y;
+                                float x, y;
                                 if (tempLine.aW.X - tempLine.b.X == 0)
-                                    x = (float)1;
+                                 x = (float)1;
                                 else
-                                    x = (float)Math.Abs((e.Location.X - tempLine.b.X) / (float)(tempLine.aW.X - tempLine.b.X));
+                                 x = (float)Math.Abs((e.Location.X - tempLine.b.X) / (float)(tempLine.aW.X - tempLine.b.X));
                                 if (tempLine.aW.Y - tempLine.b.Y == 0)
-                                    y = (float)1.1;
+                                 y = (float)1.1;
                                 else
-                                    y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (float)(tempLine.aW.Y - tempLine.b.Y));
+                                 y = (float)Math.Abs((e.Location.Y - tempLine.b.Y) / (float)(tempLine.aW.Y - tempLine.b.Y));
                                 if (y == 1) y = 1;
-                                points[curLineIndex] = tempLine ;
+                               // points[curLineIndex] = tempLine ;
                                 int focusX = 0;
                                 
                                 //if (angel == 0)
                                 //    focusX = 1;
                                 popMatrix(curLineIndex);
-                                Point a = new Point(tempLine.a.X, tempLine.a.Y);
-                                Point b = new Point(tempLine.b.X, tempLine.b.Y);
-                                int dx = curLine.turnPoint.X - points[curLineIndex].turnPoint.X;
-                                int dy = curLine.turnPoint.Y - points[curLineIndex].turnPoint.Y;
+
+
                                 Matrix coordinans0 = new Matrix(1, 0, 
                                     0, 1,
-                                    -curLine.turnPoint.X, -curLine.turnPoint.Y);
+                                    -points[curLineIndex].turnPoint.X, -points[curLineIndex].turnPoint.Y);
                                 points[curLineIndex].affinMatrix.Multiply(coordinans0);
                                 popMatrix(curLineIndex);
 
@@ -481,9 +468,9 @@ namespace shareData
 
                                 coordinans0 = new Matrix(1, 0,
                                     0, 1,
-                                    curLine.turnPoint.X, curLine.turnPoint.Y + focusX);//==!!! 3 афинных преобразования
+                                   points[curLineIndex].turnPoint.X, points[curLineIndex].turnPoint.Y + focusX);//==!!! 3 афинных преобразования
                                 points[curLineIndex].affinMatrix.Multiply(coordinans0);
-                                angel = findAngel(tempLine);
+                                
 
 
 
@@ -557,8 +544,8 @@ namespace shareData
         }
         private void printLine(SLine line)
         {//вывести состояние линии
-            Console.WriteLine("!{0}, {1} - {2},{3}",  line.a.X, line.a.Y, line.b.X, line.b.Y);
-            Console.WriteLine("!!{0}, {1} - {2},{3}", line.aW.X, line.aW.Y, line.bW.X, line.bW.Y);
+            //Console.WriteLine("!{0}, {1} - {2},{3}",  line.a.X, line.a.Y, line.b.X, line.b.Y);
+            //Console.WriteLine("!!{0}, {1} - {2},{3}", line.aW.X, line.aW.Y, line.bW.X, line.bW.Y);
         }
         public void loadStorage(string path)
         {//загрузка состяония из файла
@@ -700,7 +687,7 @@ namespace shareData
     }
     
     
-    struct SLine
+   public struct SLine
     {//структура хранения (здаровая и не поворотливая)
         public int typeObj;
         public Color color;
@@ -712,7 +699,7 @@ namespace shareData
         public List<SLine> figures; //список тоек - для не отрезков (может сделать отрезки частью этого?)
         //public Point[] figures;
 
-        SLine(Point a, Point b) { turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(); }
+       public SLine(Point a, Point b) { turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(); }
         //SLine(Point a, Point b, int t, Color c) { this.a = aW = a; this.b = bW = b; typeObj = t; color = c; figures = new List<SLine>(); affinMatrix = new List<Matrix>(); }
         public void popMatrix()
         {//внутрение применение афинных преобразований

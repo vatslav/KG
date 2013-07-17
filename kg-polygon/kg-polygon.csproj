@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AffinTransform.cs" />
     <Compile Include="auxiliaryClasses.cs" />
     <Compile Include="console.cs" />
     <Compile Include="drawingObjects.cs" />
