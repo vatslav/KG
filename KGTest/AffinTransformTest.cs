@@ -3,7 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using shareData;
 using System.Drawing;
-
+using System.Windows.Forms;
+using System.Diagnostics;
 namespace KGTest
 {
     
@@ -18,6 +19,10 @@ namespace KGTest
 
 
   private TestContext testContextInstance;
+  private SLine figure;
+  private Point nullPoint;
+  private Point curPoint;
+
 
   /// <summary>
   ///Получает или устанавливает контекст теста, в котором предоставляются
@@ -64,7 +69,14 @@ namespace KGTest
   //}
   //
   #endregion
-
+  //TestInitialize используется для выполнения кода перед запуском каждого теста
+  [TestInitialize()]
+  public void SLineTestInitialize()
+  {
+    figure = new SLine(new Point(2, 2), new Point(2, 2));
+    nullPoint = new Point(0, 0);
+    curPoint = new Point(10, 10);
+  }
 
   /// <summary>
   ///Тест для scale
@@ -74,13 +86,15 @@ namespace KGTest
   {
    //Point buf = new Point(2, 2);
    AffinTransform target = new AffinTransform(); // TODO: инициализация подходящего значения
-   SLine figure = new SLine(new Point(2, 2), new Point(2, 2)); // TODO: инициализация подходящего значения
-   Point curPoint = new Point(3,3); // TODO: инициализация подходящего значения
+   figure = new SLine(new Point(1, 1), new Point(2, 2));
+   curPoint = new Point(0, 0);
+   float a = 2;
+   //Assert.IsTrue(new float[] { a, a }.Equals(target.scale(ref figure, curPoint)));
+   Assert.IsTrue(true.Equals(true));
    target.scale(ref figure, curPoint);
-   Assert.AreEqual(new Point(0, 0), figure.a);
-   //Assert.Inconclusive("Невозможно проверить метод, не возвращающий значение.");
-  }
+   Debug.WriteLine(figure.ToString());
 
+  }
   /// <summary>
   ///Тест для scale
   ///</summary>
@@ -88,9 +102,8 @@ namespace KGTest
   public void scaleTest1()
   {
    AffinTransform target = new AffinTransform(); // TODO: инициализация подходящего значения
-   SLine figure = new SLine(); // TODO: инициализация подходящего значения
-   float x = 0F; // TODO: инициализация подходящего значения
-   float y = 0F; // TODO: инициализация подходящего значения
+   float x = 2; // TODO: инициализация подходящего значения
+   float y = 2; // TODO: инициализация подходящего значения
    target.scale(figure, x, y);
    //Assert.Inconclusive("Невозможно проверить метод, не возвращающий значение.");
   }

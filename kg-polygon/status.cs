@@ -447,7 +447,11 @@ namespace shareData
                                 //y = (float)Math.Abs((e.Location.Y - tempLine.bW.Y) / (float)(tempLine.aW.Y - tempLine.bW.Y));
                                 x = (float)Math.Abs(((float)(tempLine.aW.X - tempLine.bW.X)) / (e.Location.X - tempLine.bW.X));
                                 y = (float)Math.Abs(((float)(tempLine.aW.Y - tempLine.bW.Y)) / (e.Location.Y - tempLine.bW.Y));
-                               // x = (float) e.Location.X / tempLine.aW.X;
+
+                                x = (float)Math.Abs((e.Location.X - tempLine.bW.X) / (float)(tempLine.aW.X - tempLine.bW.X));
+                                y = (float)Math.Abs((e.Location.Y - tempLine.bW.Y) / (float)(tempLine.aW.Y - tempLine.bW.Y));
+                             
+                             // x = (float) e.Location.X / tempLine.aW.X;
                                // y = (float) e.Location.Y / tempLine.aW.Y;
                                 //int wholex = (int) Math.Truncate(x);
                                 //int wholey = (int) Math.Truncate(y);
@@ -456,7 +460,7 @@ namespace shareData
                                // Console.WriteLine("inout");
                                 //x = Math.Abs(2 - x);
                                 //y = Math.Abs(2 - y);
-                               Console.WriteLine(x.ToString() + " y=" + y.ToString());
+                               Console.WriteLine(x.ToString() + " y=" + y.ToString()) ;
                                 //if (points[curLineIndex].a.X == points[curLineIndex].b.X ||
                                 //    points[curLineIndex].aW.X == points[curLineIndex].bW.X)
                                 //{
@@ -725,18 +729,34 @@ namespace shareData
         public List<SLine> figures; //список тоек - для не отрезков (может сделать отрезки частью этого?)
         //public Point[] figures;
 
-        public SLine(Point a, Point b) { turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(1,0, 0,1, 0,0); }
-        //SLine(Point a, Point b, int t, Color c) { this.a = aW = a; this.b = bW = b; typeObj = t; color = c; figures = new List<SLine>(); affinMatrix = new List<Matrix>(); }
+        public SLine(Point a, Point b) 
+        { 
+         turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; 
+         color = Color.DeepSkyBlue; figures = new List<SLine>(); 
+         affinMatrix = new Matrix(1,0, 0,1, 0,0); 
+        }
 
         public override string ToString()
         {//перегрузка метода ToString
-            string str = "a:" + this.a.ToString()+" b:"+this.b.ToString()+" color:"+this.color.ToString();//, this.a;
+            //string str = "a:" + this.a.ToString()+" b:"+this.b.ToString()+" color:"+this.color.ToString();//, this.a;
+            string str = String.Format("a={0}, b={1}. aW={2}, bW={3}", this.a, this.b,
+             this.aW, this.bW);
             return str;
+        }
+        public string ToStringMx()
+        {
+         StringBuilder str = new StringBuilder("mx=");
+         foreach (float obj in this.affinMatrix.Elements)
+         {
+          str.Append(obj.ToString() + " ");
+         }
+         return str.ToString();
         }
 
 
         public double d()
         {//растояние как метод
+        
             return Math.Sqrt(Math.Pow((this.b.X - this.a.X), 2) + Math.Pow(this.b.Y - this.a.Y, 2));
         }
     }
