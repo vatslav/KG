@@ -12,7 +12,7 @@ namespace kg_polygon
  public class AffinTransform
  {
   public AffinTransform() { }
-  public void scale(ref SLine figure, Point curPoint)
+  public float[] scale(ref SLine figure, Point curPoint)
   {
    float x, y;
    x = (float)Math.Abs((curPoint.X - figure.bW.X) / (float)(figure.aW.X - figure.bW.X));
@@ -20,17 +20,19 @@ namespace kg_polygon
    //Debug.WriteLine("" + curPoint.X + " "+ figure.bW.X + " " + figure.aW.X +" " + figure.bW.X);
    //Debug.WriteLine(""+x+ " " + y);
    //Debug.WriteLine("" + x + y);
-
-   scale(figure, x, y);
-  
-   return;
+   
+   scale(ref figure, x, y);
+   float[] myArray = { x, y };
+   return  myArray;
   }
-  public void scale( SLine figure, float x, float y)
+  public void scale(ref SLine figure, float x, float y)
   {
    Debug.WriteLine(figure.ToString());
    Debug.WriteLine(figure.ToStringMx());
-   figure.affinMatrix = new Matrix();
-   //figure.affinMatrix.Scale(x, y);
+   figure.affinMatrix.Scale(x, y);
+   figure.applyAffinMatrix();
+   Debug.WriteLine(figure.ToString());
+   Debug.WriteLine(figure.ToStringMx());
   }
  }
 }

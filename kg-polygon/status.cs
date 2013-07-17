@@ -10,6 +10,7 @@ using System.Collections;
 using kg_polygon;
 using drawingObjects;
 using System.Drawing.Drawing2D;
+using System.Diagnostics;
 
 namespace shareData
 {
@@ -57,6 +58,7 @@ namespace shareData
 
 
         }
+
         public void changeZoom(MouseEventArgs e)
         {//смена состояние (маштабирвоание/тансформация
             if (curModes == (int)modes.MODE_MOVE && curCaptures != (int)captures.TAKE_NONE)
@@ -321,7 +323,9 @@ namespace shareData
                         changeTurnPoint();
 
                     }
+                    //points[curLineIndex].applyAffinMatrix();
                     applyMatrix(curLineIndex);
+                    Debug.WriteLine(points[curLineIndex].ToStringMx());
                     //popMatrix(curLineIndex);
                     SLine myLine = points[curLineIndex];
                     bmpGr.DrawEllipse(secondryPen, myLine.turnPoint.X, myLine.turnPoint.Y, 5, 5);
@@ -437,68 +441,36 @@ namespace shareData
                                 curLine.a = e.Location;
                                 curLine.aW = e.Location;
                                 points[curLineIndex] = curLine;
+                                popMatrix(curLineIndex);
                             }
                             else
                             {//если  маштаб
-                                SLine tempLine = points[curLineIndex];
-                                //tempLine.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
-                                float x,y;
-                                //x = (float)Math.Abs((e.Location.X - tempLine.bW.X) / (float)(tempLine.aW.X - tempLine.bW.X));
-                                //y = (float)Math.Abs((e.Location.Y - tempLine.bW.Y) / (float)(tempLine.aW.Y - tempLine.bW.Y));
-                                x = (float)Math.Abs(((float)(tempLine.aW.X - tempLine.bW.X)) / (e.Location.X - tempLine.bW.X));
-                                y = (float)Math.Abs(((float)(tempLine.aW.Y - tempLine.bW.Y)) / (e.Location.Y - tempLine.bW.Y));
-
-                                x = (float)Math.Abs((e.Location.X - tempLine.bW.X) / (float)(tempLine.aW.X - tempLine.bW.X));
-                                y = (float)Math.Abs((e.Location.Y - tempLine.bW.Y) / (float)(tempLine.aW.Y - tempLine.bW.Y));
+                             SLine tempLine = points[curLineIndex];
+                             AffinTransform aft = new AffinTransform();
+                             float[] temp = aft.scale(ref tempLine, e.Location);
+                             konsole.Print(""+ temp[0]+ "\n"+ temp[1]);
+                             //float x, y;
+                             //x = (float)Math.Abs((e.Location.X - tempLine.bW.X) / (float)(tempLine.aW.X - tempLine.bW.X));
+                             //y = (float)Math.Abs((e.Location.Y - tempLine.bW.Y) / (float)(tempLine.aW.Y - tempLine.bW.Y));
+                             //Point center = (segmentCenter(tempLine.aW, tempLine.bW));
+                             //Matrix amx = new Matrix(1, 0, 0, 1, -center.X, -center.Y);
+                             //tempLine.affinMatrix.Multiply(amx);
+                            
+                             //amx = new Matrix(x, 0, y, 1, 0,0);
+                             //tempLine.affinMatrix.Multiply(amx);
                              
-                             // x = (float) e.Location.X / tempLine.aW.X;
-                               // y = (float) e.Location.Y / tempLine.aW.Y;
-                                //int wholex = (int) Math.Truncate(x);
-                                //int wholey = (int) Math.Truncate(y);
-                                //x = scalelogic(x);
-                               // y = scalelogic(y);
-                               // Console.WriteLine("inout");
-                                //x = Math.Abs(2 - x);
-                                //y = Math.Abs(2 - y);
-                               Console.WriteLine(x.ToString() + " y=" + y.ToString()) ;
-                                //if (points[curLineIndex].a.X == points[curLineIndex].b.X ||
-                                //    points[curLineIndex].aW.X == points[curLineIndex].bW.X)
-                                //{
-                                //    //y = 2;
-                                //    //x = 2;
-                                //}
-                                //if (points[curLineIndex].a.Y == points[curLineIndex].b.Y ||
-                                //   points[curLineIndex].aW.Y == points[curLineIndex].bW.Y)
-                                //{
-                                //    //x = 2;
-                                // //   y = 2;
-                                //}
-                                //Matrix coordinans0 = new Matrix(1, 0,
-                                //    0, 1,
-                                //    -curLine.turnPoint.X, -curLine.turnPoint.Y);
-                               // tempLine.affinMatrix.Multiply(coordinans0);
-                                //popMatrix(curLineIndex);
-                                //coordinans0 = new Matrix(x, 0, 
-                                //    0, y,
-                                //    0, 0);
-                                //tempLine.affinMatrix.Multiply(coordinans0);
-                                
+                             //amx = new Matrix(1, 0, 0, 1, center.X, center.Y);
+                             //tempLine.affinMatrix.Multiply(amx);
 
-                                //tempLine.affinMatrix.Multiply(coordinans0);
-                                //Matrix buf = new Matrix(1, 0, 0, 1, 0, 0);
-                               // tempLine.affinMatrix.Shear(-curLine.turnPoint.X, -curLine.turnPoint.Y);
+                             points[curLineIndex] = tempLine;
+                             //points[curLineIndex].affinMatrix = tempLine.affinMatrix;
 
-                                //tempLine.affinMatrix.Translate(-tempLine.turnPoint.X, -tempLine.turnPoint.Y);
-                                tempLine.affinMatrix.Scale(x,y);
-                                //.affinMatrix.Translate(tempLine.turnPoint.X, tempLine.turnPoint.Y);
-                                //popMatrix(curLineIndex);
-                                //tempLine.affinMatrix.Multiply(buf);
-                                //coordinans0 = new Matrix(1, 0,
-                                //0, 1, curLine.turnPoint.X, curLine.turnPoint.Y);
-                                //tempLine.affinMatrix.Multiply(coordinans0);
-                                //points[curLineIndex] = tempLine;
-                                applyMatrix(curLineIndex);
-                                //popMatrix(curLineIndex);
+                             
+
+
+
+                            
+
                             }
                             break;
                         case (int)captures.TAKE_PT2:
@@ -508,6 +480,7 @@ namespace shareData
                                 curLine = points[curLineIndex];
                                 curLine.b = e.Location;
                                 points[curLineIndex] = curLine;
+                                popMatrix(curLineIndex);
                             }
                             else
                             {
@@ -517,7 +490,7 @@ namespace shareData
                                 x = (float)Math.Abs(((float)(tempLine.aW.X - tempLine.bW.X)) / (e.Location.X - tempLine.bW.X));
                                 y = (float)Math.Abs(((float)(tempLine.aW.Y - tempLine.bW.Y)) / (e.Location.Y - tempLine.bW.Y));
                                 tempLine.affinMatrix.Scale(x, y);
-                                applyMatrix(curLineIndex);
+                                //applyMatrix(curLineIndex);
 
                             }
                             break;
@@ -724,25 +697,22 @@ namespace shareData
         public Point a, b;
         public Point aW, bW;// нудно сделать использование их везде
         public Point turnPoint;
-       // public List<Matrix> affinMatrixes; //список матриц афинного преобразования
         public Matrix affinMatrix;
-        public List<SLine> figures; //список тоек - для не отрезков (может сделать отрезки частью этого?)
-        //public Point[] figures;
 
         public SLine(Point a, Point b) 
         { 
          turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; 
-         color = Color.DeepSkyBlue; figures = new List<SLine>(); 
+         color = Color.DeepSkyBlue;
          affinMatrix = new Matrix(1,0, 0,1, 0,0); 
         }
-
+        //перегрузка метода ToString
         public override string ToString()
-        {//перегрузка метода ToString
-            //string str = "a:" + this.a.ToString()+" b:"+this.b.ToString()+" color:"+this.color.ToString();//, this.a;
+        {
             string str = String.Format("a={0}, b={1}. aW={2}, bW={3}", this.a, this.b,
              this.aW, this.bW);
             return str;
         }
+
         public string ToStringMx()
         {
          StringBuilder str = new StringBuilder("mx=");
@@ -753,7 +723,24 @@ namespace shareData
          return str.ToString();
         }
 
+        public void applyAffinMatrix()
+        {
+         Point[] pArr = { this.aW, this.bW };
+         this.affinMatrix.TransformPoints(pArr);
+         this.aW = pArr[0];
+         this.bW = pArr[1];
+        }
 
+            //SLine tempLine = points[indexLine];
+            //Point[] ps = new Point[2];
+            //ps[0] = tempLine.a;
+            //ps[1] = tempLine.b;
+            //tempLine.affinMatrix.TransformPoints(ps);
+            //tempLine.aW = ps[0];
+            //tempLine.bW = ps[1];
+
+            //points[indexLine] = tempLine;
+            //return;
         public double d()
         {//растояние как метод
         
