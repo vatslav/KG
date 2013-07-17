@@ -713,9 +713,9 @@ namespace shareData
         public int getCentr(int numberCoord)
         {
           if (numberCoord.Equals(0))
-           return (this.a.X + this.b.X) / 2;
+           return (this.aW.X + this.bW.X) / 2;
           if (numberCoord.Equals(1))
-           return (this.a.Y + this.b.Y) / 2;
+           return (this.aW.Y + this.bW.Y) / 2;
           else
            throw new FormatException();
         }
