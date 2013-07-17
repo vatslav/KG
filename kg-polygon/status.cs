@@ -713,7 +713,7 @@ namespace shareData
     }
     
     
-    struct SLine
+  public  struct SLine
     {//структура хранения (здаровая и не поворотливая)
         public int typeObj;
         public Color color;
@@ -725,7 +725,7 @@ namespace shareData
         public List<SLine> figures; //список тоек - для не отрезков (может сделать отрезки частью этого?)
         //public Point[] figures;
 
-        SLine(Point a, Point b) { turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(1,0, 0,1, 0,0); }
+        public SLine(Point a, Point b) { turnPoint = this.a = aW = a; this.b = bW = b; typeObj = 0; color = Color.DeepSkyBlue; figures = new List<SLine>(); affinMatrix = new Matrix(1,0, 0,1, 0,0); }
         //SLine(Point a, Point b, int t, Color c) { this.a = aW = a; this.b = bW = b; typeObj = t; color = c; figures = new List<SLine>(); affinMatrix = new List<Matrix>(); }
 
         public override string ToString()
