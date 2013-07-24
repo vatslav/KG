@@ -15,7 +15,6 @@ namespace kg_polygon
   editor blob;
   public AffinTransform(editor blob1) { blob = blob1; }
   public AffinTransform() { }
-  enum scaleMethod { natural, apiScaleOnly, apiScaleMore, mix };
   //преобразует масштабирование линия + точка в линии + коеф. Х + коеф. У
   public float[] scale(ref SLine figure, Point curPoint)
   {
@@ -29,16 +28,16 @@ namespace kg_polygon
    if (double.IsNaN(x) || x == 0)
    {
     x = (float)1;
+    if (blob.findDirection() == 2)
+    {
+
+    }
    }
    if (double.IsNaN(y) || y == 0)
    {
     y = (float)1;
    }
-
-   
-   scale(ref figure, x, y);
-   
-
+   scale2D(ref figure, x, y);
    return  myArray;
   }
 
@@ -61,25 +60,23 @@ namespace kg_polygon
    figure.affinMatrix.Multiply(amx, MatrixOrder.Append);
    figure.applyAffinMatrix();
   }
-
-  private void Drawing2DScaleMore(ref SLine figure, float x, float y)
+  //масшатабирование  линии + коеф. Х + коеф. У в разных режимых
+  private void scale2D(ref SLine figure, float x, float y)
   {
    float dx = figure.getCentr(0);
    float dy = figure.getCentr(1);  
    figure.affinMatrix.Translate(-dx, -dy, MatrixOrder.Append);
    figure.affinMatrix.Scale(x, y, MatrixOrder.Append);
    figure.affinMatrix.Translate(dx, dy, MatrixOrder.Append);
-   //figure.applyAffinMatrix();
   }
-
+  public void scale(ref SLine figure, float x, float y)
+  {
+      scale2D(ref figure, x, y);
+  }
 
   //private void 
 
-  //масшатабирование  линии + коеф. Х + коеф. У в разных режимых
-  public void scale(ref SLine figure, float x, float y)
-  {
-   Drawing2DScaleMore(ref figure, x, y);
+  
 
-  }
  }
 }

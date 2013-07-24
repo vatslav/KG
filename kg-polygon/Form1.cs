@@ -169,7 +169,8 @@ namespace kg_polygon
 
         private void consoleWindow_TextChanged(object sender, EventArgs e)
         {
-
+            consoleWindow.SelectionStart = consoleWindow.Text.Length;
+            consoleWindow.ScrollToCaret();
         }
     }
 

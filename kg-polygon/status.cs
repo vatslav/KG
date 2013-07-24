@@ -440,7 +440,7 @@ namespace shareData
                             else
                             {//если  маштаб
                              SLine tempLine = points[curLineIndex];
-                             float[] temp = aft.scale(ref tempLine, e.Location);
+                             aft.scale(ref tempLine, e.Location);
                             // konsole.Print(""+ temp[0]+ "\n"+ temp[1]);
 
                              points[curLineIndex] = tempLine;
@@ -576,7 +576,10 @@ namespace shareData
         {//найти угол по индексу линии
             return findDirection(points[lineIndex].aW, points[lineIndex].bW);
         }
-
+        public int findDirection()
+        {//найти угол по индексу линии
+            return findDirection(points[curLineIndex].aW, points[curLineIndex].bW);
+        }
         public int findDirection(Point a, Point b)
         {//найти направление отрезка, проходящего через 2 данные точки
             int x,y;
