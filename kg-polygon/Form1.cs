@@ -164,7 +164,7 @@ namespace kg_polygon
 
         private void button1_Click(object sender, EventArgs e)
         {
-         state.handScale(consoleEntry.Text);
+          state.handScale(consoleEntry.Text);
         }
 
         private void consoleWindow_TextChanged(object sender, EventArgs e)

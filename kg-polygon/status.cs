@@ -20,6 +20,11 @@ namespace shareData
         public int curCaptures;
         public bool isDragging;
         public int pen;
+        public SLine curFigure
+        {
+            get {return points[CurLineIndex];}
+            set { points[CurLineIndex] = value; }
+        }
         protected Point curPoint;
         protected SLine curLine;
         private int curLineIndex;
@@ -38,7 +43,6 @@ namespace shareData
         protected List<SLine> points = new List<SLine>();
         protected bool zoom = false;
         public console konsole = new console();
-        protected double curAngel = 0;
         AffinTransform aft;
 
        
@@ -395,6 +399,10 @@ namespace shareData
 
 
         }
+        public void handScale(string inputStr)
+        {
+            aft.handScale(inputStr);
+        }
         
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
@@ -417,15 +425,8 @@ namespace shareData
                         //меняем кординаты у перетягиваемого изображения прямо в хранилище
                         //готовимся к отрисовке
                         case (int)captures.TAKE_TURN:
-                            double angel = findAngel(points[curLineIndex].turnPoint, e.Location);
-                            curLine = points[curLineIndex];
-                            PointF pf = new PointF(points[curLineIndex].turnPoint.X, points[curLineIndex].turnPoint.Y);
-
-                            points[curLineIndex].affinMatrix.RotateAt((float) (curAngel-angel), pf);
-                            curAngel = angel;  
-                            drawingScieneOnly();
+                            aft.rotate(e.Location);
                             break;
-
 
                         case (int)captures.TAKE_PT1:
                             if (zoom)
@@ -572,107 +573,7 @@ namespace shareData
             cur.turnPoint.Y = (int)((cur.aW.Y + cur.bW.Y) / 2 + 35);
             points[curLineIndex] = cur;
         }
-        public int findDirection(int lineIndex)
-        {//найти угол по индексу линии
-            return findDirection(points[lineIndex].aW, points[lineIndex].bW);
-        }
-        public int findDirection()
-        {//найти угол по индексу линии
-            return findDirection(points[curLineIndex].aW, points[curLineIndex].bW);
-        }
-        public int findDirection(Point a, Point b)
-        {//найти направление отрезка, проходящего через 2 данные точки
-            int x,y;
 
-            
-            //опередяляем направление вдоль оси Х, х=0 => совпадают с осью
-            if (b.X - a.X > 0)
-                x = 1;
-            else if (b.X - a.X < 0)
-                x = -1;
-            else
-                x = -1;
-
-            if (b.Y - a.Y < 0)
-                y = 1;
-            else if (b.Y - a.Y > 0)
-                y = -1;
-            else
-                y = -1;
-          
-            if (x == 1 && y == 1)
-                return 3;                
-            if (x == -1 && y == 1)
-                return 4;
-            if (x == -1 && y == -1)
-                return 1;
-            if (x == 1 && y == -1)
-                return 2;
-            return 0;
-        }
-        public double findAngel(SLine line)
-        {//найти угол данной линии
-            double c = d(line.a, line.b); //длина отрезка
-            double a = line.a.X - line.b.X; //проекциия на Х  //поворот на 90 градусов, от того кто а, кто б
-            double b = line.a.Y - line.b.Y; // проекция на У
-
-            //return findAngel(a, b, c, findDirection(curLineIndex));
-
-
-            return findAngel(line.a, line.b);
-
-
-        }
-
-        public double findAngel(Point A, Point B)
-        {//находит угол отрезка проход. через 2 данные точки (функция обертка)
-            double c = d(A,B);
-            double b = A.Y - B.Y;
-            double a = A.X - B.X;
-            return findAngel(a, b, c, findDirection(A,B));
-        }
-
-        public double findAngel(double a, double b, double c, int direction)
-        {//находит угол - тут  вся математика - функция ядро
-            if (a == 0) a = 0.000000000001;
-            if (c == 0) c = 0.000000000001;
-            if (b == 0) b = 0.000000000001;
-            double p = (a + b + c)/2;
-            double R = (a * b * c) / (4 * Math.Sqrt(p * (p - a) * (p - b) * (p - c)));
-            double sinAngel = b / (2 * R);
-            double angel = Math.Asin(sinAngel) * (180 / Math.PI);
-            sinAngel = angel;
-            if (a == 0 || b == 0 || c == 0)
-                angel = 0;
-
-            switch (direction)
-            {
-                case (2):
-                    angel = 90 - (-1 * angel) + 90;
-                    break;
-                case (3):
-                    angel = -1 * angel + 180;
-                    break;
-                case (4):
-                    angel = (90-angel) + 270;
-                    break;
-                case (0):
-
-                    MessageBox.Show("wow!");
-                    angel = 999;
-                    break;
-
-            }
-            return angel;
-        }
-        public void handScale(string scaleCoef)
-        {
-         float scaleXY = (float) Convert.ToDouble(scaleCoef);
-         SLine tempLine = points[curLineIndex];
-         AffinTransform aft = new AffinTransform();
-         aft.scale(ref tempLine, scaleXY,scaleXY);
-         points[curLineIndex] = tempLine;
-        }
 
     }
     
