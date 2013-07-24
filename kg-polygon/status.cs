@@ -298,7 +298,14 @@ namespace shareData
             foreach (SLine line in points)
             {
                 primaryPen.Color = line.color;
-                bmpGr.DrawLine(primaryPen, line.aW, line.bW);
+                try
+                {
+                    bmpGr.DrawLine(primaryPen, line.aW, line.bW);
+                }
+                catch (OverflowException)
+                    {
+                        applyMatrix(curLineIndex);
+                    }
 
             }
             SLine tempL = new SLine();
@@ -474,7 +481,7 @@ namespace shareData
                             tempLine3.affinMatrix.Multiply(coordinans3);
                             curPoint.X = e.Location.X;
                             curPoint.Y = e.Location.Y;
-
+                            //applyMatrix(curLineIndex);
                             break;
                     }
                 
