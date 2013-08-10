@@ -298,20 +298,24 @@ namespace shareData
         public void drawingScieneOnly()
         {//отрисовки всех фигур + короб (без пост и пред действий)
             //потому что иногда нужна толко отрисовка без других действий
-
-            foreach (SLine line in points)
+            try
             {
-                primaryPen.Color = line.color;
-                try
+                foreach (SLine line in points)
                 {
-                    bmpGr.DrawLine(primaryPen, line.aW, line.bW);
-                }
-                catch (OverflowException)
+                    primaryPen.Color = line.color;
+                    try
+                    {
+                        bmpGr.DrawLine(primaryPen, line.aW, line.bW);
+                    }
+                    catch (OverflowException)
                     {
                         applyMatrix(curLineIndex);
                     }
 
+                }
             }
+            catch (InvalidOperationException) { }
+
             SLine tempL = new SLine();
             //отрисовка короба
             try
@@ -421,76 +425,78 @@ namespace shareData
             {
                 
                 if (isDragging)
-                    switch (curCaptures)
-                    {
-                        //меняем кординаты у перетягиваемого изображения прямо в хранилище
-                        //готовимся к отрисовке
-                        case (int)captures.TAKE_TURN:
-                            aft.rotate(e.Location);
-                            break;
+                {
+                        switch (curCaptures)
+                        {
+                            //меняем кординаты у перетягиваемого изображения прямо в хранилище
+                            //готовимся к отрисовке
+                            case (int)captures.TAKE_TURN:
+                                aft.rotate(e.Location);
+                                break;
 
-                        case (int)captures.TAKE_PT1:
-                            if (zoom)
-                            {//если деформ
-                                popMatrix(curLineIndex);
-                                curLine = points[curLineIndex];
-                                curLine.a = e.Location;
-                                curLine.aW = e.Location;
-                                points[curLineIndex] = curLine;
-                                popMatrix(curLineIndex);
-                            }
-                            else
-                            {//если  маштаб
-                             SLine tempLine = points[curLineIndex];
-                             aft.scale(ref tempLine, e.Location);
-                            // konsole.Print(""+ temp[0]+ "\n"+ temp[1]);
+                            case (int)captures.TAKE_PT1:
+                                if (zoom)
+                                {//если деформ
+                                    popMatrix(curLineIndex);
+                                    curLine = points[curLineIndex];
+                                    curLine.a = e.Location;
+                                    curLine.aW = e.Location;
+                                    points[curLineIndex] = curLine;
+                                    popMatrix(curLineIndex);
+                                }
+                                else
+                                {//если  маштаб
+                                 SLine tempLine = points[curLineIndex];
+                                 aft.scale(ref tempLine, e.Location);
+                                // konsole.Print(""+ temp[0]+ "\n"+ temp[1]);
 
-                             points[curLineIndex] = tempLine;
+                                 points[curLineIndex] = tempLine;
 
 
                             
 
-                            }
-                            break;
-                        case (int)captures.TAKE_PT2:
-                            if (zoom)
-                            {
-                                popMatrix(curLineIndex);
-                                curLine = points[curLineIndex];
-                                curLine.b = e.Location;
-                                curLine.bW = e.Location;
-                                points[curLineIndex] = curLine;
-                                popMatrix(curLineIndex);
-                            }
-                            else
-                            {
-                                SLine tempLine = points[curLineIndex];
-                                float x, y;
+                                }
+                                break;
+                            case (int)captures.TAKE_PT2:
+                                if (zoom)
+                                {
+                                    popMatrix(curLineIndex);
+                                    curLine = points[curLineIndex];
+                                    curLine.b = e.Location;
+                                    curLine.bW = e.Location;
+                                    points[curLineIndex] = curLine;
+                                    popMatrix(curLineIndex);
+                                }
+                                else
+                                {
+                                    SLine tempLine = points[curLineIndex];
+                                    float x, y;
 
-                                x = (float)Math.Abs(((float)(tempLine.aW.X - tempLine.bW.X)) / (e.Location.X - tempLine.bW.X));
-                                y = (float)Math.Abs(((float)(tempLine.aW.Y - tempLine.bW.Y)) / (e.Location.Y - tempLine.bW.Y));
-                                tempLine.affinMatrix.Scale(x, y);
+                                    x = (float)Math.Abs(((float)(tempLine.aW.X - tempLine.bW.X)) / (e.Location.X - tempLine.bW.X));
+                                    y = (float)Math.Abs(((float)(tempLine.aW.Y - tempLine.bW.Y)) / (e.Location.Y - tempLine.bW.Y));
+                                    tempLine.affinMatrix.Scale(x, y);
+                                    //applyMatrix(curLineIndex);
+
+                                }
+                                break;
+                            case (int)captures.TAKE_CENTR:
+                                SLine tempLine3 = points[curLineIndex];
+                                Matrix coordinans3 = new Matrix(1,0, 0,1, 
+                                    (e.Location.X - curPoint.X),
+                                    (e.Location.Y - curPoint.Y) );
+
+
+                                tempLine3.affinMatrix.Multiply(coordinans3);
+                                curPoint.X = e.Location.X;
+                                curPoint.Y = e.Location.Y;
                                 //applyMatrix(curLineIndex);
-
-                            }
-                            break;
-                        case (int)captures.TAKE_CENTR:
-                            SLine tempLine3 = points[curLineIndex];
-                            Matrix coordinans3 = new Matrix(1,0, 0,1, 
-                                (e.Location.X - curPoint.X),
-                                (e.Location.Y - curPoint.Y) );
-
-
-                            tempLine3.affinMatrix.Multiply(coordinans3);
-                            curPoint.X = e.Location.X;
-                            curPoint.Y = e.Location.Y;
-                            //applyMatrix(curLineIndex);
-                            break;
-                    }
+                                break;
+                        }
                 
 
-                drawingSciene();
+                    drawingSciene();
 
+            }
 
             }
                     

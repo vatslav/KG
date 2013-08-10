@@ -93,7 +93,7 @@ namespace kg_polygon
      {
          PointF centerPointsArr = new PointF(blob.curFigure.turnPoint.X, blob.curFigure.turnPoint.Y);
 
-         blob.curFigure.affinMatrix.RotateAt((float)(bufAngel - angel), centerPointsArr);
+         figure.affinMatrix.RotateAt((float)(bufAngel - angel), centerPointsArr);
          bufAngel = angel;
          blob.drawingScieneOnly();
      }
