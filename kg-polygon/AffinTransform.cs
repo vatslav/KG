@@ -93,9 +93,9 @@ namespace kg_polygon
     }
      private void rotate(ref SLine figure, double angel)
      {
-         PointF centerPointsArr = new PointF(figure.turnPoint.X, figure.turnPoint.Y);
+         PointF centerPointsArr = new PointF(figure.getCentrX(), figure.getCentrY());
 
-         figure.affinMatrix.RotateAt((float)(bufAngel - angel), centerPointsArr);
+         figure.affinMatrix.RotateAt((float)(bufAngel - angel), centerPointsArr,MatrixOrder.Append);
          bufAngel = angel;
          blob.drawingScieneOnly();
      }
