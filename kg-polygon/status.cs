@@ -399,6 +399,7 @@ namespace shareData
 
 
         }
+        //для отладки поворота
         public void handScale(string inputStr)
         {
             aft.handScale(inputStr);
@@ -431,7 +432,7 @@ namespace shareData
                         case (int)captures.TAKE_PT1:
                             if (zoom)
                             {//если деформ
-                                applyMatrix(curLineIndex);
+                                popMatrix(curLineIndex);
                                 curLine = points[curLineIndex];
                                 curLine.a = e.Location;
                                 curLine.aW = e.Location;
@@ -457,6 +458,7 @@ namespace shareData
                                 popMatrix(curLineIndex);
                                 curLine = points[curLineIndex];
                                 curLine.b = e.Location;
+                                curLine.bW = e.Location;
                                 points[curLineIndex] = curLine;
                                 popMatrix(curLineIndex);
                             }
