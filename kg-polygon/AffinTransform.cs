@@ -16,30 +16,35 @@ namespace kg_polygon
     editor blob;
     public AffinTransform(editor blob1) { blob = blob1; }
     public AffinTransform() { }
-    private double bufAngel;
+    private double bufAngel=0;
   //преобразует масштабирование линия + точка в линии + коеф. Х + коеф. У
   public float[] scale(ref SLine figure, Point curPoint)
   {
-
+      bool crach = false;
    float x, y;
    x = (float)Math.Abs((curPoint.X - figure.bW.X) / (float)(figure.aW.X - figure.bW.X) );
    y = (float)Math.Abs((curPoint.Y - figure.bW.Y) / (float)(figure.aW.Y - figure.bW.Y) );
    float[] myArray = { x, y };
 
-   blob.konsole.Print("direcrion="+findDirection() );
+   blob.konsole.Print("direcrion=" + findDirection() + " angel=" + findAngel(figure).ToString().Substring(0,5));
    if (double.IsNaN(x) || x == 0)
    {
-    x = (float)1;
-    if (findDirection() == 2)
-    {
-        
-    }
+       crach = true;
+       //x = (float)1;
+       //if (findDirection() == 2)
+       rotateCrach(ref figure, 45);
+
    }
    if (double.IsNaN(y) || y == 0)
    {
-    y = (float)1;
+       crach = true; ;// y = (float)1;
+      // if (findDirection() == 2)
+       
+           rotateCrach(ref figure, -45);
+       
    }
-   scale2D(ref figure, x, y);
+   if  (!crach)
+    scale2D(ref figure, x, y);
    return  myArray;
   }
 
@@ -99,7 +104,18 @@ namespace kg_polygon
          bufAngel = angel;
          blob.drawingScieneOnly();
      }
+     //используется только при граничных условиях в трансформировании
+     private void rotateCrach(ref SLine figure, double angel)
+     {
+         PointF centerPointsArr = new PointF(figure.getCentrX(), figure.getCentrY());
 
+         figure.affinMatrix.RotateAt((float)(angel), centerPointsArr, MatrixOrder.Append);
+         blob.konsole.Print("rotateCrash! ");
+         
+            
+        // bufAngel = angel;
+        // blob.drawingScieneOnly();
+     }
 
      //найти угол по индексу линии
      public int findDirection()
@@ -145,14 +161,14 @@ namespace kg_polygon
      }
      public double findAngel(SLine line)
      {//найти угол данной линии
-         double c = d(line.a, line.b); //длина отрезка
-         double a = line.a.X - line.b.X; //проекциия на Х  //поворот на 90 градусов, от того кто а, кто б
-         double b = line.a.Y - line.b.Y; // проекция на У
+         double c = d(line.aW, line.bW); //длина отрезка
+         double a = line.aW.X - line.bW.X; //проекциия на Х  //поворот на 90 градусов, от того кто а, кто б
+         double b = line.aW.Y - line.bW.Y; // проекция на У
 
          //return findAngel(a, b, c, findDirection(curLineIndex));
 
 
-         return findAngel(line.a, line.b);
+         return findAngel(line.aW, line.bW);
 
 
      }

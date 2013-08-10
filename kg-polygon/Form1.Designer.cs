@@ -140,7 +140,7 @@
             this.consoleEntry.ForeColor = System.Drawing.SystemColors.Window;
             this.consoleEntry.Location = new System.Drawing.Point(743, 396);
             this.consoleEntry.Name = "consoleEntry";
-            this.consoleEntry.Size = new System.Drawing.Size(202, 20);
+            this.consoleEntry.Size = new System.Drawing.Size(292, 20);
             this.consoleEntry.TabIndex = 8;
             // 
             // consoleWindow
@@ -153,7 +153,7 @@
             this.consoleWindow.Location = new System.Drawing.Point(743, 103);
             this.consoleWindow.Name = "consoleWindow";
             this.consoleWindow.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.consoleWindow.Size = new System.Drawing.Size(202, 292);
+            this.consoleWindow.Size = new System.Drawing.Size(292, 287);
             this.consoleWindow.TabIndex = 9;
             this.consoleWindow.Text = "";
             this.consoleWindow.TextChanged += new System.EventHandler(this.consoleWindow_TextChanged);
@@ -172,7 +172,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(966, 453);
+            this.ClientSize = new System.Drawing.Size(1346, 466);
             this.Controls.Add(this.make);
             this.Controls.Add(this.consoleWindow);
             this.Controls.Add(this.consoleEntry);
