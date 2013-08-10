@@ -43,6 +43,7 @@ namespace shareData
         protected List<SLine> points = new List<SLine>();
         protected bool zoom = false;
         public console konsole = new console();
+        protected int prevCaptur = -1;
         AffinTransform aft;
 
        
@@ -208,6 +209,7 @@ namespace shareData
         private void applyMatrix(int indexLine)
         {//применить матрицу афинных преобразований, без сброса самой матрицы
             SLine tempLine = points[indexLine];
+            tempLine.affinMatrix = points[indexLine].affinMatrix.Clone();
             Point[] ps = new Point[2];
             ps[0] = tempLine.a;
             ps[1] = tempLine.b;
@@ -216,6 +218,7 @@ namespace shareData
             tempLine.bW = ps[1];
 
             points[indexLine] = tempLine;
+
             return;
         }
         private void popMatrix(int indexLine)
@@ -408,7 +411,14 @@ namespace shareData
         {
             aft.handScale(inputStr);
         }
-        
+        public void printMatrix(Matrix mx)
+        {
+            foreach (float i in mx.Elements)
+                Console.Write(i.ToString()+' ');
+            Console.WriteLine();
+            
+            return;
+        }
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
         {//отрисовка + выполнение действий пользователя (поворот, маштабирвоание, трансформ, деформ)
@@ -420,18 +430,27 @@ namespace shareData
                 if (isDragging)
                     drawingSciene(curLine);
             }
-
+                
             else
             {
                 
                 if (isDragging)
                 {
+                    if (curCaptures!=prevCaptur)
+                    {
+                        popMatrix(curLineIndex);
+                    }
+
+                    SLine templine = new SLine();
+                    templine = points[curLineIndex];
+                    templine.affinMatrix = points[curLineIndex].affinMatrix.Clone();
                         switch (curCaptures)
                         {
                             //меняем кординаты у перетягиваемого изображения прямо в хранилище
                             //готовимся к отрисовке
                             case (int)captures.TAKE_TURN:
-                                aft.rotate(e.Location);
+                                aft.rotate(ref templine, e.Location);
+                                points[curLineIndex] = templine;
                                 break;
 
                             case (int)captures.TAKE_PT1:
@@ -442,15 +461,16 @@ namespace shareData
                                     curLine.a = e.Location;
                                     curLine.aW = e.Location;
                                     points[curLineIndex] = curLine;
-                                    popMatrix(curLineIndex);
+                                    
                                 }
                                 else
                                 {//если  маштаб
-                                 SLine tempLine = points[curLineIndex];
-                                 aft.scale(ref tempLine, e.Location);
+
+                                    
+                                    aft.scale(ref templine, e.Location);
                                 // konsole.Print(""+ temp[0]+ "\n"+ temp[1]);
 
-                                 points[curLineIndex] = tempLine;
+                                    points[curLineIndex] = templine;
 
 
                             
@@ -480,13 +500,16 @@ namespace shareData
                                 }
                                 break;
                             case (int)captures.TAKE_CENTR:
-                                SLine tempLine3 = points[curLineIndex];
+                                
+
                                 Matrix coordinans3 = new Matrix(1,0, 0,1, 
                                     (e.Location.X - curPoint.X),
                                     (e.Location.Y - curPoint.Y) );
 
 
-                                tempLine3.affinMatrix.Multiply(coordinans3);
+
+                                templine.affinMatrix.Multiply(coordinans3);
+                                points[curLineIndex] = templine;
                                 curPoint.X = e.Location.X;
                                 curPoint.Y = e.Location.Y;
                                 //applyMatrix(curLineIndex);
@@ -495,6 +518,8 @@ namespace shareData
                 
 
                     drawingSciene();
+                    prevCaptur = curCaptures;
+
 
             }
 

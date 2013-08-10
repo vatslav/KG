@@ -76,6 +76,8 @@ namespace kg_polygon
       scale2D(ref figure, x, y);
   }
 
+
+
   public void rotate(Point curPoint)
   {
       SLine line = blob.curFigure;
@@ -91,7 +93,7 @@ namespace kg_polygon
     }
      private void rotate(ref SLine figure, double angel)
      {
-         PointF centerPointsArr = new PointF(blob.curFigure.turnPoint.X, blob.curFigure.turnPoint.Y);
+         PointF centerPointsArr = new PointF(figure.turnPoint.X, figure.turnPoint.Y);
 
          figure.affinMatrix.RotateAt((float)(bufAngel - angel), centerPointsArr);
          bufAngel = angel;
