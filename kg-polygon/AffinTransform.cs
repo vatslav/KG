@@ -46,8 +46,8 @@ namespace kg_polygon
   //масштабирование с использованием матриц (без c# WinForms api)
   private void naturalScale(ref SLine figure, float x, float y)
   {
-   float dx = figure.getCentr(0);
-   float dy = figure.getCentr(1);
+   float dx = figure.getRotateX();
+   float dy = figure.getRotateY();
    //матрица переноса центра в ноль
    Matrix amx = new Matrix(1, 0, 0, 1, -dx, -dy);
    //применяем матрицу 
@@ -65,8 +65,8 @@ namespace kg_polygon
   //масшатабирование  линии + коеф. Х + коеф. У в разных режимых
   private void scale2D(ref SLine figure, float x, float y)
   {
-   float dx = figure.getCentr(0);
-   float dy = figure.getCentr(1);  
+   float dx = figure.getCentrX();
+   float dy = figure.getCentrY();  
    figure.affinMatrix.Translate(-dx, -dy, MatrixOrder.Append);
    figure.affinMatrix.Scale(x, y, MatrixOrder.Append);
    figure.affinMatrix.Translate(dx, dy, MatrixOrder.Append);

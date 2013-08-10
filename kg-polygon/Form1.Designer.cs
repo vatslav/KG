@@ -136,6 +136,8 @@
             // 
             // consoleEntry
             // 
+            this.consoleEntry.BackColor = System.Drawing.SystemColors.MenuText;
+            this.consoleEntry.ForeColor = System.Drawing.SystemColors.Window;
             this.consoleEntry.Location = new System.Drawing.Point(743, 396);
             this.consoleEntry.Name = "consoleEntry";
             this.consoleEntry.Size = new System.Drawing.Size(202, 20);
@@ -144,8 +146,10 @@
             // consoleWindow
             // 
             this.consoleWindow.AutoWordSelection = true;
+            this.consoleWindow.BackColor = System.Drawing.SystemColors.MenuText;
             this.consoleWindow.Cursor = System.Windows.Forms.Cursors.Default;
             this.consoleWindow.EnableAutoDragDrop = true;
+            this.consoleWindow.ForeColor = System.Drawing.SystemColors.Window;
             this.consoleWindow.Location = new System.Drawing.Point(743, 103);
             this.consoleWindow.Name = "consoleWindow";
             this.consoleWindow.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;

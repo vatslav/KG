@@ -411,14 +411,6 @@ namespace shareData
         {
             aft.handScale(inputStr);
         }
-        public void printMatrix(Matrix mx)
-        {
-            foreach (float i in mx.Elements)
-                Console.Write(i.ToString()+' ');
-            Console.WriteLine();
-            
-            return;
-        }
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
         {//отрисовка + выполнение действий пользователя (поворот, маштабирвоание, трансформ, деформ)
@@ -436,10 +428,8 @@ namespace shareData
                 
                 if (isDragging)
                 {
-                    if (curCaptures!=prevCaptur)
-                    {
-                        popMatrix(curLineIndex);
-                    }
+                    if (curCaptures != prevCaptur)
+                    { }// popMatrix(curLineIndex);
 
                     SLine templine = new SLine();
                     templine = points[curLineIndex];
@@ -501,15 +491,17 @@ namespace shareData
                                 break;
                             case (int)captures.TAKE_CENTR:
                                 
+                                //мат!
+                                //Matrix coordinans3 = new Matrix(1,0, 0,1, 
+                                //    (e.Location.X - curPoint.X),
+                                //    (e.Location.Y - curPoint.Y) );
 
-                                Matrix coordinans3 = new Matrix(1,0, 0,1, 
-                                    (e.Location.X - curPoint.X),
-                                    (e.Location.Y - curPoint.Y) );
 
 
-
-                                templine.affinMatrix.Multiply(coordinans3);
+                                //templine.affinMatrix.Multiply(coordinans3);
+                                templine.affinMatrix.Translate((e.Location.X - curPoint.X), (e.Location.Y - curPoint.Y), MatrixOrder.Append);
                                 points[curLineIndex] = templine;
+
                                 curPoint.X = e.Location.X;
                                 curPoint.Y = e.Location.Y;
                                 //applyMatrix(curLineIndex);
@@ -602,8 +594,8 @@ namespace shareData
         private void changeTurnPoint()
         {
             SLine cur = points[curLineIndex];
-            cur.turnPoint.X = (int)((cur.aW.X + cur.bW.X) / 2 + 20 );
-            cur.turnPoint.Y = (int)((cur.aW.Y + cur.bW.Y) / 2 + 35);
+            cur.turnPoint.X = cur.getRotateX();
+            cur.turnPoint.Y = cur.getRotateY();
             points[curLineIndex] = cur;
         }
 
@@ -644,24 +636,30 @@ namespace shareData
          return str.ToString();
         }
 
-        public int getCentr(int numberCoord)
+        public int getCentrX()
         {
-          if (numberCoord.Equals(0))
-           return (this.aW.X + this.bW.X) / 2;
-          if (numberCoord.Equals(1))
-           return (this.aW.Y + this.bW.Y) / 2;
-          else
-           throw new FormatException();
+           return (this.aW.X + this.bW.X) / 2 ;
+
+        }
+
+        public int getCentrY()
+        {
+            return (this.aW.Y + this.bW.Y) / 2;
+
+        }
+        public int getRotateX()
+        {
+            return getCentrX()+15;
+
+        }
+
+        public int getRotateY()
+        {
+            return getCentrY()+15;
+
         }
 
 
-        public Point getCentr()
-        {//середина между 2 точкми
-         Point c = new Point(0,0);
-         c.X = this.getCentr(0);
-         c.Y = this.getCentr(1);
-         return c;
-        }
 
         public void applyAffinMatrix()
         {
