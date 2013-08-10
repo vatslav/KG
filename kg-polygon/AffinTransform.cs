@@ -25,24 +25,21 @@ namespace kg_polygon
    x = (float)Math.Abs((curPoint.X - figure.bW.X) / (float)(figure.aW.X - figure.bW.X) );
    y = (float)Math.Abs((curPoint.Y - figure.bW.Y) / (float)(figure.aW.Y - figure.bW.Y) );
    float[] myArray = { x, y };
-
-   blob.konsole.Print("direcrion=" + findDirection() + " angel=" + findAngel(figure).ToString().Substring(0,5));
-   if (double.IsNaN(x) || x == 0)
+   try
    {
+       blob.konsole.Print("direcrion=" + findDirection() + " angel=" + findAngel(figure).ToString().Substring(0, 5));
+   }
+   catch (ArgumentOutOfRangeException) { }
+   if (double.IsNaN(x) || x == 0 || double.IsNaN(y) || y == 0)
        crach = true;
-       //x = (float)1;
-       //if (findDirection() == 2)
-       rotateCrach(ref figure, 45);
 
-   }
-   if (double.IsNaN(y) || y == 0)
-   {
-       crach = true; ;// y = (float)1;
-      // if (findDirection() == 2)
-       
-           rotateCrach(ref figure, -45);
-       
-   }
+   if (90 - findAngel(figure) < 4 && findDirection() == 2)
+       rotateCrach(ref figure, 1.0);
+   else if (180 - findAngel(figure) < 4 && findDirection() == 2)
+       rotateCrach(ref figure, curPoint);
+    if (crach)
+        rotateCrach(ref figure, curPoint);
+
    if  (!crach)
     scale2D(ref figure, x, y);
    return  myArray;
@@ -108,13 +105,13 @@ namespace kg_polygon
      private void rotateCrach(ref SLine figure, double angel)
      {
          PointF centerPointsArr = new PointF(figure.getCentrX(), figure.getCentrY());
-
          figure.affinMatrix.RotateAt((float)(angel), centerPointsArr, MatrixOrder.Append);
-         blob.konsole.Print("rotateCrash! ");
-         
-            
-        // bufAngel = angel;
-        // blob.drawingScieneOnly();
+     }
+     public void rotateCrach(ref SLine figure, Point curPoint)
+     {
+         double angel = findAngel(figure.aW, curPoint);
+         rotateCrach(ref figure, angel);
+
      }
 
      //найти угол по индексу линии

@@ -333,8 +333,13 @@ namespace shareData
                         repaireLine(curLineIndex);
                         return;
                     }
-                    bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].aW));
-                    bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].bW));
+                    try
+                    {
+                        bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].aW));
+                        bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].bW));
+                    }
+                    catch (OverflowException)
+                    { repaireLine(curLineIndex); }
                     if (curCaptures != (int) captures.TAKE_TURN)
                     {
                        
