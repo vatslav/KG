@@ -36,12 +36,12 @@ namespace kg_polygon
    if (90 - findAngel(figure) < 4 && findDirection() == 2)
        rotateCrach(ref figure, 1.0);
    else if (180 - findAngel(figure) < 5 && findDirection() == 2)
-       rotateCrach(ref figure, curPoint);
+       rotateCrach(ref figure, 5);
    if (crach)
-       rotateCrach(ref figure, curPoint);
+       rotateCrach(ref figure, 5);
 
    if  (!crach)
-       naturalScale(ref figure, x, y);
+       scale2D(ref figure, x, y);
    return  myArray;
   }
 
@@ -67,8 +67,8 @@ namespace kg_polygon
   //масшатабирование  линии + коеф. Х + коеф. У в разных режимых
   private void scale2D(ref SLine figure, float x, float y)
   {
-   float dx = figure.getCentrX();
-   float dy = figure.getCentrY();  
+    float dx = figure.getRotateX();
+   float dy = figure.getRotateY();  
    figure.affinMatrix.Translate(-dx, -dy, MatrixOrder.Append);
    figure.affinMatrix.Scale(x, y, MatrixOrder.Append);
    figure.affinMatrix.Translate(dx, dy, MatrixOrder.Append);
