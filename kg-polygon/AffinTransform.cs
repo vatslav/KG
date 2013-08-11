@@ -35,13 +35,13 @@ namespace kg_polygon
 
    if (90 - findAngel(figure) < 4 && findDirection() == 2)
        rotateCrach(ref figure, 1.0);
-   else if (180 - findAngel(figure) < 4 && findDirection() == 2)
+   else if (180 - findAngel(figure) < 5 && findDirection() == 2)
        rotateCrach(ref figure, curPoint);
-    if (crach)
-        rotateCrach(ref figure, curPoint);
+   if (crach)
+       rotateCrach(ref figure, curPoint);
 
    if  (!crach)
-    scale2D(ref figure, x, y);
+       naturalScale(ref figure, x, y);
    return  myArray;
   }
 
@@ -62,7 +62,7 @@ namespace kg_polygon
    //матрица возврощения обратно
    amx = new Matrix(1, 0, 0, 1, dx, dy);
    figure.affinMatrix.Multiply(amx, MatrixOrder.Append);
-   figure.applyAffinMatrix();
+   //figure.applyAffinMatrix();
   }
   //масшатабирование  линии + коеф. Х + коеф. У в разных режимых
   private void scale2D(ref SLine figure, float x, float y)
@@ -110,6 +110,7 @@ namespace kg_polygon
      public void rotateCrach(ref SLine figure, Point curPoint)
      {
          double angel = findAngel(figure.aW, curPoint);
+         blob.konsole.Print("angel rotate=" + angel.ToString());   
          rotateCrach(ref figure, angel);
 
      }
