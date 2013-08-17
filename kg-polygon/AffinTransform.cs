@@ -17,6 +17,8 @@ namespace kg_polygon
     public AffinTransform(editor blob1) { blob = blob1; }
     public AffinTransform() { }
     private double bufAngel=0;
+     private int bufX;
+     private int bufY;
   //преобразует масштабирование линия + точка в линии + коеф. Х + коеф. У
   public float[] scale(ref SLine figure, Point curPoint)
   {
@@ -65,7 +67,7 @@ namespace kg_polygon
    //figure.applyAffinMatrix();
   }
   //масшатабирование  линии + коеф. Х + коеф. У в разных режимых
-  private void scale2D(ref SLine figure, float x, float y)
+  public void scale2D(ref SLine figure, float x, float y)
   {
     float dx = figure.getRotateX();
    float dy = figure.getRotateY();  
@@ -73,6 +75,7 @@ namespace kg_polygon
    figure.affinMatrix.Scale(x, y, MatrixOrder.Append);
    figure.affinMatrix.Translate(dx, dy, MatrixOrder.Append);
   }
+
   public void scale(ref SLine figure, float x, float y)
   {
       scale2D(ref figure, x, y);
@@ -230,7 +233,13 @@ namespace kg_polygon
      {//растояние между 2 точками
          return Math.Sqrt(Math.Pow((b.X - a.X), 2) + Math.Pow(b.Y - a.Y, 2));
      }
-  //private void 
+
+     public void moveTo(int x, int y, int index)
+     {
+         //blob
+         //applyMatrix(curLineIndex);
+     }
+
 
   
 

@@ -40,11 +40,11 @@ namespace shareData
         protected Pen secondryPen = new Pen(Color.DarkOrange, 1.0f);//лиkния
         protected Bitmap bmp;
         protected Graphics bmpGr;         //сглаживание
-        protected List<SLine> points = new List<SLine>();
+        public List<SLine> points = new List<SLine>();
         protected bool zoom = false;
         public console konsole = new console();
         protected int prevCaptur = -1;
-        AffinTransform aft;
+        public AffinTransform aft;
 
        
         
@@ -66,7 +66,7 @@ namespace shareData
         }
         public void initial(RichTextBox rtb, TextBox tb)
         {//инициализация консоли
-            konsole.init(rtb, tb);
+            konsole.init(rtb, tb, this);
 
 
         }
@@ -206,7 +206,7 @@ namespace shareData
             return arr;
         }
 
-        private void applyMatrix(int indexLine)
+        public void applyMatrix(int indexLine)
         {//применить матрицу афинных преобразований, без сброса самой матрицы
             SLine tempLine = points[indexLine];
             tempLine.affinMatrix = points[indexLine].affinMatrix.Clone();
@@ -415,6 +415,10 @@ namespace shareData
         public void handScale(string inputStr)
         {
             aft.handScale(inputStr);
+        }
+        public void redrow()
+        {
+           // drawingSciene( pictureBox1, MouseEventArgs e);
         }
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
