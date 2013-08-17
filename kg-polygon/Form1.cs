@@ -24,7 +24,7 @@ namespace kg_polygon
     {
         //состояние программы
         editor state = new editor();
-
+        //console konsole;
         
         //Timer t = new Timer();
         //t.Tick+= new System.EventHandler(this, t_Tick);
@@ -39,20 +39,9 @@ namespace kg_polygon
             //canvas=pictureBox1.CreateGraphics(); //присваиваем канвасу уазатель, чем он
             state.curModes = (int)modes.MODE_DROW; //режим работы по умолчанию
             rLine.Checked = true;
-            //text.Text = "asdasd";
             
-
-            //Timer reDraw = new Timer();
-            //reDraw.Elapsed += new ElapsedEventHandler(state.DrawingFigure(null,null);
-            //reDraw.Interval = 50;
-            //reDraw.Start();
-            //System.Timers.Timer timer = new System.Timers.Timer();
-            //timer.AutoReset = true;
-            //timer.Interval = 1000; //in milliseconds
-            //timer.Elapsed += new System.Timers.ElapsedEventHandler(state.DrawingFigure);
-
-            //// включаем таймер
-            //timer.Enabled = true;
+            //konsole = new(RichTextBox consoleWindow, TextBox consoleEntry);
+           
         }
 
         private void pictureBox1_Click(object sender, EventArgs e) { }
@@ -171,6 +160,24 @@ namespace kg_polygon
         {
             consoleWindow.SelectionStart = consoleWindow.Text.Length;
             consoleWindow.ScrollToCaret();
+        }
+
+        private void consoleEntry_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void consoleEntry_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                state.konsole.execComands();
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
     }
 

@@ -139,9 +139,13 @@
             this.consoleEntry.BackColor = System.Drawing.SystemColors.MenuText;
             this.consoleEntry.ForeColor = System.Drawing.SystemColors.Window;
             this.consoleEntry.Location = new System.Drawing.Point(743, 396);
+            this.consoleEntry.Multiline = true;
             this.consoleEntry.Name = "consoleEntry";
             this.consoleEntry.Size = new System.Drawing.Size(292, 20);
             this.consoleEntry.TabIndex = 8;
+            this.consoleEntry.WordWrap = false;
+            this.consoleEntry.TextChanged += new System.EventHandler(this.consoleEntry_TextChanged);
+            this.consoleEntry.KeyDown += new System.Windows.Forms.KeyEventHandler(this.consoleEntry_KeyDown);
             // 
             // consoleWindow
             // 
@@ -187,6 +191,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
