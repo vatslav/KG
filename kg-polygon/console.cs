@@ -76,7 +76,11 @@ namespace kg_polygon
                 {
                     
                         string[] substrings = Regex.Split(buf, @"\s");
-                        
+                        if (substrings.Length > 4)
+                        {
+                            answer = "неверный синтаксис scale";
+                            return;
+                        }
                         try
                         {
                             SLine temp = blob.points[Convert.ToInt32(substrings[3])];
@@ -84,17 +88,43 @@ namespace kg_polygon
                             x = Convert.ToSingle(substrings[1]);
                             y= Convert.ToSingle(substrings[2]);
                             blob.aft.scale2D(ref temp, x, y);
-                            blob.drawingSciene();
+                            
                             blob.points[Convert.ToInt32(substrings[3])] = temp;
+                            blob.applyMatrix(Convert.ToInt32(substrings[3]));
+                            blob.drawingSciene();
                             answer = success;
                         }
                         catch (ArgumentOutOfRangeException)
                         {
-                            answer = "не верный синтаксис scale";
+                            answer = "неверный синтаксис scale";
                         }
-                        
 
+                }
+                else if (buf.StartsWith("rotate"))
+                {
+                    string[] substrings = Regex.Split(buf, @"\s");
+                    if (substrings.Length > 3)
+                    {
+                        answer = "неверный синтаксис scale";
+                        return;
+                    }
+                    try
+                    {
+                        int index = Convert.ToInt32(substrings[2]);
+                        SLine temp = blob.points[index];
+                        Double x;
+                        x = Convert.ToDouble(substrings[1]);
+                        blob.aft.rotate(ref temp, x);
 
+                        blob.points[index] = temp;
+                        blob.applyMatrix(index);
+                        blob.drawingSciene();
+                        answer = success;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        answer = "неверный синтаксис rotate";
+                    }
                 }
 
                 else
@@ -115,7 +145,7 @@ namespace kg_polygon
         private void help()
         {
             answer = @"help - справка
-move <НомерЛинии> <смещение по оси Х> <смещение по оси Y> ";
+move <смещение по оси Х> <смещение по оси Y> <НомерЛинии> ";
             
         }
         private void defolt()

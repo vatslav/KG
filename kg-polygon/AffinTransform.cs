@@ -17,8 +17,7 @@ namespace kg_polygon
     public AffinTransform(editor blob1) { blob = blob1; }
     public AffinTransform() { }
     private double bufAngel=0;
-     private int bufX;
-     private int bufY;
+
   //преобразует масштабирование линия + точка в линии + коеф. Х + коеф. У
   public float[] scale(ref SLine figure, Point curPoint)
   {
@@ -96,7 +95,7 @@ namespace kg_polygon
         rotate(ref figure, angel);
         
     }
-     private void rotate(ref SLine figure, double angel)
+     public void rotate(ref SLine figure, double angel)
      {
          PointF centerPointsArr = new PointF(figure.getCentrX(), figure.getCentrY());
 
