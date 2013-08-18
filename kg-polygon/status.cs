@@ -511,16 +511,9 @@ namespace shareData
                                 //Matrix coordinans3 = new Matrix(1,0, 0,1, 
                                 //    (e.Location.X - curPoint.X),
                                 //    (e.Location.Y - curPoint.Y) );
-
-
-
-                                //templine.affinMatrix.Multiply(coordinans3);
-                                templine.affinMatrix.Translate((e.Location.X - curPoint.X), (e.Location.Y - curPoint.Y), MatrixOrder.Append);
-                                points[curLineIndex] = templine;
-
+                                aft.moveTo((e.Location.X - curPoint.X), (e.Location.Y - curPoint.Y),curLineIndex);
                                 curPoint.X = e.Location.X;
                                 curPoint.Y = e.Location.Y;
-                                //applyMatrix(curLineIndex);
                                 break;
                         }
                 

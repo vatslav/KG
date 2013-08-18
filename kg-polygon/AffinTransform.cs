@@ -89,6 +89,18 @@ namespace kg_polygon
       blob.curFigure = line;
   }
 
+  public void moveTo(float x, float y, int index)
+  {
+      SLine line = blob.points[index];
+      line.affinMatrix = blob.points[index].affinMatrix.Clone();
+      line.affinMatrix.Translate(x, y, MatrixOrder.Append);
+      blob.points[index] = line;
+  }
+  public void moveTo(float x, float y)
+  {
+      moveTo(x, y, blob.CurLineIndex);
+
+  }
     public void rotate(ref SLine figure, Point curPoint)
     {
         double angel = findAngel(blob.curFigure.turnPoint, curPoint);
@@ -233,11 +245,7 @@ namespace kg_polygon
          return Math.Sqrt(Math.Pow((b.X - a.X), 2) + Math.Pow(b.Y - a.Y, 2));
      }
 
-     public void moveTo(int x, int y, int index)
-     {
-         //blob
-         //applyMatrix(curLineIndex);
-     }
+
 
 
   

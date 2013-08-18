@@ -77,7 +77,7 @@ namespace kg_polygon
                         string[] substrings = Regex.Split(buf, @"\s");
                         try
                         {
-                            blob.points[Convert.ToInt32(substrings[3])].affinMatrix.Translate(Convert.ToSingle(substrings[1]), Convert.ToSingle(substrings[2]), MatrixOrder.Append);
+                            blob.aft.moveTo(Convert.ToSingle(substrings[1]), Convert.ToSingle(substrings[2]));
                             blob.applyMatrix(Convert.ToInt32(substrings[3]));
                             blob.drawingSciene();
                         }
