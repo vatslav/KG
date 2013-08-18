@@ -197,7 +197,8 @@ namespace shareData
         }
         protected Point[] getPointsTransform(Point primary)
         { //массив точек для трансформации (см. место где вызываю данную функцию)
-            int mathVis = (int) (visibility / ( Math.Sqrt(2)));
+            int mathVis = (int) (visibility / 2);
+            
             Point a = new Point(primary.X - mathVis, primary.Y - mathVis);
             Point b = new Point(primary.X - mathVis, primary.Y + mathVis);
             Point c = new Point(primary.X + mathVis, primary.Y + mathVis);
@@ -335,8 +336,18 @@ namespace shareData
                     }
                     try
                     {
-                        bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].aW));
+                        int height =  Math.Abs(curFigure.bW.X - curFigure.aW.X);
+                        int weidth = Math.Abs(curFigure.bW.Y - curFigure.aW.Y);
+                        int limit = 10;
+                        if (height < limit)
+                            height = limit;
+                        if (weidth < limit)
+                            weidth = limit;
+                        Rectangle frame = new Rectangle(Math.Min(curFigure.aW.X, curFigure.bW.X), Math.Min(curFigure.aW.Y, curFigure.bW.Y),
+                           height, weidth);
+                        bmpGr.DrawRectangle(secondryPen, frame);
                         bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].bW));
+                        bmpGr.DrawPolygon(secondryPen, getPointsTransform(points[curLineIndex].aW));
                     }
                     catch (OverflowException)
                     { repaireLine(curLineIndex); }
@@ -415,10 +426,6 @@ namespace shareData
         public void handScale(string inputStr)
         {
             aft.handScale(inputStr);
-        }
-        public void redrow()
-        {
-           // drawingSciene( pictureBox1, MouseEventArgs e);
         }
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)

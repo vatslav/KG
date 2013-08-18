@@ -33,7 +33,6 @@
             this.rLine = new System.Windows.Forms.RadioButton();
             this.consoleEntry = new System.Windows.Forms.TextBox();
             this.consoleWindow = new System.Windows.Forms.RichTextBox();
-            this.make = new System.Windows.Forms.Button();
             this.bLoad = new System.Windows.Forms.Button();
             this.bSafe = new System.Windows.Forms.Button();
             this.bDel = new System.Windows.Forms.Button();
@@ -42,17 +41,20 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // rPolygon
             // 
             this.rPolygon.AutoSize = true;
-            this.rPolygon.Location = new System.Drawing.Point(696, 57);
+            this.rPolygon.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rPolygon.Location = new System.Drawing.Point(12, 64);
             this.rPolygon.Name = "rPolygon";
-            this.rPolygon.Size = new System.Drawing.Size(97, 17);
+            this.rPolygon.Size = new System.Drawing.Size(133, 24);
             this.rPolygon.TabIndex = 6;
             this.rPolygon.TabStop = true;
             this.rPolygon.Text = "Многоуголник";
@@ -63,9 +65,10 @@
             // 
             this.rLine.AllowDrop = true;
             this.rLine.AutoSize = true;
-            this.rLine.Location = new System.Drawing.Point(696, 34);
+            this.rLine.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rLine.Location = new System.Drawing.Point(12, 34);
             this.rLine.Name = "rLine";
-            this.rLine.Size = new System.Drawing.Size(57, 17);
+            this.rLine.Size = new System.Drawing.Size(75, 24);
             this.rLine.TabIndex = 7;
             this.rLine.TabStop = true;
             this.rLine.Text = "Линия";
@@ -75,11 +78,11 @@
             // consoleEntry
             // 
             this.consoleEntry.BackColor = System.Drawing.SystemColors.MenuText;
+            this.consoleEntry.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.consoleEntry.ForeColor = System.Drawing.SystemColors.Window;
-            this.consoleEntry.Location = new System.Drawing.Point(6, 458);
-            this.consoleEntry.Multiline = true;
+            this.consoleEntry.Location = new System.Drawing.Point(6, 467);
             this.consoleEntry.Name = "consoleEntry";
-            this.consoleEntry.Size = new System.Drawing.Size(363, 20);
+            this.consoleEntry.Size = new System.Drawing.Size(363, 26);
             this.consoleEntry.TabIndex = 8;
             this.consoleEntry.WordWrap = false;
             this.consoleEntry.TextChanged += new System.EventHandler(this.consoleEntry_TextChanged);
@@ -91,31 +94,22 @@
             this.consoleWindow.BackColor = System.Drawing.SystemColors.MenuText;
             this.consoleWindow.Cursor = System.Windows.Forms.Cursors.Default;
             this.consoleWindow.EnableAutoDragDrop = true;
+            this.consoleWindow.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.consoleWindow.ForeColor = System.Drawing.SystemColors.Window;
-            this.consoleWindow.Location = new System.Drawing.Point(6, 33);
+            this.consoleWindow.Location = new System.Drawing.Point(6, 25);
             this.consoleWindow.Name = "consoleWindow";
             this.consoleWindow.ReadOnly = true;
             this.consoleWindow.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.consoleWindow.Size = new System.Drawing.Size(363, 419);
+            this.consoleWindow.Size = new System.Drawing.Size(363, 436);
             this.consoleWindow.TabIndex = 9;
             this.consoleWindow.Text = "";
             this.consoleWindow.TextChanged += new System.EventHandler(this.consoleWindow_TextChanged);
-            // 
-            // make
-            // 
-            this.make.Location = new System.Drawing.Point(642, 0);
-            this.make.Name = "make";
-            this.make.Size = new System.Drawing.Size(104, 23);
-            this.make.TabIndex = 10;
-            this.make.Text = "уйти в отладку";
-            this.make.UseVisualStyleBackColor = true;
-            this.make.Click += new System.EventHandler(this.button1_Click);
             // 
             // bLoad
             // 
             this.bLoad.BackgroundImage = global::kg_polygon.Properties.Resources.human_gnome_fs_directory_accept;
             this.bLoad.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.bLoad.Location = new System.Drawing.Point(560, 17);
+            this.bLoad.Location = new System.Drawing.Point(544, 25);
             this.bLoad.Name = "bLoad";
             this.bLoad.Size = new System.Drawing.Size(130, 130);
             this.bLoad.TabIndex = 5;
@@ -128,7 +122,7 @@
             // 
             this.bSafe.BackgroundImage = global::kg_polygon.Properties.Resources.human_add_folder_to_archive;
             this.bSafe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.bSafe.Location = new System.Drawing.Point(425, 18);
+            this.bSafe.Location = new System.Drawing.Point(408, 26);
             this.bSafe.Name = "bSafe";
             this.bSafe.Size = new System.Drawing.Size(129, 129);
             this.bSafe.TabIndex = 4;
@@ -141,7 +135,7 @@
             // 
             this.bDel.BackgroundImage = global::kg_polygon.Properties.Resources.human_trashcan_full_new;
             this.bDel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.bDel.Location = new System.Drawing.Point(290, 18);
+            this.bDel.Location = new System.Drawing.Point(273, 25);
             this.bDel.Name = "bDel";
             this.bDel.Size = new System.Drawing.Size(129, 129);
             this.bDel.TabIndex = 3;
@@ -155,12 +149,12 @@
             // 
             this.bEdit.BackgroundImage = global::kg_polygon.Properties.Resources.x_office_drawing_template;
             this.bEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.bEdit.Location = new System.Drawing.Point(154, 18);
+            this.bEdit.Location = new System.Drawing.Point(137, 25);
             this.bEdit.Name = "bEdit";
             this.bEdit.Size = new System.Drawing.Size(130, 130);
             this.bEdit.TabIndex = 2;
             this.bEdit.Text = "Изменить";
-            this.bEdit.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.bEdit.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.bEdit.UseVisualStyleBackColor = true;
             this.bEdit.Click += new System.EventHandler(this.bEdit_Click);
             // 
@@ -169,7 +163,7 @@
             this.bDrow.BackgroundImage = global::kg_polygon.Properties.Resources.old_openofficeorg_draw;
             this.bDrow.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.bDrow.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.bDrow.Location = new System.Drawing.Point(23, 19);
+            this.bDrow.Location = new System.Drawing.Point(6, 25);
             this.bDrow.Name = "bDrow";
             this.bDrow.Size = new System.Drawing.Size(125, 129);
             this.bDrow.TabIndex = 1;
@@ -182,9 +176,9 @@
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.White;
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.pictureBox1.Location = new System.Drawing.Point(23, 166);
+            this.pictureBox1.Location = new System.Drawing.Point(7, 167);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(700, 313);
+            this.pictureBox1.Size = new System.Drawing.Size(820, 340);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -196,17 +190,17 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.rLine);
             this.groupBox1.Controls.Add(this.bDrow);
             this.groupBox1.Controls.Add(this.bEdit);
             this.groupBox1.Controls.Add(this.bDel);
-            this.groupBox1.Controls.Add(this.rPolygon);
             this.groupBox1.Controls.Add(this.bSafe);
             this.groupBox1.Controls.Add(this.bLoad);
             this.groupBox1.Controls.Add(this.pictureBox1);
+            this.groupBox1.Controls.Add(this.groupBox3);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(797, 492);
+            this.groupBox1.Size = new System.Drawing.Size(837, 520);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Область рисования";
@@ -216,19 +210,31 @@
             // 
             this.groupBox2.Controls.Add(this.consoleWindow);
             this.groupBox2.Controls.Add(this.consoleEntry);
-            this.groupBox2.Location = new System.Drawing.Point(815, 13);
+            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox2.Location = new System.Drawing.Point(855, 13);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(375, 491);
+            this.groupBox2.Size = new System.Drawing.Size(375, 506);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Консоль";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.rLine);
+            this.groupBox3.Controls.Add(this.rPolygon);
+            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox3.Location = new System.Drawing.Point(680, 23);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(151, 131);
+            this.groupBox3.TabIndex = 8;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Тип фигуры";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1346, 559);
-            this.Controls.Add(this.make);
+            this.ClientSize = new System.Drawing.Size(1242, 544);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -245,6 +251,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -261,9 +269,9 @@
         private System.Windows.Forms.RadioButton rLine;
         private System.Windows.Forms.TextBox consoleEntry;
         private System.Windows.Forms.RichTextBox consoleWindow;
-        private System.Windows.Forms.Button make;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }
 

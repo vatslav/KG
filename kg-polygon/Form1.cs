@@ -25,6 +25,7 @@ namespace kg_polygon
         //состояние программы
         editor state = new editor();
         //console konsole;
+
         
         //Timer t = new Timer();
         //t.Tick+= new System.EventHandler(this, t_Tick);
@@ -41,6 +42,8 @@ namespace kg_polygon
             rLine.Checked = true;
             
             //konsole = new(RichTextBox consoleWindow, TextBox consoleEntry);
+            
+
            
         }
 

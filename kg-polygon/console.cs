@@ -26,10 +26,24 @@ namespace kg_polygon
         String success = "преобразование выполнено успешно";
         editor blob;
         bool isStart = true;
+        //List<string> inputComands = new List<string>();
+        AutoCompleteStringCollection inputComands = new AutoCompleteStringCollection();
         public void init(RichTextBox consoleWindow, TextBox consoleEntry, editor blob1)
         {
             
             this.consoleEntry = consoleEntry;
+            inputComands.Add("scale ");
+            inputComands.Add("move ");
+            inputComands.Add("rotate ");
+            inputComands.Add("help ");
+            consoleEntry.AutoCompleteCustomSource = inputComands;
+            consoleEntry.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            consoleEntry.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            
+            
+
+
+
             this.consoleWindow = consoleWindow;
             this.blob = blob1;
             consoleWindow.Text = "Для получения справки по командам консоли введите help" + Environment.NewLine + welcomString ;
@@ -47,6 +61,7 @@ namespace kg_polygon
             //Environment.NewLine
             if (buf.Length > 0)
             {
+                inputComands.Add(buf);
                // buf = buf.Substring(0, buf.Length - 1);
                 if (!isStart)
                     consoleWindow.Text += welcomString;
@@ -90,15 +105,19 @@ namespace kg_polygon
                             SLine temp = blob.points[Convert.ToInt32(substrings[3])];
                             float x, y;
                             x = Convert.ToSingle(substrings[1]);
-                            y= Convert.ToSingle(substrings[2]);
+                            y = Convert.ToSingle(substrings[2]);
                             blob.aft.scale2D(ref temp, x, y);
-                            
+
                             blob.points[Convert.ToInt32(substrings[3])] = temp;
                             blob.applyMatrix(Convert.ToInt32(substrings[3]));
                             blob.drawingSciene();
                             answer = success;
                         }
                         catch (ArgumentOutOfRangeException)
+                        {
+                            answer = "неверный синтаксис scale";
+                        }
+                        catch (IndexOutOfRangeException)
                         {
                             answer = "неверный синтаксис scale";
                         }
@@ -129,6 +148,10 @@ namespace kg_polygon
                     {
                         answer = "неверный синтаксис rotate";
                     }
+                    catch (IndexOutOfRangeException)
+                    {
+                        answer = "неверный синтаксис rotate";
+                    }
                 }
 
                 else
@@ -136,7 +159,8 @@ namespace kg_polygon
 
 
 
-                        consoleWindow.Text += answer + Environment.NewLine;
+                consoleWindow.Text += answer + Environment.NewLine;
+                
             }
 
 
@@ -149,7 +173,9 @@ namespace kg_polygon
         private void help()
         {
             answer = @"help - справка
-move <смещение по оси Х> <смещение по оси Y> <НомерЛинии> ";
+move <смещение по оси Х> <смещение по оси Y> <НомерЛинии> 
+scale <Коэффициент для оси Х> <Коэффициент для оси Y> <НомерЛинии>
+rotate <угол поворота> <НомерЛинии>";
             
         }
         private void defolt()
