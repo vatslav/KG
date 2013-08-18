@@ -179,6 +179,11 @@ namespace kg_polygon
         {
 
         }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 
 

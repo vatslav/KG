@@ -28,91 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.bDrow = new System.Windows.Forms.Button();
-            this.bEdit = new System.Windows.Forms.Button();
-            this.bDel = new System.Windows.Forms.Button();
-            this.bSafe = new System.Windows.Forms.Button();
-            this.bLoad = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.rPolygon = new System.Windows.Forms.RadioButton();
             this.rLine = new System.Windows.Forms.RadioButton();
             this.consoleEntry = new System.Windows.Forms.TextBox();
             this.consoleWindow = new System.Windows.Forms.RichTextBox();
             this.make = new System.Windows.Forms.Button();
+            this.bLoad = new System.Windows.Forms.Button();
+            this.bSafe = new System.Windows.Forms.Button();
+            this.bDel = new System.Windows.Forms.Button();
+            this.bEdit = new System.Windows.Forms.Button();
+            this.bDrow = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 103);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(700, 313);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            this.pictureBox1.DoubleClick += new System.EventHandler(this.pictureBox1_DoubleClick);
-            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
-            // 
-            // bDrow
-            // 
-            this.bDrow.Location = new System.Drawing.Point(13, 24);
-            this.bDrow.Name = "bDrow";
-            this.bDrow.Size = new System.Drawing.Size(116, 73);
-            this.bDrow.TabIndex = 1;
-            this.bDrow.Text = "Draw";
-            this.bDrow.UseVisualStyleBackColor = true;
-            this.bDrow.Click += new System.EventHandler(this.bDrow_Click);
-            // 
-            // bEdit
-            // 
-            this.bEdit.Location = new System.Drawing.Point(135, 24);
-            this.bEdit.Name = "bEdit";
-            this.bEdit.Size = new System.Drawing.Size(116, 73);
-            this.bEdit.TabIndex = 2;
-            this.bEdit.Text = "Edit";
-            this.bEdit.UseVisualStyleBackColor = true;
-            this.bEdit.Click += new System.EventHandler(this.bEdit_Click);
-            // 
-            // bDel
-            // 
-            this.bDel.Location = new System.Drawing.Point(258, 24);
-            this.bDel.Name = "bDel";
-            this.bDel.Size = new System.Drawing.Size(111, 73);
-            this.bDel.TabIndex = 3;
-            this.bDel.Text = "Delete";
-            this.bDel.UseVisualStyleBackColor = true;
-            this.bDel.EnabledChanged += new System.EventHandler(this.bDel_EnabledChanged);
-            this.bDel.Click += new System.EventHandler(this.bDel_Click);
-            // 
-            // bSafe
-            // 
-            this.bSafe.Location = new System.Drawing.Point(376, 24);
-            this.bSafe.Name = "bSafe";
-            this.bSafe.Size = new System.Drawing.Size(117, 73);
-            this.bSafe.TabIndex = 4;
-            this.bSafe.Text = "Сохранить";
-            this.bSafe.UseVisualStyleBackColor = true;
-            this.bSafe.Click += new System.EventHandler(this.bSafe_Click);
-            // 
-            // bLoad
-            // 
-            this.bLoad.Location = new System.Drawing.Point(499, 24);
-            this.bLoad.Name = "bLoad";
-            this.bLoad.Size = new System.Drawing.Size(126, 73);
-            this.bLoad.TabIndex = 5;
-            this.bLoad.Text = "Загрузить";
-            this.bLoad.UseVisualStyleBackColor = true;
-            this.bLoad.Click += new System.EventHandler(this.bLoad_Click);
             // 
             // rPolygon
             // 
             this.rPolygon.AutoSize = true;
-            this.rPolygon.Location = new System.Drawing.Point(632, 79);
+            this.rPolygon.Location = new System.Drawing.Point(696, 57);
             this.rPolygon.Name = "rPolygon";
             this.rPolygon.Size = new System.Drawing.Size(97, 17);
             this.rPolygon.TabIndex = 6;
@@ -125,7 +63,7 @@
             // 
             this.rLine.AllowDrop = true;
             this.rLine.AutoSize = true;
-            this.rLine.Location = new System.Drawing.Point(632, 56);
+            this.rLine.Location = new System.Drawing.Point(696, 34);
             this.rLine.Name = "rLine";
             this.rLine.Size = new System.Drawing.Size(57, 17);
             this.rLine.TabIndex = 7;
@@ -138,10 +76,10 @@
             // 
             this.consoleEntry.BackColor = System.Drawing.SystemColors.MenuText;
             this.consoleEntry.ForeColor = System.Drawing.SystemColors.Window;
-            this.consoleEntry.Location = new System.Drawing.Point(743, 396);
+            this.consoleEntry.Location = new System.Drawing.Point(6, 458);
             this.consoleEntry.Multiline = true;
             this.consoleEntry.Name = "consoleEntry";
-            this.consoleEntry.Size = new System.Drawing.Size(292, 20);
+            this.consoleEntry.Size = new System.Drawing.Size(363, 20);
             this.consoleEntry.TabIndex = 8;
             this.consoleEntry.WordWrap = false;
             this.consoleEntry.TextChanged += new System.EventHandler(this.consoleEntry_TextChanged);
@@ -154,17 +92,18 @@
             this.consoleWindow.Cursor = System.Windows.Forms.Cursors.Default;
             this.consoleWindow.EnableAutoDragDrop = true;
             this.consoleWindow.ForeColor = System.Drawing.SystemColors.Window;
-            this.consoleWindow.Location = new System.Drawing.Point(743, 103);
+            this.consoleWindow.Location = new System.Drawing.Point(6, 33);
             this.consoleWindow.Name = "consoleWindow";
+            this.consoleWindow.ReadOnly = true;
             this.consoleWindow.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.consoleWindow.Size = new System.Drawing.Size(292, 287);
+            this.consoleWindow.Size = new System.Drawing.Size(363, 419);
             this.consoleWindow.TabIndex = 9;
             this.consoleWindow.Text = "";
             this.consoleWindow.TextChanged += new System.EventHandler(this.consoleWindow_TextChanged);
             // 
             // make
             // 
-            this.make.Location = new System.Drawing.Point(733, 24);
+            this.make.Location = new System.Drawing.Point(642, 0);
             this.make.Name = "make";
             this.make.Size = new System.Drawing.Size(104, 23);
             this.make.TabIndex = 10;
@@ -172,24 +111,129 @@
             this.make.UseVisualStyleBackColor = true;
             this.make.Click += new System.EventHandler(this.button1_Click);
             // 
+            // bLoad
+            // 
+            this.bLoad.BackgroundImage = global::kg_polygon.Properties.Resources.human_gnome_fs_directory_accept;
+            this.bLoad.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.bLoad.Location = new System.Drawing.Point(560, 17);
+            this.bLoad.Name = "bLoad";
+            this.bLoad.Size = new System.Drawing.Size(130, 130);
+            this.bLoad.TabIndex = 5;
+            this.bLoad.Text = "Открыть";
+            this.bLoad.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.bLoad.UseVisualStyleBackColor = true;
+            this.bLoad.Click += new System.EventHandler(this.bLoad_Click);
+            // 
+            // bSafe
+            // 
+            this.bSafe.BackgroundImage = global::kg_polygon.Properties.Resources.human_add_folder_to_archive;
+            this.bSafe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.bSafe.Location = new System.Drawing.Point(425, 18);
+            this.bSafe.Name = "bSafe";
+            this.bSafe.Size = new System.Drawing.Size(129, 129);
+            this.bSafe.TabIndex = 4;
+            this.bSafe.Text = "Сохранить";
+            this.bSafe.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.bSafe.UseVisualStyleBackColor = true;
+            this.bSafe.Click += new System.EventHandler(this.bSafe_Click);
+            // 
+            // bDel
+            // 
+            this.bDel.BackgroundImage = global::kg_polygon.Properties.Resources.human_trashcan_full_new;
+            this.bDel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.bDel.Location = new System.Drawing.Point(290, 18);
+            this.bDel.Name = "bDel";
+            this.bDel.Size = new System.Drawing.Size(129, 129);
+            this.bDel.TabIndex = 3;
+            this.bDel.Text = "Удалить";
+            this.bDel.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.bDel.UseVisualStyleBackColor = true;
+            this.bDel.EnabledChanged += new System.EventHandler(this.bDel_EnabledChanged);
+            this.bDel.Click += new System.EventHandler(this.bDel_Click);
+            // 
+            // bEdit
+            // 
+            this.bEdit.BackgroundImage = global::kg_polygon.Properties.Resources.x_office_drawing_template;
+            this.bEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.bEdit.Location = new System.Drawing.Point(154, 18);
+            this.bEdit.Name = "bEdit";
+            this.bEdit.Size = new System.Drawing.Size(130, 130);
+            this.bEdit.TabIndex = 2;
+            this.bEdit.Text = "Изменить";
+            this.bEdit.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.bEdit.UseVisualStyleBackColor = true;
+            this.bEdit.Click += new System.EventHandler(this.bEdit_Click);
+            // 
+            // bDrow
+            // 
+            this.bDrow.BackgroundImage = global::kg_polygon.Properties.Resources.old_openofficeorg_draw;
+            this.bDrow.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.bDrow.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.bDrow.Location = new System.Drawing.Point(23, 19);
+            this.bDrow.Name = "bDrow";
+            this.bDrow.Size = new System.Drawing.Size(125, 129);
+            this.bDrow.TabIndex = 1;
+            this.bDrow.Text = "Добавить";
+            this.bDrow.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.bDrow.UseVisualStyleBackColor = true;
+            this.bDrow.Click += new System.EventHandler(this.bDrow_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.White;
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.pictureBox1.Location = new System.Drawing.Point(23, 166);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(700, 313);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.pictureBox1.DoubleClick += new System.EventHandler(this.pictureBox1_DoubleClick);
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.rLine);
+            this.groupBox1.Controls.Add(this.bDrow);
+            this.groupBox1.Controls.Add(this.bEdit);
+            this.groupBox1.Controls.Add(this.bDel);
+            this.groupBox1.Controls.Add(this.rPolygon);
+            this.groupBox1.Controls.Add(this.bSafe);
+            this.groupBox1.Controls.Add(this.bLoad);
+            this.groupBox1.Controls.Add(this.pictureBox1);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(797, 492);
+            this.groupBox1.TabIndex = 11;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Область рисования";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.consoleWindow);
+            this.groupBox2.Controls.Add(this.consoleEntry);
+            this.groupBox2.Location = new System.Drawing.Point(815, 13);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(375, 491);
+            this.groupBox2.TabIndex = 12;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Консоль";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1346, 466);
+            this.ClientSize = new System.Drawing.Size(1346, 559);
             this.Controls.Add(this.make);
-            this.Controls.Add(this.consoleWindow);
-            this.Controls.Add(this.consoleEntry);
-            this.Controls.Add(this.rLine);
-            this.Controls.Add(this.rPolygon);
-            this.Controls.Add(this.bLoad);
-            this.Controls.Add(this.bSafe);
-            this.Controls.Add(this.bDel);
-            this.Controls.Add(this.bEdit);
-            this.Controls.Add(this.bDrow);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBox2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Векторный редактор 2.0";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
@@ -197,8 +241,11 @@
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -215,6 +262,8 @@
         private System.Windows.Forms.TextBox consoleEntry;
         private System.Windows.Forms.RichTextBox consoleWindow;
         private System.Windows.Forms.Button make;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
 

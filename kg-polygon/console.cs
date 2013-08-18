@@ -25,13 +25,14 @@ namespace kg_polygon
         String answer;
         String success = "преобразование выполнено успешно";
         editor blob;
+        bool isStart = true;
         public void init(RichTextBox consoleWindow, TextBox consoleEntry, editor blob1)
         {
             
             this.consoleEntry = consoleEntry;
             this.consoleWindow = consoleWindow;
             this.blob = blob1;
-            
+            consoleWindow.Text = "Для получения справки по командам консоли введите help" + Environment.NewLine + welcomString ;
             
 
 
@@ -47,7 +48,10 @@ namespace kg_polygon
             if (buf.Length > 0)
             {
                // buf = buf.Substring(0, buf.Length - 1);
-                consoleWindow.Text += welcomString + buf + Environment.NewLine;
+                if (!isStart)
+                    consoleWindow.Text += welcomString;
+                isStart = false;
+                consoleWindow.Text +=  buf + Environment.NewLine;
                 buf = buf.Replace(".", ",");
                 if (buf=="help")
                         help();
