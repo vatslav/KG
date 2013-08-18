@@ -27,7 +27,7 @@ namespace shareData
         }
         protected Point curPoint;
         protected SLine curLine;
-        private int curLineIndex;
+        private int curLineIndex=-1;
 
         public int CurLineIndex
         {
@@ -45,6 +45,7 @@ namespace shareData
         public console konsole = new console();
         protected int prevCaptur = -1;
         public AffinTransform aft;
+        //bool blockDCM = false; //блокирвока отпускания левый кнопки мыши, что бы после выделения тут же не произошли другие изменения
 
        
         
@@ -88,7 +89,10 @@ namespace shareData
         {//растояние между 2 точками
             return Math.Sqrt(Math.Pow((b.X - a.X), 2) + Math.Pow(b.Y - a.Y, 2));
         }
-
+        public void resetIndexLine()
+        {
+            curLineIndex = -1;
+        }
 
         //отрисовка  холста с учетом надатия ЛКМ
         public void drawingDown(MouseEventArgs e) 
@@ -118,6 +122,7 @@ namespace shareData
                                 curLineIndex = index;
                                 curPoint = e.Location;
                                 curLine = points[curLineIndex];
+                                //blockDCM = true;
 
                             }
                             break;
@@ -151,7 +156,8 @@ namespace shareData
                             break;
                         case (int)modes.MODE_MOVE:
                             isDragging = false;
-                            applyMatrix(curLineIndex);
+                            if (curLineIndex!= -1)
+                                applyMatrix(curLineIndex);
                             drawingSciene();
                             break;
                     }

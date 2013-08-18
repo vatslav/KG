@@ -30,7 +30,9 @@ namespace kg_polygon
    float[] myArray = { x, y };
    try
    {
-       blob.konsole.Print("direcrion=" + findDirection() + " angel=" + findAngel(figure).ToString().Substring(0, 5));
+       //blob.konsole.Print("direcrion=" + findDirection() + " angel=" + findAngel(figure).ToString().Substring(0, 5));
+       Point center = new Point(figure.getCentrX(), figure.getCentrY());
+       blob.konsole.Print(findAngel(figure.aW,curPoint,  center).ToString());
    }
    catch (ArgumentOutOfRangeException) { }
    if (double.IsNaN(x) || x == 0 || double.IsNaN(y) || y == 0)
@@ -55,6 +57,7 @@ namespace kg_polygon
        scale2D(ref figure, x, y);
    return  myArray;
   }
+  //public float findAngel(Point a, Point b, Point c);
 
   //масштабирование с использованием матриц (без c# WinForms api)
   private void naturalScale(ref SLine figure, float x, float y)
@@ -181,6 +184,7 @@ namespace kg_polygon
              return 2;
          return 0;
      }
+     
      public double findAngel(SLine line)
      {//найти угол данной линии
          double c = d(line.aW, line.bW); //длина отрезка
@@ -194,6 +198,15 @@ namespace kg_polygon
 
 
      }
+     public double findAngel(Point A, Point B, Point C)
+     {
+         double a = d(A, B);
+         double b = d(A, C);
+         double c = d(C, B);
+
+         return findAngel(a, b, c, findDirection(B, C));
+     }
+
 
      public double findAngel(Point A, Point B)
      {//находит угол отрезка проход. через 2 данные точки (функция обертка)
@@ -213,8 +226,7 @@ namespace kg_polygon
          double sinAngel = b / (2 * R);
          double angel = Math.Asin(sinAngel) * (180 / Math.PI);
          sinAngel = angel;
-         if (a == 0 || b == 0 || c == 0)
-             angel = 0;
+
 
          switch (direction)
          {

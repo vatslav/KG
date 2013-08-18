@@ -76,12 +76,15 @@ namespace kg_polygon
         private void bDrow_Click(object sender, EventArgs e)
         {
             state.curModes = (int)modes.MODE_DROW;
+            state.resetIndexLine();
+            state.drawingSciene();
         }
 
         private void bDel_Click(object sender, EventArgs e)
         {
             state.curModes = (int)modes.MODE_DELETE;
-            state.drawingScieneOnly();
+            state.resetIndexLine();
+            state.drawingSciene();
         }
 
         private void bSafe_Click(object sender, EventArgs e)
