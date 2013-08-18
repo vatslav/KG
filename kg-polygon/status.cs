@@ -429,10 +429,6 @@ namespace shareData
 
         }
         //для отладки поворота
-        public void handScale(string inputStr)
-        {
-            aft.handScale(inputStr);
-        }
 
         public void drawingSciene(PictureBox pictureBox1, MouseEventArgs e)
         {//отрисовка + выполнение действий пользователя (поворот, маштабирвоание, трансформ, деформ)
@@ -477,16 +473,8 @@ namespace shareData
                                 }
                                 else
                                 {//если  маштаб
-
-                                    
-                                    aft.scale(ref templine, e.Location);
-                                // konsole.Print(""+ temp[0]+ "\n"+ temp[1]);
-
+                                    aft.scale(ref templine, e.Location, 1);
                                     points[curLineIndex] = templine;
-
-
-                            
-
                                 }
                                 break;
                             case (int)captures.TAKE_PT2:
@@ -501,13 +489,8 @@ namespace shareData
                                 }
                                 else
                                 {
-                                    SLine tempLine = points[curLineIndex];
-                                    float x, y;
-
-                                    x = (float)Math.Abs(((float)(tempLine.aW.X - tempLine.bW.X)) / (e.Location.X - tempLine.bW.X));
-                                    y = (float)Math.Abs(((float)(tempLine.aW.Y - tempLine.bW.Y)) / (e.Location.Y - tempLine.bW.Y));
-                                    tempLine.affinMatrix.Scale(x, y);
-                                    //applyMatrix(curLineIndex);
+                                    aft.scale(ref templine, e.Location, 2);
+                                    points[curLineIndex] = templine;
 
                                 }
                                 break;

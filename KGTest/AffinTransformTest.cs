@@ -90,7 +90,7 @@ namespace KGTest
    curPoint = new Point(0, 0);
    //Assert.IsTrue(new float[] { a, a }.Equals(target.scale(ref figure, curPoint)));
    Assert.IsTrue(true.Equals(true));
-   target.scale(ref figure, curPoint);
+   //target.scale(ref figure, curPoint);
    Debug.WriteLine(figure.ToString());
    Debug.WriteLine(figure.ToStringMx());
   // Debug.WriteLine(figure.ToString());
