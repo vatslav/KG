@@ -658,13 +658,13 @@ namespace shareData
         }
         public int getRotateX()
         {
-            return getCentrX()+15;
+            return getCentrX();
 
         }
 
         public int getRotateY()
         {
-            return getCentrY()+15;
+            return getCentrY();
 
         }
 

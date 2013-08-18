@@ -167,8 +167,8 @@ namespace kg_polygon
         }
         public void Print(string str)
         {
-            //consoleWindow.Text += "                                            " + str;
-            //consoleWindow.Text = str;
+            consoleWindow.Text += "                                            " + str;
+            consoleWindow.Text = str;
         }
         private void help()
         {

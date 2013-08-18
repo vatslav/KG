@@ -23,6 +23,8 @@ namespace kg_polygon
   {
       bool crach = false;
    float x, y;
+   int limit = 4;
+   int crashAngel = 1;
    x = (float)Math.Abs((curPoint.X - figure.bW.X) / (float)(figure.aW.X - figure.bW.X) );
    y = (float)Math.Abs((curPoint.Y - figure.bW.Y) / (float)(figure.aW.Y - figure.bW.Y) );
    float[] myArray = { x, y };
@@ -34,14 +36,22 @@ namespace kg_polygon
    if (double.IsNaN(x) || x == 0 || double.IsNaN(y) || y == 0)
        crach = true;
 
-   if (90 - findAngel(figure) < 4 && findDirection() == 2)
-       rotateCrach(ref figure, 1.0);
-   else if (180 - findAngel(figure) < 5 && findDirection() == 2)
-       rotateCrach(ref figure, 5);
+   if (90 - findAngel(figure) < limit && findDirection() == 2)
+       rotateCrach(ref figure, crashAngel);
+   else if (180 - findAngel(figure) < limit && findDirection() == 2)
+       rotateCrach(ref figure, crashAngel);
+   else if (90 - findAngel(figure) < limit && findDirection() == 1)
+       rotateCrach(ref figure, -crashAngel);
+   else if (findAngel(figure) < limit && findDirection() == 1)
+       rotateCrach(ref figure, crashAngel);
+   else if (360 - findAngel(figure) < limit && findDirection() == 4)
+       rotateCrach(ref figure, -crashAngel);
+   else if (270 - findDirection() < limit && findDirection() == 3)
+       rotateCrach(ref figure, crashAngel);
    if (crach)
        rotateCrach(ref figure, 5);
 
-   if  (!crach)
+   if (!crach)
        scale2D(ref figure, x, y);
    return  myArray;
   }
