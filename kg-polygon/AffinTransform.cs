@@ -20,35 +20,38 @@ namespace kg_polygon
 
   //преобразует масштабирование линия + точка в линии + коеф. Х + коеф. У
   public float[] scale(ref SLine figure, Point curPoint)
-  {
+  {//TODO
+      // если растояние от мышки до края фигуры больше visibility, то нужно найти угол между мышкой и краев
+      //относительно центра и повернуть на него - это отдельной песней, можно после перехода на рекнатглы
+      //сейчас все остальное доделать
       bool crach = false;
    float x, y;
-   int limit = 4;
+   int limit = 1;
    int crashAngel = 1;
    x = (float)Math.Abs((curPoint.X - figure.bW.X) / (float)(figure.aW.X - figure.bW.X) );
    y = (float)Math.Abs((curPoint.Y - figure.bW.Y) / (float)(figure.aW.Y - figure.bW.Y) );
    float[] myArray = { x, y };
    try
    {
-       //blob.konsole.Print("direcrion=" + findDirection() + " angel=" + findAngel(figure).ToString().Substring(0, 5));
+       blob.konsole.Print("direcrion=" + findDirection() + " angel=" + findAngel(figure).ToString().Substring(0, 5));
        Point center = new Point(figure.getCentrX(), figure.getCentrY());
-       blob.konsole.Print(findAngel(figure.aW,curPoint,  center).ToString());
+       //blob.konsole.Print(findAngel(figure.aW,curPoint,  center).ToString());
    }
    catch (ArgumentOutOfRangeException) { }
    if (double.IsNaN(x) || x == 0 || double.IsNaN(y) || y == 0)
        crach = true;
 
-   if (90 - findAngel(figure) < limit && findDirection() == 2)
+   if (Math.Abs(90 - findAngel(figure)) < limit && findDirection() == 2)
        rotateCrach(ref figure, crashAngel);
-   else if (180 - findAngel(figure) < limit && findDirection() == 2)
+   else if (Math.Abs(180 - findAngel(figure)) < limit && findDirection() == 2)
        rotateCrach(ref figure, crashAngel);
-   else if (90 - findAngel(figure) < limit && findDirection() == 1)
+   else if (Math.Abs(90 - findAngel(figure)) < limit && findDirection() == 1)
        rotateCrach(ref figure, -crashAngel);
    else if (findAngel(figure) < limit && findDirection() == 1)
        rotateCrach(ref figure, crashAngel);
-   else if (360 - findAngel(figure) < limit && findDirection() == 4)
+   else if (Math.Abs(360 - findAngel(figure)) < limit && findDirection() == 4)
        rotateCrach(ref figure, -crashAngel);
-   else if (270 - findDirection() < limit && findDirection() == 3)
+   else if (Math.Abs(270 - findDirection()) < limit && findDirection() == 3)
        rotateCrach(ref figure, crashAngel);
    if (crach)
        rotateCrach(ref figure, 5);
