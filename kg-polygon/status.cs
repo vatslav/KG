@@ -302,9 +302,9 @@ namespace shareData
             SLine temp = new SLine();
             
             temp = points[index];
-            temp.affinMatrix = lastMatrix;//new Matrix(1, 0, 0, 1, 0, 0);
-            //temp.aW = curLine.a;
-            //temp.bW = curLine.b;
+            temp.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
+            temp.aW = curLine.a;
+            temp.bW = curLine.b;
             points[index] = temp;
             applyMatrix(index);
 

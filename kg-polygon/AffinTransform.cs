@@ -24,41 +24,55 @@ namespace kg_polygon
       // если растояние от мышки до края фигуры больше visibility, то нужно найти угол между мышкой и краев
       //относительно центра и повернуть на него - это отдельной песней, можно после перехода на рекнатглы
       //сейчас все остальное доделать
-      bool crach = false;
-   float x, y;
+   bool crach = false; //было ли крушение?
+   float x, y; //коэффициенты
    x = y = 0;
-   int limit = 1;
-   int crashAngel = 1;
-   if (numberPoint == 1)
+   int limit = 1; //за сколько градусов, до граничной линии начинаем раболтать?
+   int crashAngel = 1; //на сколько скачим в лучае пересечения?
+   float znam = (float)(figure.aW.X - figure.bW.X);
+   float znam2 = (float)(figure.aW.Y - figure.bW.Y);
+   if (numberPoint == 1) //если тянули за первую точку
    {
-       x = (float)Math.Abs((curPoint.X - figure.bW.X) / (float)(figure.aW.X - figure.bW.X));
-       y = (float)Math.Abs((curPoint.Y - figure.bW.Y) / (float)(figure.aW.Y - figure.bW.Y));
+       if (znam == 0)
+           znam = (float)0.1;
+       if (znam2 == 0)
+           znam2 = (float)0.1;
+       x = (float)Math.Abs((curPoint.X - figure.bW.X) / znam);
+       y = (float)Math.Abs((curPoint.Y - figure.bW.Y) / znam2);
    }
-   else if (numberPoint == 2)
+   else if (numberPoint == 2) // если за вторую
    {
-       x = (float)Math.Abs((curPoint.X - figure.aW.X) / (float)(figure.aW.X - figure.bW.X));
-       y = (float)Math.Abs((curPoint.Y - figure.aW.Y) / (float)(figure.aW.Y - figure.bW.Y));
+       
+       if (znam == 0)
+           znam = (float)0.1;
+      if (znam2 == 0)
+           znam2 = (float)0.1;
+       x = (float)Math.Abs((curPoint.X - figure.aW.X) / znam);
+       y = (float)Math.Abs((curPoint.Y - figure.aW.Y) / znam2);
    }
-   if (Math.Abs(x) > 9999 || Math.Abs(y) > 9999)
-   {
-       blob.applyMatrix(blob.CurLineIndex);
-       rotateCrach(ref figure, crashAngel);
-       return;
+   //if (Math.Abs(x) > 9999 || Math.Abs(y) > 9999) //если в результате получилась бесконечность
+   //if (double.IsNaN(x) || x == 0 || double.IsNaN(y) || y == 0 || Math.Abs(x) > 9999 || Math.Abs(y) > 9999)
+   ////    crach = true;
+   //   {
+   //    blob.applyMatrix(blob.CurLineIndex);
+   //    crach = true;
+   //    rotateCrach(ref figure, crashAngel);
+   //    return;
 
 
-   }
+   //}
 
 
-   try
+   try//отрисовка метаинформации в консоль
    {
        blob.konsole.Print("direcrion=" + findDirection() + " angel=" + findAngel(figure).ToString().Substring(0, 5));
        Point center = new Point(figure.getCentrX(), figure.getCentrY());
        //blob.konsole.Print(findAngel(figure.aW,curPoint,  center).ToString());
    }
    catch (ArgumentOutOfRangeException) { }
-   if (double.IsNaN(x) || x == 0 || double.IsNaN(y) || y == 0 || Math.Abs(x) > 9999 || Math.Abs(y) > 9999)
-       crach = true;
-
+   //if (double.IsNaN(x) || x == 0 || double.IsNaN(y) || y == 0 || Math.Abs(x) > 9999 || Math.Abs(y) > 9999)
+   //    crach = true;
+      //проверка на граничные условия и реагирование на них
    if (Math.Abs(90 - findAngel(figure)) < limit && findDirection() == 2)
        rotateCrach(ref figure, crashAngel);
    else if (Math.Abs(180 - findAngel(figure)) < limit && findDirection() == 2)
@@ -74,21 +88,13 @@ namespace kg_polygon
    else if (Math.Abs(270 - findDirection()) < limit && findDirection() == 4)
        rotateCrach(ref figure, -crashAngel);
    if (crach)
-       rotateCrach(ref figure, 5);
-   blob.lastMatrix = figure.affinMatrix.Clone();
-   if (Math.Abs(x) > 9999 || Math.Abs(y) > 9999)
-   {
-       blob.applyMatrix(blob.CurLineIndex);
        rotateCrach(ref figure, crashAngel);
-       return;
-
-
-   }
+//если креша не было, то делаем преобразование
    if (!crach)
        scale2D(ref figure, x, y);
    return;
   }
-  //public float findAngel(Point a, Point b, Point c);
+
 
   //масштабирование с использованием матриц (без c# WinForms api)
   private void naturalScale(ref SLine figure, float x, float y)
@@ -157,7 +163,8 @@ namespace kg_polygon
      public void rotate(ref SLine figure, double angel)
      {
          PointF centerPointsArr = new PointF(figure.getCentrX(), figure.getCentrY());
-
+         if (Math.Abs(angel) > 9999 || Math.Abs(bufAngel) > 9999 || Math.Abs(angel)<0.01)
+             return;
          figure.affinMatrix.RotateAt((float)(bufAngel - angel), centerPointsArr,MatrixOrder.Append);
          bufAngel = angel;
          blob.drawingScieneOnly();
