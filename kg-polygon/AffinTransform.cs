@@ -19,7 +19,7 @@ namespace kg_polygon
     private double bufAngel=0;
 
   //преобразует масштабирование линия + точка в линии + коеф. Х + коеф. У
-  public float[] scale(ref SLine figure, Point curPoint, int numberPoint)
+  public void scale(ref SLine figure, Point curPoint, int numberPoint)
   {//TODO
       // если растояние от мышки до края фигуры больше visibility, то нужно найти угол между мышкой и краев
       //относительно центра и повернуть на него - это отдельной песней, можно после перехода на рекнатглы
@@ -39,7 +39,16 @@ namespace kg_polygon
        x = (float)Math.Abs((curPoint.X - figure.aW.X) / (float)(figure.aW.X - figure.bW.X));
        y = (float)Math.Abs((curPoint.Y - figure.aW.Y) / (float)(figure.aW.Y - figure.bW.Y));
    }
-   float[] myArray = { x, y };
+   if (Math.Abs(x) > 9999 || Math.Abs(y) > 9999)
+   {
+       blob.applyMatrix(blob.CurLineIndex);
+       rotateCrach(ref figure, crashAngel);
+       return;
+
+
+   }
+
+
    try
    {
        blob.konsole.Print("direcrion=" + findDirection() + " angel=" + findAngel(figure).ToString().Substring(0, 5));
@@ -47,7 +56,7 @@ namespace kg_polygon
        //blob.konsole.Print(findAngel(figure.aW,curPoint,  center).ToString());
    }
    catch (ArgumentOutOfRangeException) { }
-   if (double.IsNaN(x) || x == 0 || double.IsNaN(y) || y == 0)
+   if (double.IsNaN(x) || x == 0 || double.IsNaN(y) || y == 0 || Math.Abs(x) > 9999 || Math.Abs(y) > 9999)
        crach = true;
 
    if (Math.Abs(90 - findAngel(figure)) < limit && findDirection() == 2)
@@ -66,10 +75,18 @@ namespace kg_polygon
        rotateCrach(ref figure, -crashAngel);
    if (crach)
        rotateCrach(ref figure, 5);
+   blob.lastMatrix = figure.affinMatrix.Clone();
+   if (Math.Abs(x) > 9999 || Math.Abs(y) > 9999)
+   {
+       blob.applyMatrix(blob.CurLineIndex);
+       rotateCrach(ref figure, crashAngel);
+       return;
 
+
+   }
    if (!crach)
        scale2D(ref figure, x, y);
-   return  myArray;
+   return;
   }
   //public float findAngel(Point a, Point b, Point c);
 
@@ -95,8 +112,11 @@ namespace kg_polygon
   //масшатабирование  линии + коеф. Х + коеф. У в разных режимых
   public void scale2D(ref SLine figure, float x, float y)
   {
-    float dx = figure.getRotateX();
-   float dy = figure.getRotateY();  
+   float dx = figure.getRotateX();
+   float dy = figure.getRotateY();
+    int a;
+   if (Math.Abs(x) > 9999)
+       a=1 + 1;
    figure.affinMatrix.Translate(-dx, -dy, MatrixOrder.Append);
    figure.affinMatrix.Scale(x, y, MatrixOrder.Append);
    figure.affinMatrix.Translate(dx, dy, MatrixOrder.Append);

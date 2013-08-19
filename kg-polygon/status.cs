@@ -45,6 +45,8 @@ namespace shareData
         public console konsole = new console();
         protected int prevCaptur = -1;
         public AffinTransform aft;
+        public Matrix lastMatrix;
+      
         //bool blockDCM = false; //блокирвока отпускания левый кнопки мыши, что бы после выделения тут же не произошли другие изменения
 
        
@@ -217,6 +219,7 @@ namespace shareData
         {//применить матрицу афинных преобразований, без сброса самой матрицы
             SLine tempLine = points[indexLine];
             tempLine.affinMatrix = points[indexLine].affinMatrix.Clone();
+            
             Point[] ps = new Point[2];
             ps[0] = tempLine.a;
             ps[1] = tempLine.b;
@@ -299,10 +302,12 @@ namespace shareData
             SLine temp = new SLine();
             
             temp = points[index];
-            temp.affinMatrix = new Matrix(1, 0, 0, 1, 0, 0);
-            temp.aW = curLine.a;
-            temp.bW = curLine.b;
+            temp.affinMatrix = lastMatrix;//new Matrix(1, 0, 0, 1, 0, 0);
+            //temp.aW = curLine.a;
+            //temp.bW = curLine.b;
             points[index] = temp;
+            applyMatrix(index);
+
         }
 
         public void drawingScieneOnly()
