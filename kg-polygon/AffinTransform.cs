@@ -18,7 +18,11 @@ namespace kg_polygon
     public AffinTransform(editor blob1) { blob = blob1; }
     public AffinTransform() { }
     private double bufAngel=0;
+    private bool isDown = false;
 
+
+    public void down() { isDown = true; }
+    public void up() { isDown = false; }
 
   //преобразует масштабирование линия + точка в линии + коеф. Х + коеф. У
   public void scale(ref SLine figure, Point curPoint, int numberPoint)
@@ -36,40 +40,48 @@ namespace kg_polygon
    float znamY =(float)(figure.aW.Y - figure.bW.Y);
    bool crash = false;
    if (znamX == 0)
-       znamX = (float)234;
+       znamX = (float)0.01;
    if (znamY == 0)
-       znamY = (float)765;
+       znamY = (float)0.01;
    if (numberPoint == 1) //если тянули за первую точку
    {
 
        x = (float)Math.Abs((curPoint.X - figure.bW.X) / znamX);
        y = (float)Math.Abs((curPoint.Y - figure.bW.Y) / znamY);
-       crash = true;
+       crash =  true;
    }
    else if (numberPoint == 2) // если за вторую
    {
        x = (float)Math.Abs((curPoint.X - figure.aW.X) / znamX);
        y = (float)Math.Abs((curPoint.Y - figure.aW.Y) / znamY);
-       crash = true;
+       crash =  true;
    }
-   //if (Math.Abs(difAngel - curAngel) > 5 && crash == true)
-   //    rotate(ref figure, (difAngel - curAngel));
+      
+   //if (Math.Abs(difAngel - curAngel) > 5 && crash )
+   //{
+   //    int angelR = 1;
+   //    if (difAngel < 0)
+   //        angelR *= -1;
+   //    rotateCrach(ref figure, angelR);
+   //    isDown = false;
+
+   //}
 
 
-   try//отрисовка метаинформации в консоль
-   {
-       String bug = "";
-       if (Math.Abs(curAngel - difAngel) > 5)
-           bug = "\nda";
-       blob.konsole.Print("direcrion=" + findDirection().ToString() + " angel=" + aux.substr(findAngel(figure).ToString()) +
-           "\nx,y=" + aux.substr(x.ToString()) + " " + aux.substr(y.ToString()) +
-           "\ndiffAngel="+aux.substr(difAngel.ToString()) +
-           "\ndifAngels=" + aux.substr((difAngel - curAngel).ToString()) +
-             bug);
+ //отрисовка метаинформации в консоль
+
+   String bug = "";
+   if (Math.Abs(difAngel - curAngel) > 1 && crash)
+       bug = "\nda";
+   blob.konsole.Print("direcrion=" + findDirection().ToString() + " angel=" + aux.substr(findAngel(figure).ToString()) +
+       "\nx,y=" + aux.substr(x.ToString()) + " " + aux.substr(y.ToString()) +
+       "\ndiffAngel=" + aux.substr(difAngel.ToString()) +
+       "\ncurAngel=" + aux.substr(curAngel.ToString()) +
+       "\ndifAngels=" + aux.substr((difAngel - curAngel).ToString()) +
+         bug);
        
        //blob.konsole.Print(findAngel(figure.aW,curPoint,  center).ToString());
-   }
-   catch (InsufficientMemoryException) { blob.konsole.Print("error print"); }
+
    //ArgumentOutOfRangeException
    scale2D(ref figure, x, y);
    return;
@@ -160,6 +172,7 @@ namespace kg_polygon
      {
          PointF centerPointsArr = new PointF(figure.getCentrX(), figure.getCentrY());
          figure.affinMatrix.RotateAt((float)(angel), centerPointsArr, MatrixOrder.Append);
+         blob.drawingScieneOnly();
      }
      public void rotateCrach(ref SLine figure, Point curPoint)
      {
@@ -244,10 +257,11 @@ namespace kg_polygon
      }
 
      public double findAngel(double a, double b, double c, int direction)
-     {//находит уголл
-         if (a == 0) a = 0.000000000001;
-         if (c == 0) c = 0.000000000001;
-         if (b == 0) b = 0.000000000001;
+     {//находит уголл  0.000000000001
+         double value = 0.001;
+         if (a == 0) a = value;
+         if (c == 0) c = value;
+         if (b == 0) b = value;
          double p = (a + b + c) / 2;
          double R = (a * b * c) / (4 * Math.Sqrt(p * (p - a) * (p - b) * (p - c)));
          double sinAngel = b / (2 * R);
@@ -268,6 +282,9 @@ namespace kg_polygon
                  break;
 
          }
+         //if (Double.IsNaN(angel) || a==value || b==value || c==value)
+         //    angel = 999999;
+
          return angel;
      }
      public void handScale(string scaleCoef)
