@@ -271,9 +271,9 @@ namespace kg_polygon
 
          switch (direction)
          {
-             case (2):
-                 angel = 90 - (-1 * angel) + 90;
-                 break;
+             //case (2):
+             //    angel =  - (-1 * angel;
+             //    break;
              case (3):
                  angel = -1 * angel + 180;
                  break;
