@@ -478,10 +478,10 @@ namespace shareData
                                 }
                                 else
                                 {//если  маштаб
-                                    aft.down();
+                                    
                                     aft.scale(ref templine, e.Location, 1);
                                     points[curLineIndex] = templine;
-                                    aft.up();
+                                    
                                 }
                                 break;
                             case (int)captures.TAKE_PT2:
@@ -496,10 +496,10 @@ namespace shareData
                                 }
                                 else
                                 {
-                                    aft.down();
+                                    
                                     aft.scale(ref templine, e.Location, 2);
                                     points[curLineIndex] = templine;
-                                    aft.up();
+                                   
 
                                 }
                                 break;

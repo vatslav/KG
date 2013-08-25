@@ -18,11 +18,7 @@ namespace kg_polygon
     public AffinTransform(editor blob1) { blob = blob1; }
     public AffinTransform() { }
     private double bufAngel=0;
-    private bool isDown = false;
-
-
-    public void down() { isDown = true; }
-    public void up() { isDown = false; }
+    
 
   //преобразует масштабирование линия + точка в линии + коеф. Х + коеф. У
   public void scale(ref SLine figure, Point curPoint, int numberPoint)
