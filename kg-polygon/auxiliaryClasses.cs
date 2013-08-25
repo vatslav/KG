@@ -13,20 +13,32 @@ using System.Drawing.Drawing2D;
 
 namespace kg_polygon
 {
-    public class auxiliaryClasses
+    public static class aux
     {
-        public void aux()
-        { return; }
-    }
-    public class MatrixPro : auxiliaryClasses
+
+
+
+    public static int mxL(int lenth)
     {
-        public static MatrixPro operator *(MatrixPro a, MatrixPro b)
-        {
-            MatrixPro c = new MatrixPro();
-            
+        if (lenth > 5)
+            return 5;
+        else
+            return lenth;
 
-            return c;
-
-        }
     }
+    public static String substr(String str)
+    {
+        int end = 5;
+        if (str.Length < end)
+            end = str.Length;
+        return str.Substring(0, end);
+    }
+
+
+
+
+    }
+
+
+
 }
