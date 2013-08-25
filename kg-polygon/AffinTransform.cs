@@ -26,16 +26,15 @@ namespace kg_polygon
 
   //преобразует масштабирование линия + точка в линии + коеф. Х + коеф. У
   public void scale(ref SLine figure, Point curPoint, int numberPoint)
-  {//TODO
-      // если растояние от мышки до края фигуры больше visibility, то нужно найти угол между мышкой и краев
-      //относительно центра и повернуть на него - это отдельной песней, можно после перехода на рекнатглы
-      //сейчас все остальное доделать
+  {//TODO:
+      //важно помнить про то, с какой стороны браться с difAngel
+      //оптимизация?
+      //отдельный консольный выход?
    float x, y; //коэффициенты
    x = y = 0;
-   int limit = 1; //за сколько градусов, до граничной линии начинаем раболтать?
-   int crashAngel = 1; //на сколько скачим в лучае пересечения?
-   double difAngel = findAngel(figure.turnPoint, curPoint);
+   double difAngel=0;
    double curAngel = findAngel(figure);
+   int curDirect = findDirection();
    float znamX = (float)(figure.aW.X - figure.bW.X);
    float znamY =(float)(figure.aW.Y - figure.bW.Y);
    bool crash = false;
@@ -43,35 +42,38 @@ namespace kg_polygon
        znamX = (float)0.01;
    if (znamY == 0)
        znamY = (float)0.01;
+    if (znamY == 0 || znamX == 0)
+        crash=true;
    if (numberPoint == 1) //если тянули за первую точку
    {
 
        x = (float)Math.Abs((curPoint.X - figure.bW.X) / znamX);
        y = (float)Math.Abs((curPoint.Y - figure.bW.Y) / znamY);
-       crash =  true;
+       difAngel = findAngel( curPoint, figure.turnPoint);
    }
    else if (numberPoint == 2) // если за вторую
    {
        x = (float)Math.Abs((curPoint.X - figure.aW.X) / znamX);
        y = (float)Math.Abs((curPoint.Y - figure.aW.Y) / znamY);
-       crash =  true;
+       difAngel = findAngel(figure.turnPoint, curPoint);
+       
    }
-      
-   //if (Math.Abs(difAngel - curAngel) > 5 && crash )
-   //{
-   //    int angelR = 1;
-   //    if (difAngel < 0)
-   //        angelR *= -1;
-   //    rotateCrach(ref figure, angelR);
-   //    isDown = false;
+    
 
-   //}
+   if (Math.Abs(difAngel - curAngel) > 5 || crash)
+   {
+       if (double.IsNaN(difAngel) || double.IsNaN(curAngel))
+           return;
+       rotateCrach(ref figure, difAngel - curAngel);
+       return;
 
+
+   }
 
  //отрисовка метаинформации в консоль
 
    String bug = "";
-   if (Math.Abs(difAngel - curAngel) > 1 && crash)
+   if (Math.Abs(difAngel - curAngel) > 1 || crash)
        bug = "\nda";
    blob.konsole.Print("direcrion=" + findDirection().ToString() + " angel=" + aux.substr(findAngel(figure).ToString()) +
        "\nx,y=" + aux.substr(x.ToString()) + " " + aux.substr(y.ToString()) +
@@ -83,7 +85,8 @@ namespace kg_polygon
        //blob.konsole.Print(findAngel(figure.aW,curPoint,  center).ToString());
 
    //ArgumentOutOfRangeException
-   scale2D(ref figure, x, y);
+    if (!crash)
+        scale2D(ref figure, x, y);
    return;
   }
 
@@ -171,7 +174,7 @@ namespace kg_polygon
      private void rotateCrach(ref SLine figure, double angel)
      {
          PointF centerPointsArr = new PointF(figure.getCentrX(), figure.getCentrY());
-         figure.affinMatrix.RotateAt((float)(angel), centerPointsArr, MatrixOrder.Append);
+         figure.affinMatrix.RotateAt((float)(-angel), centerPointsArr, MatrixOrder.Append);
          blob.drawingScieneOnly();
      }
      public void rotateCrach(ref SLine figure, Point curPoint)
@@ -267,7 +270,7 @@ namespace kg_polygon
          double sinAngel = b / (2 * R);
          double angel = Math.Asin(sinAngel) * (180 / Math.PI);
          sinAngel = angel;
-
+         
 
          switch (direction)
          {
@@ -282,8 +285,8 @@ namespace kg_polygon
                  break;
 
          }
-         //if (Double.IsNaN(angel) || a==value || b==value || c==value)
-         //    angel = 999999;
+         if (Double.IsNaN(angel) || a == value || b == value || c == value)
+             blob.konsole.Print("isNan");
 
          return angel;
      }
