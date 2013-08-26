@@ -33,7 +33,7 @@ namespace shareData
         {
          get { return curLineIndex; }
         }
-        protected int visibility = 15;
+        public const int visibility = 15;
         protected Graphics canvas;
         protected PictureBox defaultCanvas;
         protected Pen primaryPen = new Pen(Color.Blue, 2.0f);//линия

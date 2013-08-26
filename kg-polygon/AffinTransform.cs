@@ -26,6 +26,8 @@ namespace kg_polygon
       //важно помнить про то, с какой стороны браться с difAngel
       //оптимизация?
       //отдельный консольный выход?
+    //if (d(figure.aW, figure.bW) < 3 * editor.visibility)
+    //      return;
    float x, y; //коэффициенты
    x = y = 0;
    double difAngel=0;
@@ -33,13 +35,10 @@ namespace kg_polygon
    int curDirect = findDirection();
    float znamX = (float)(figure.aW.X - figure.bW.X);
    float znamY =(float)(figure.aW.Y - figure.bW.Y);
-   bool crash = false;
    if (znamX == 0)
        znamX = (float)0.01;
    if (znamY == 0)
        znamY = (float)0.01;
-    if (znamY == 0 || znamX == 0)
-        crash=true;
    if (numberPoint == 1) //если тянули за первую точку
    {
 
@@ -54,9 +53,11 @@ namespace kg_polygon
        difAngel = findAngel(figure.turnPoint, curPoint);
        
    }
-    
 
-   if (Math.Abs(difAngel - curAngel) > 5 || crash)
+   if (x == 0 || y == 0 || Double.IsNaN(x) || double.IsNaN(y) || double.IsInfinity(x) || double.IsInfinity(y))
+       return;
+
+   if (Math.Abs(difAngel - curAngel) > 5)
    {
        if (double.IsNaN(difAngel) || double.IsNaN(curAngel))
            return;
@@ -66,10 +67,9 @@ namespace kg_polygon
 
    }
 
- //отрисовка метаинформации в консоль
 
    String bug = "";
-   if (Math.Abs(difAngel - curAngel) > 1 || crash)
+   if (Math.Abs(difAngel - curAngel) > 1)
        bug = "\nda";
    blob.konsole.Print("direcrion=" + findDirection().ToString() + " angel=" + aux.substr(findAngel(figure).ToString()) +
        "\nx,y=" + aux.substr(x.ToString()) + " " + aux.substr(y.ToString()) +
@@ -77,12 +77,9 @@ namespace kg_polygon
        "\ncurAngel=" + aux.substr(curAngel.ToString()) +
        "\ndifAngels=" + aux.substr((difAngel - curAngel).ToString()) +
          bug);
-       
-       //blob.konsole.Print(findAngel(figure.aW,curPoint,  center).ToString());
-
-   //ArgumentOutOfRangeException
-    if (!crash)
-        scale2D(ref figure, x, y);
+      
+ 
+    scale2D(ref figure, x, y);
    return;
   }
 
