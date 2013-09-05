@@ -11,6 +11,9 @@ using kg_polygon;
 using drawingObjects;
 using System.Drawing.Drawing2D;
 using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+using System.IO;
 
 namespace shareData
 {
@@ -41,6 +44,7 @@ namespace shareData
         protected Bitmap bmp;
         protected Graphics bmpGr;         //сглаживание
         public List<SLine> points = new List<SLine>();
+
         protected bool zoom = false;
         public console konsole = new console();
         protected int prevCaptur = -1;
@@ -538,22 +542,14 @@ namespace shareData
         }
 
         public void safeStorage(string path)
-        {//сохранить состояние в файл (шас работает с багами)
-            System.IO.StreamWriter textFile = new System.IO.StreamWriter(path);
-            try
-            {
-                foreach (SLine line in points)
-                {
-                    textFile.WriteLine("{4} {0},{1} {2},{3}", line.aW.X, line.aW.Y, line.bW.X, line.bW.Y, line.typeObj);
-                }
+        {
+            //откроем поток для записи в файл
+            FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+            BinaryFormatter bf = new BinaryFormatter();
 
-            }
-            catch (Exception ex)
-            {
-                textFile.Close();
-                MessageBox.Show("Ошибка: " + ex.Message);
-            }
-            textFile.Close();
+            //сериализация
+            bf.Serialize(fs, points);
+            fs.Close();
         }
         private void printLine(SLine line)
         {//вывести состояние линии
@@ -562,32 +558,11 @@ namespace shareData
         }
         public void loadStorage(string path)
         {//загрузка состяония из файла
-            //Console.WriteLine(path);
-            char[] delimeterChar = { ' ', ',' };
-            string[] lines = System.IO.File.ReadAllLines(path);
-            SLine tempLine = curLine; ;
-            string[] tempStr;
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            BinaryFormatter bf = new BinaryFormatter();
+            points = (List<SLine>)bf.Deserialize(fs);
+            fs.Close();
 
-            ArrayList tempArr = new ArrayList();
-            tempArr.Clear();
-            int ptr = 0;
-            foreach (string line in lines)
-            {
-                if (line == "") break;
-                tempStr = line.Split(delimeterChar);
-                tempLine.typeObj = Convert.ToInt32(tempStr[0]);
-                tempLine.a.X = Convert.ToInt32(tempStr[1]);
-                tempLine.a.Y = Convert.ToInt32(tempStr[2]);
-                tempLine.b.X = Convert.ToInt32(tempStr[3]);
-                tempLine.b.Y = Convert.ToInt32(tempStr[4]);
-                tempArr.Add(tempLine);
-                ptr++;
-            }
-            points.Clear();
-            foreach (object obj in tempArr)
-              points.Add((SLine)obj);
-            drawingSciene();
-            tempArr.Clear();
             
 
         }
@@ -609,7 +584,7 @@ namespace shareData
 
     }
     
-    
+  [Serializable]
   public  struct SLine
     {//структура хранения (здаровая и не поворотливая)
         public int typeObj;
@@ -617,6 +592,7 @@ namespace shareData
         public Point a, b;
         public Point aW, bW;// нудно сделать использование их везде
         public Point turnPoint;
+      
         public Matrix affinMatrix;
 
         public SLine(Point a, Point b) 

@@ -89,16 +89,14 @@ namespace kg_polygon
 
         private void bSafe_Click(object sender, EventArgs e)
         {
-            int a;
-            //SaveFileDialog askSave = new SaveFileDialog();
-            //askSave.Filter = "VectorFugireFiles|*.vff";
-            //askSave.Title = "Выберети файл - векторное хранилища для сохранения данных прогруммы";
-            //askSave.ShowDialog();
-            ////File = File.OpenText(filename);
-            ////StreamWriter sw = File.CreateText(filename)
-            
-            //if (askSave.FileName != "")
-            // state.safeStorage(askSave.FileName);
+
+            SaveFileDialog askSave = new SaveFileDialog();
+            askSave.Filter = "VectorFugireFiles|*.vff";
+            askSave.Title = "Выберети файл - векторное хранилища для сохранения данных прогруммы";
+            askSave.ShowDialog();
+
+            if (askSave.FileName != "")
+             state.safeStorage(askSave.FileName);
 
             
         }
